@@ -200,8 +200,8 @@ va - NalezVazby\n\
 e4, exd5, exd6 e.p., e8D, exd8D, O-O, Da1, Dxa1, Dha1, Dhxa1,\n\
 D8a1, D8xa1, Dh8a1, Dh8xa1 - Priklady zadani tahu cloveka\n"
 
-int Cas=5000000;
-int Hloubka=4;
+int Cas=5000;
+int Hloubka=40;
 
 static void CasMysleni(void){
 	char s[256];
