@@ -25,7 +25,7 @@ baseobj=${outdir}/cotyvar.o ${outdir}/cteni.o ${outdir}/datastr.o \
 	${outdir}/soubvv.o ${outdir}/dejtah.o ${outdir}/ticho.o
 
 ifeq (${target}, windows)
-volby=${def} ${opt} -c -mwindows -march=i586
+volby=${def} ${opt} -c -mwindows
 winspecobj=${outdir}/winio.o ${outdir}/winmain.o ${outdir}/winmysl.o  ${outdir}/winpos.o  ${outdir}/winsachy.o ${outdir}/partiar.o ${outdir}/dlg.o ${outdir}/promdlg.o
 winallobj=${baseobj} ${winspecobj}
 endif
@@ -38,18 +38,18 @@ qtinclude=-I/usr/lib/qt2/include
 qtvlakno=-DQT_THREAD_mSUPPORT
 qtdef=-DTyp_Produktu=5
 qtlib=-L/usr/lib/qt2/lib -lqt-mt
-volby=${opt} ${qtvlakno} ${qtdef} ${qtinclude} -c -march=i686
+volby=${opt} ${qtvlakno} ${qtdef} ${qtinclude} -c
 endif # ifeq (${target}, qt)
 
 ifeq (${target},konzole)
 def=-DTyp_Produktu=2
 konallobj=${baseobj}
-volby=${def} ${opt} -c -march=i586
+volby=${def} ${opt} -c
 endif
 ifeq (${target},pha)
 def=-DTyp_Produktu=4
 phaallobj=${baseobj} ${outdir}/scio.o
-volby=${def} ${opt} -c -march=i586
+volby=${def} ${opt} -c
 endif
 
 .PHONY: sachy
