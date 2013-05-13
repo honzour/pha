@@ -543,7 +543,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
     	if (hloubka && soub) {
         tmp_oh = Stav(uloha);
-        sprintf(podvarianta, "%s_null", varianta);
+        sprintf(podvarianta, "%s" ODDELOVAC_VARIANT "null", varianta);
         sprintf(odkaz, "%s.html", podvarianta);
         fprintf(soub, "zkousim <A HREF=\"%s\">nulltah</A><BR>\n", odkaz);
       }
@@ -716,7 +716,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
       if (soub) {
         TahToStr(pt1->data, uloha, posledniTah);
-        sprintf(podvarianta, "%s_%s_%i", varianta, posledniTah, h - 1);
+        sprintf(podvarianta, "%s" ODDELOVAC_VARIANT "%s" ODDELOVAC_VARIANT "%i", varianta, posledniTah, h - 1);
         sprintf(odkaz, "%s.html", podvarianta);
         fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
       }

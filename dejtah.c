@@ -378,7 +378,7 @@ nedeterministicky, aby to nehralo porad stejne. */
 #ifdef HTML_VYPISY
       {
         TahToStr(pt1->data, uloha, posledniTah);
-        sprintf(varianta, "v%s_%i", posledniTah, h);
+        sprintf(varianta, "v%s" ODDELOVAC_VARIANT "%i", posledniTah, h);
         sprintf(odkaz, "%s.html", varianta);
         if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
       }
@@ -526,7 +526,7 @@ nedeterministicky, aby to nehralo porad stejne. */
 #endif
 #ifdef HTML_VYPISY
           if (soub) fputs("dobry ", soub);
-          sprintf(varianta, "v%s_%i_dobry", posledniTah, h);
+          sprintf(varianta, "v%s" ODDELOVAC_VARIANT "%i" ODDELOVAC_VARIANT "dobry", posledniTah, h);
           sprintf(odkaz, "%s.html", varianta);
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif

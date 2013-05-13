@@ -17,7 +17,7 @@ nebo dvaatricetibitove WINDOWS*/
 #define CGI_script 3
 /* CGI script */
 #define Projekt 4
-/* Souèást projektu šachové centrum */
+/* Soucast projektu Sachove centrum */
 #define Qt_Program 5
 #if 0
 #ifdef _WINDOWS
@@ -34,12 +34,18 @@ tohle provedem v Makefile pomoci napr. -DTyp_Produktu=5
 #endif
 #if Typ_Produktu==DOS_UNIX
 #define Vypisy
-//#define HTML_VYPISY
+#define HTML_VYPISY
 #ifdef unix
 #define ODDELOVAC "/"
 #else
 #define ODDELOVAC "\\"
 #endif
+#ifdef unix
+#define ODDELOVAC_VARIANT "-"
+#else
+#define ODDELOVAC_VARIANT "_"
+#endif
+
 #define HTML_CESTA ("html" ODDELOVAC)
 #endif
 #if Typ_Produktu==DOS_UNIX ||Typ_Produktu==Win32_Program
