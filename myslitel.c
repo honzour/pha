@@ -716,8 +716,8 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
       if (soub) {
         TahToStr(pt1->data, uloha, posledniTah);
-        sprintf(podvarianta, "%s" ODDELOVAC_VARIANT "%s" ODDELOVAC_VARIANT "%i", varianta, posledniTah, h - 1);
-        sprintf(odkaz, "%s.html", podvarianta);
+        sprintf(podvarianta, "%s%s%s%s%i", varianta, ODDELOVAC_VARIANT, posledniTah, ODDELOVAC_VARIANT, h - 1);
+        sprintf(odkaz, "%s%s%i.html", posledniTah, ODDELOVAC_VARIANT, h - 1);
         fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
       }
 #endif
