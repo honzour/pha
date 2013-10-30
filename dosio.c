@@ -154,7 +154,7 @@ void createMissingPath(char *path)
 		{
 			path[i] = 0;
 			mkdir(path, 0755);
-			path[i] == '/';
+			path[i] = '/';
 		}
 	}
 
