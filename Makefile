@@ -13,7 +13,7 @@ endif
 clean:
 	if [ -e ${outdir} ]; then rm -r -f ${outdir}; fi
 
-opt=-O3
+opt=-O3 -Wno-unused-result
 
 baseobj=${outdir}/cotyvar.o ${outdir}/cteni.o ${outdir}/datastr.o \
 	${outdir}/dosio.o ${outdir}/hash.o ${outdir}/hashpech.o \

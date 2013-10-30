@@ -5,6 +5,7 @@
 /*********************************************************/
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
 #include "volby.h"
@@ -143,11 +144,29 @@ void HTMLTiskniSachovnici(TPozice *pos, FILE *f) {
   fprintf(f, "Na tahu je %s. \n", pos->bily ? "bily" : "cerny");
 }
 
-FILE *otevriHtmlLog(TUloha *u, const char *varianta) {
+
+void createMissingPath(char *path)
+{
+	int i;
+	for (i = 0; path[i]; i++)
+	{
+		if (path[i] == '/')
+		{
+			path[i] = 0;
+			mkdir(path, 0755);
+			path[i] == '/';
+		}
+	}
+
+}
+
+
+FILE *otevriHtmlLog(TUloha *u, char *varianta) {
   char s[512];
   FILE *f;
   
   sprintf(s, "%s%s.html", HTML_CESTA, varianta);
+  createMissingPath(s);
   f = fopen(s, "w");
   if (!f) return NULL;
   fputs( 
@@ -388,7 +407,7 @@ void TahPocitace(TUloha *uloha) {
 	for(i=0;i<15;i++)
 	  printf("%i ", uloha->stat.HU[i]);
 	puts("");
-  printf("MS=%i\nUZ=%i,OH=%i,OH2=%i,OHP=%i%i\n",
+  printf("MS=%i\nUZ=%i,OH=%i,OH2=%i,OHP=%i\n",
     (int)uloha->stat.MS,(int)uloha->stat.UZ,(int)uloha->stat.OH,(int)uloha->stat.OH2,(int)uloha->stat.OHP);
 #endif
 #endif

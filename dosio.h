@@ -25,7 +25,7 @@ cfunkce void HTMLTiskniSachovnici(TPozice *pos, FILE *f);
 /**
  Otevre textovy vystupni soubor a vytiskne tam HTML hlavicku.
 */
-cfunkce FILE *otevriHtmlLog(TUloha *u, const char *varianta);
+cfunkce FILE *otevriHtmlLog(TUloha *u, char *varianta);
 
 /**
  Vytiskne HTML konec a zavre soubor.

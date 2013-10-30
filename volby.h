@@ -41,7 +41,7 @@ tohle provedem v Makefile pomoci napr. -DTyp_Produktu=5
 #define ODDELOVAC "\\"
 #endif
 #ifdef unix
-#define ODDELOVAC_VARIANT "-"
+#define ODDELOVAC_VARIANT "/"
 #else
 #define ODDELOVAC_VARIANT "_"
 #endif

@@ -35,7 +35,7 @@ void KopirujHVar(TUloha *uloha, u16 t);
 
 s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
- , const char *varianta
+ , char *varianta
 #endif
 );
 

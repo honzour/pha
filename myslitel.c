@@ -144,7 +144,7 @@ void KopirujHVar(TUloha *uloha, u16 t) {
 /*******************************************************************/
 static int NulovyTah(TUloha *uloha, s16 prah, s16 hloubka
 #ifdef HTML_VYPISY
- , const char *varianta
+ , char *varianta
 #endif
   ) {
   int b;
@@ -369,7 +369,7 @@ static u8 prohloubeni(TUloha *uloha, int zanor, int hloubka) {
 /*****************************************************************************/
 s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
- , const char *varianta
+ , char *varianta
 #endif
              ) {
   
