@@ -352,7 +352,7 @@ nedeterministicky, aby to nehralo porad stejne. */
         beta = (s16)(pt1->cena + rozdil + 10);
       }
     } else {
-       /* pt0 1 a 2 už mám nastavené*/
+       /* pt0 1 a 2 uz mám nastavené*/
       alfa = -mat;
       beta = mat;
       rozdil = 20;
@@ -378,7 +378,7 @@ nedeterministicky, aby to nehralo porad stejne. */
 #ifdef HTML_VYPISY
       {
         TahToStr(pt1->data, uloha, posledniTah);
-        sprintf(varianta, "v%s" ODDELOVAC_VARIANT "%i", posledniTah, h);
+        sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s" ODDELOVAC_VARIANT "koren", h, posledniTah);
         sprintf(odkaz, "%s.html", varianta);
         if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
       }
@@ -407,18 +407,20 @@ nedeterministicky, aby to nehralo porad stejne. */
         goto ZaverKoncimMysleni;
       }
 
-      if (pt1 == pt0) { /* poèítám první tah*/
+      if (pt1 == pt0) { /* pocítám první tah*/
         RemCena=pt1->cena;
 #if Typ_Produktu==Win32_Program
         VypAktualizujCenu(uloha,pt1->cena);
 #endif
         if (pt1->cena <= alfa) {
-	    /* První tah podtekl alfa. Poèítaè zaèíná tušit neštìstí.
-	    Nejspís by podtekly i všechny další tahy*/
+	    /* První tah podtekl alfa. Poèítaè zaèíná tusit nestìstí.
+	    Nejspís by podtekly i vsechny dalsí tahy*/
 #ifdef HTML_VYPISY
           if (soub) fputs("alfa podteceni, pocitam znovu \n", soub);
-          sprintf(varianta, "v%s_%i_alfa", posledniTah, h);
+
+		  sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_alfa", h, posledniTah);
           sprintf(odkaz, "%s.html", varianta);
+          
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif
           Tahni(pt1->data,uloha);
@@ -456,8 +458,10 @@ nedeterministicky, aby to nehralo porad stejne. */
       	  KopirujHVar(uloha, pt1->data);
 #ifdef HTML_VYPISY
           if (soub) fputs("beta preteceni, pocitam znovu \n", soub);
-          sprintf(varianta, "v%s_%i_beta", posledniTah, h);
+
+		  sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_beta", h, posledniTah);
           sprintf(odkaz, "%s.html", varianta);
+
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif
       	  Tahni(pt1->data,uloha);
