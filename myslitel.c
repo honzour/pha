@@ -388,7 +388,8 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
   char odkaz[256];
 
   FILE *soub = NULL;
-  if (varianta) soub = otevriHtmlLog(uloha, varianta);
+  sprintf(podvarianta, "%skoren", varianta);
+  if (varianta) soub = otevriHtmlLog(uloha, podvarianta);
   if (soub) fprintf(soub, "\n<P>AlfaBeta(%i, %i) do hloubky %i, zanoreni = %i, varianta = %s<BR>\n",
                     alfa, beta, hloubka, uloha->zasobnik.pos, varianta);
 #endif
@@ -716,8 +717,8 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
       if (soub) {
         TahToStr(pt1->data, uloha, posledniTah);
-        sprintf(podvarianta, "%s%sv%s%s%i", varianta, ODDELOVAC_VARIANT, posledniTah, ODDELOVAC_VARIANT, h - 1);
-        sprintf(odkaz, "v%s%s%i.html", posledniTah, ODDELOVAC_VARIANT, h - 1);
+        sprintf(podvarianta, "%s%i%s%s%s", varianta, h - 1, ODDELOVAC_VARIANT, posledniTah, ODDELOVAC_VARIANT);
+        sprintf(odkaz, "%i%s%s%skoren.html", h - 1, ODDELOVAC_VARIANT, posledniTah, ODDELOVAC_VARIANT);
         fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
       }
 #endif

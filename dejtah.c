@@ -378,8 +378,8 @@ nedeterministicky, aby to nehralo porad stejne. */
 #ifdef HTML_VYPISY
       {
         TahToStr(pt1->data, uloha, posledniTah);
-        sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s" ODDELOVAC_VARIANT "koren", h, posledniTah);
-        sprintf(odkaz, "%s.html", varianta);
+        sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s" ODDELOVAC_VARIANT, h, posledniTah);
+        sprintf(odkaz,  "%skoren.html", varianta);
         if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
       }
 #endif
