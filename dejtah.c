@@ -418,8 +418,8 @@ nedeterministicky, aby to nehralo porad stejne. */
 #ifdef HTML_VYPISY
           if (soub) fputs("alfa podteceni, pocitam znovu \n", soub);
 
-		  sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_alfa", h, posledniTah);
-          sprintf(odkaz, "%s.html", varianta);
+        sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_alfa" ODDELOVAC_VARIANT, h, posledniTah);
+        sprintf(odkaz,  "%skoren.html", varianta);
           
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif
@@ -459,9 +459,9 @@ nedeterministicky, aby to nehralo porad stejne. */
 #ifdef HTML_VYPISY
           if (soub) fputs("beta preteceni, pocitam znovu \n", soub);
 
-		  sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_beta", h, posledniTah);
-          sprintf(odkaz, "%s.html", varianta);
-
+          sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_beta" ODDELOVAC_VARIANT, h, posledniTah);
+          sprintf(odkaz,  "%skoren.html", varianta);
+			
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif
       	  Tahni(pt1->data,uloha);
@@ -530,8 +530,8 @@ nedeterministicky, aby to nehralo porad stejne. */
 #endif
 #ifdef HTML_VYPISY
           if (soub) fputs("dobry ", soub);
-          sprintf(varianta, "v%s" ODDELOVAC_VARIANT "%i" ODDELOVAC_VARIANT "dobry", posledniTah, h);
-          sprintf(odkaz, "%s.html", varianta);
+          sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_dobry" ODDELOVAC_VARIANT, h, posledniTah);
+          sprintf(odkaz,  "%skoren.html", varianta);
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif
           KopirujHVar(uloha, tmp.data);
