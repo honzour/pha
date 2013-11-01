@@ -152,17 +152,15 @@ static int NulovyTah(TUloha *uloha, s16 prah, s16 hloubka
 
 #ifdef HTML_VYPISY
   FILE *soub = NULL;
-  char podvarianta[256];
 
   if (hloubka > 1) {
     char odkaz[256];
-	sprintf(odkaz, "%skoren", varianta);
+	sprintf(odkaz, "%snullkoren", varianta);
     if (varianta) soub = otevriHtmlLog(uloha, odkaz);
     if (soub) {
       fprintf(soub, "\n<P>Metoda nuloveho tahu(%i) do hloubky %i, zanoreni = %i, varianta = %s<BR>\n",
         prah, hloubka, uloha->zasobnik.pos, varianta);
-      sprintf(podvarianta, "%sab", varianta);
-      fprintf(soub, "<A HREF=\"abkoren.html\">null</A> ", odkaz);
+      fprintf(soub, "<A HREF=\"koren.html\">null</A> ", odkaz);
     }
   }
 #endif
@@ -187,7 +185,7 @@ static int NulovyTah(TUloha *uloha, s16 prah, s16 hloubka
   b =  (
     (hloubka ? -AlfaBeta(uloha, (s16)(-prah), (s16)(1-prah), hloubka
 #ifdef HTML_VYPISY
- , podvarianta
+ , varianta
 #endif
      )    : 
   -AlfaBetaBrani(uloha, (s16)(-prah), (s16)(1-prah), 4)
@@ -544,8 +542,8 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
     	if (hloubka && soub) {
         tmp_oh = Stav(uloha);
-        sprintf(podvarianta, "%s" ODDELOVAC_VARIANT "null"  ODDELOVAC_VARIANT , varianta);
-        fprintf(soub, "zkousim <A HREF=\"null/koren.html\">nulltah</A><BR>\n", odkaz);
+        sprintf(podvarianta, "%snull"  ODDELOVAC_VARIANT , varianta);
+        fprintf(soub, "zkousim <A HREF=\"null/nullkoren.html\">nulltah</A><BR>\n", odkaz);
       }
 #endif
 
