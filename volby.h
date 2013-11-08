@@ -34,7 +34,7 @@ tohle provedem v Makefile pomoci napr. -DTyp_Produktu=5
 #endif
 #if Typ_Produktu==DOS_UNIX
 #define Vypisy
-#define HTML_VYPISY
+/*#define HTML_VYPISY*/
 #ifdef unix
 #define ODDELOVAC "/"
 #else
