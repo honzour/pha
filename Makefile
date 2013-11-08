@@ -22,7 +22,7 @@ baseobj=${outdir}/cotyvar.o ${outdir}/cteni.o ${outdir}/datastr.o \
 	${outdir}/lokruti.o ${outdir}/myslitel.o ${outdir}/obk_ch.o \
 	${outdir}/ohodnoc.o ${outdir}/partie.o ${outdir}/pgn.o \
 	${outdir}/sachy.o ${outdir}/strtah.o ${outdir}/tabulky.o \
-	${outdir}/soubvv.o ${outdir}/dejtah.o ${outdir}/ticho.o
+	${outdir}/soubvv.o ${outdir}/dejtah.o ${outdir}/ticho.o ${outdir}/testy.o
 
 ifeq (${target}, windows)
 volby=${def} ${opt} -c -mwindows
@@ -142,6 +142,7 @@ z_datastr=datastr.c datastr.h hash.h cotyvar.h volby.h Makefile
 z_cteni=cteni.c cteni.h obk_ch.h datastr.h hash.h cotyvar.h volby.h Makefile 
 z_obk_ch=obk_ch.c obk_ch.h Makefile 
 z_scio=scio.c scio.h globruti.h dosio.h volby.h cotyvar.h chyba.h myslitel.h generato.h Makefile
+z_testy=testy.c cotyvar.h volby.h partie.h Makefile
 
 # totez pro specificke windowsi soubory
 
@@ -254,3 +255,5 @@ ${outdir}/obk_ch.o: ${z_obk_ch}
 ${outdir}/scio.o: ${z_scio}
 	${cc} scio.c -o ${outdir}/scio.o ${volby}
 
+${outdir}/testy.o: ${z_scio}
+	${cc} testy.c -o ${outdir}/testy.o ${volby}
