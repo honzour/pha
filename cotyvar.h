@@ -190,8 +190,8 @@ typedef struct{
 	s16 cena; /* cena pozice z hrace na tahu... */
 	u8 hloubka; /* ....pri propoctu do hloubky hloubka */
 	u8 priznak; /* xxxxxxHD
-	 D - pozice je stejná nebo lepší než cena
-	 H - pozice je stejná nebo horší než cena 
+	 D - pozice je stejná nebo lepsí nez cena
+	 H - pozice je stejná nebo horsí nez cena 
 	(=> H&D - pozice má pøesnì danou hodnotu) */
 } THashPrvek;
 
