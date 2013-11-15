@@ -255,5 +255,5 @@ ${outdir}/obk_ch.o: ${z_obk_ch}
 ${outdir}/scio.o: ${z_scio}
 	${cc} scio.c -o ${outdir}/scio.o ${volby}
 
-${outdir}/testy.o: ${z_scio}
+${outdir}/testy.o: ${z_testy}
 	${cc} testy.c -o ${outdir}/testy.o ${volby}
