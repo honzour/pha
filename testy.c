@@ -9,5 +9,6 @@ void test(TUloha *uloha, TPozice *pozice, u16* tahy, int pocet, int *slozitost)
 	for (iterace = 0; iterace < pocet; iterace++)
 	{
 		InitPartie(&(uloha->prt), pozice + iterace);
+		PromazTabulky(uloha);
 	}
 }
