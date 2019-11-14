@@ -602,6 +602,10 @@ static int GenerujBezRekurze(char *typ){
  strcat(t,".tab");
 #pragma warning (disable : 4996)
  f=fopen(t,"wb");
+ if (!f) {
+    printf("Nemůžu otevřít %s\n", t);
+    return 1;
+ }
  fwrite((void *)p,d,1,f);
  fclose(f);
  free(p);

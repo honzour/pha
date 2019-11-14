@@ -339,7 +339,7 @@ nedeterministicky, aby to nehralo porad stejne. */
     if (soub)
       fprintf(
         soub,
-        "Pozice je v knihovne zahajeni, vracim %x.<BR>\n", t1->data);
+        "Pozice je v databazi koncovek, vracim %x.<BR>\n", t1->data);
     zavriHtmlLog(soub);
 #endif
    /*Kdyz jsem nasel pozici v databazi koncovek, hned koncim.*/
