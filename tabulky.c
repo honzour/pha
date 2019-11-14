@@ -40,7 +40,7 @@ Hodnoty v tabulce:
 Behem vytvareni -128 -zatim neznamo
 
 */
-#define TABDIR "/home/honza/tab/"
+#define TABDIR "tab/"
 
 static int KdeVPack[h8+1]={
  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -598,6 +598,10 @@ static int GenerujBezRekurze(char *typ){
  strcat(t,typ);
  strcat(t,".tab");
  f=fopen(t,"wb");
+ if (!f) {
+    printf("Nemůžu otevřít %s\n", t);
+    return 1;
+ }
  fwrite((void *)p,d,1,f);
  fclose(f);
  free(p);
