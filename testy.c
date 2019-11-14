@@ -2,6 +2,7 @@
 #include "cotyvar.h"
 #include "partie.h"
 #include "dejtah.h"
+#include "sachy.h"
 
 void test(TUloha *uloha, TPozice *pozice, u16* tahy, int pocet, int *slozitost)
 {

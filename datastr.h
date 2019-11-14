@@ -252,7 +252,7 @@ extern long ZAC_POZIC;
   Maska, která odfiltruje z prvku pole adresy strutkury typu f_blok_adres_t adresu.
   (Zamaskuje případnou 1 na začátku.)
  */
-#define BL_MASKA ((long)(1<<(sizeof(long)*8-1)))
+#define BL_MASKA ((long)(((long)1)<<(sizeof(long)*8-1)))
 
 #include <stdio.h>
 

@@ -1,5 +1,6 @@
 ﻿#include <string.h>
 #include <math.h>
+#include <stdlib.h>
 #include "volby.h"
 #include "cotyvar.h"
 #include "hashpech.h"
