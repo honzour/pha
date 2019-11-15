@@ -441,6 +441,29 @@ void Otevri(TUloha *uloha){
         puts("Partie otevrena"); else
         puts("Neuspech pri otvirani !");
 }
+
+int testEndgameName(const char *name) {
+    int k = 0;
+    
+    while (*name) {
+      if (*name == 'k') {
+        k++;
+        name++;
+        continue;
+      }
+      if (*name != 'd' && *name != 'v' && *name != 's' && *name != 'j' && *name != 'p') {
+        puts("nesmyslna koncovka, povoleny jen znaky kdvsjp");
+        return 1;
+      }
+      name++;
+    }
+    if (k != 2) {
+      puts("V nazvu musi byt prave dva kralove, znaky 'k'.");
+      return 1;
+    }
+    return 0;
+}
+
 cfunkce void HlavniDosCyklus(TUloha *uloha)
 {char s[256];
  u16 tah;
@@ -475,10 +498,15 @@ cfunkce void HlavniDosCyklus(TUloha *uloha)
    if (!strcmp(s,"ot\n")) {Otevri(uloha);continue;};
    if (!strcmp(s,"ge\n")) {
           char st[256];
-          puts("Jakou ?:");
+          puts("Jakou ? (napr. kdkv):");
           fgets(st,254,stdin);
           BezCRLF(st);
-          if(strlen(st)>0) GenerujTabulku(st);
+          if(testEndgameName(st)) {
+            printf("Spatny nazev %s\n", st);
+            continue;
+          }
+          
+          GenerujTabulku(st);
           continue;
          };
    if (!strcmp(s,"mh\n")) {
