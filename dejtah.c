@@ -738,7 +738,7 @@ nedeterministicky, aby to nehralo porad stejne. */
     if (h) rozdil = abs(stara - pt0->cena) + 10;
     stara = pt0->cena;
     PISDOHISTHEUR(uloha,pt0->data,h*h)
-  } /*Od cyklu přes hloubku*/
+  } /*Od cyklu pres hloubku*/
 zaver:
   *t1 = uloha->zasobnik.tahy[0];
 #ifdef Vypisy
