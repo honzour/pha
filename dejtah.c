@@ -305,9 +305,9 @@ nedeterministicky, aby to nehralo porad stejne. */
  
   if (HodnotaPozice(uloha, -mat, mat) >= -250) Vzdavam = 0;
  /* HodnotaPozice musím zavolat kvùli nastavení tabulek.
- Navíc mi to pomù¾e pøi rozhodování,
- zda se mám vzdát. Nevzdávám se jen tehdy, pokud HodPos >= -vì¾
- nebo propoèet do aspoò jedné hloubky >= -vì¾ nebo mám materiálu za
+ Navíc mi to pomuze pri rozhodování,
+ zda se mám vzdát. Nevzdávám se jen tehdy, pokud HodPos >= -vez
+ nebo propoèet do aspon jedné hloubky >= -vez nebo mám materiálu za
  dámu. */
   UlozStav(uloha);
 
@@ -573,9 +573,9 @@ nedeterministicky, aby to nehralo porad stejne. */
           if (soub) fprintf(soub, " %i ", pt0->cena);
           if (soub) fprintf(soub, "a=%i, b=%i ", (int)alfa, (int)beta);
 #endif
-        } /* Od pøeteèení alfa */
-      } /* Od jiného než prvního tahu*/
-    } /*od cyklu pøes tahy*/
+        } /* Od pretecení alfa */
+      } /* Od jiného nez prvního tahu*/
+    } /*od cyklu pres tahy*/
 #ifdef HTML_VYPISY
       if (soub) fprintf(soub, " <P>\n%i", Stav(uloha) - hloubka_oh);
 #endif
@@ -592,7 +592,7 @@ nedeterministicky, aby to nehralo porad stejne. */
     if (h) rozdil = abs(stara - pt0->cena) + 10;
     stara = pt0->cena;
     PISDOHISTHEUR(uloha,pt0->data,h*h)
-  } /*Od cyklu pøes hloubku*/
+  } /*Od cyklu pres hloubku*/
 zaver:
   *t1 = uloha->zasobnik.tahy[0];
 #ifdef Vypisy
