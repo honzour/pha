@@ -1,4 +1,4 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* ohodnoc.c - ohodnocovaci funkce                       */
 /* 13.1. 2001 Jan Nemec                                  */
 /*********************************************************/
@@ -302,7 +302,7 @@ int ChytiBilehoPesce(int CernyKral, int BilyPesec, int HrajeBily){
  /*na u->zasobnik.hodpos[u->zasobnik.pos] ulozi
    1) nedojde-li k orezani hodnotu pozice else
     2) nejsem-li v koreni u->zasobnik.hodpos[u->zasobnik.pos-1] else
-	 3) 0
+     3) 0
    */
 
 s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
@@ -315,7 +315,7 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
   THashPech *php;
 
 #ifdef Statistika
-	u->stat.OH++;
+    u->stat.OH++;
 #endif
   
   bily = u->pozice.bily;
@@ -337,7 +337,7 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
   material = h = (s16)(bm - cm);
   if (!bily) {
     h = (s16) -h;
-    stara = (s16) -stara;
+    if (hloubka) stara = (s16) -stara;
   }
  /*  Kdyz jsem blizko matu, nema smysl hodnotit pozici */
   if (alfa > mat -255 || beta < -mat + 255)
@@ -358,7 +358,7 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
   }
 
 #ifdef Statistika
-	u->stat.OH2++;
+    u->stat.OH2++;
 #endif
 
   s = 0;
@@ -413,12 +413,12 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
     goto NeniTam; 
   }
 
-  php = u->hpt + (u->zasobnik.hPechF[hloubka] &	((1 << u->HashCfg.DveNaXHashPech) - 1));
+  php = u->hpt + (u->zasobnik.hPechF[hloubka] &    ((1 << u->HashCfg.DveNaXHashPech) - 1));
   if (php->kod == u->zasobnik.hPechG[hloubka]) goto JeTam;
 
   NeniTam:;
 #ifdef Statistika
-	u->stat.OHP++;
+    u->stat.OHP++;
 #endif
   NastavPesce(u,php);
   JeTam:;
@@ -472,12 +472,12 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
           *(pzaklad + b6) == 1 && *(pzaklad + c7)==1 ||
           (p == pzaklad + h7 || p == pzaklad + g8) &&
           *(pzaklad + g6) == 1 && *(pzaklad + f7) == 1)
-	        s += u->AlgCfg.AlgKoef.FischeruvStrelec;
-	
+            s += u->AlgCfg.AlgKoef.FischeruvStrelec;
+    
         /* strelec je dobry, kdyz ma barvu souperovych pescu */
-	      s += ((BelostPole[p - pzaklad] ? php->cb : php->cc) << 1);
+          s += ((BelostPole[p - pzaklad] ? php->cb : php->cc) << 1);
         /* Tabulkova hodnota */
-	      s += u->AlgCfg.bs[p-pzaklad];
+          s += u->AlgCfg.bs[p-pzaklad];
         break;
       case -3:
         /*Strelec v pasti*/
@@ -485,8 +485,8 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
           *(pzaklad + b3) == -1 && *(pzaklad + c2) == -1 ||
           (p == pzaklad + h2 || p == pzaklad + g1) &&
           *(pzaklad + g3) == -1 && *(pzaklad + f2) == -1)
-	        s -= u->AlgCfg.AlgKoef.FischeruvStrelec;
-	
+            s -= u->AlgCfg.AlgKoef.FischeruvStrelec;
+    
         /*strelec je dobry, kdyz ma barvu souperovych pescu*/
         s -= ((BelostPole[p - pzaklad] ? php->bb : php->bc) << 1);
         s -= u->AlgCfg.cs[p - pzaklad];
@@ -494,17 +494,17 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
       case 4:
         j = XPole[p - pzaklad];
         /*Vez na volnem sloupci*/
-	      if (!u->material.CPSloupec[j]) {
+          if (!u->material.CPSloupec[j]) {
           if (!u->material.BPSloupec[j]) s += u->AlgCfg.AlgKoef.VezNaSloupci;
         } else {
-	          for (i = -10; i <= 10; i += 20) { /* Po sloupci nahoru a dolu */
-	            for (pom = p + i; !*pom; pom += i);
+              for (i = -10; i <= 10; i += 20) { /* Po sloupci nahoru a dolu */
+                for (pom = p + i; !*pom; pom += i);
               if (*pom == -1)
-	              for (j = 0; j < u->material.c[0]; j++)
-		              if (php->c[j] == (pom - pzaklad)) {
-	                  if (php->ct[j] & 2) /*Napada opozdeneho pesce*/
-	                    s += u->AlgCfg.AlgKoef.SlabyPesecNapaden;
-		                  break;
+                  for (j = 0; j < u->material.c[0]; j++)
+                      if (php->c[j] == (pom - pzaklad)) {
+                      if (php->ct[j] & 2) /*Napada opozdeneho pesce*/
+                        s += u->AlgCfg.AlgKoef.SlabyPesecNapaden;
+                          break;
                   }
             }
         }/* od else*/
@@ -512,18 +512,18 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
       case -4:
         j = XPole[p - pzaklad];
         /*Vez na volnem sloupci*/
-	      if (!u->material.BPSloupec[j]) {
+          if (!u->material.BPSloupec[j]) {
           if (!u->material.CPSloupec[j]) s -= u->AlgCfg.AlgKoef.VezNaSloupci;
         } else {
            /* Po sloupci nahoru a dolu */
-	        for (i =- 10; i <= 10; i += 20) {
-	          for (pom = p + i; !*pom; pom += i);
+            for (i =- 10; i <= 10; i += 20) {
+              for (pom = p + i; !*pom; pom += i);
             if (*pom == 1)
-	            for(j = 0; j < u->material.b[0]; j++)
-		            if (php->b[j] == (pom - pzaklad)) {
-	                if (php->bt[j] & 2) /*Napada opozdeneho pesce*/
-	                  s -= u->AlgCfg.AlgKoef.SlabyPesecNapaden;
-		              break;
+                for(j = 0; j < u->material.b[0]; j++)
+                    if (php->b[j] == (pom - pzaklad)) {
+                    if (php->bt[j] & 2) /*Napada opozdeneho pesce*/
+                      s -= u->AlgCfg.AlgKoef.SlabyPesecNapaden;
+                      break;
                 }
           }
         }/* od else*/
@@ -531,32 +531,32 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
       case 6:
         if (u->zasobnik.bm[hloubka] > StdCenyFigur[6] + 700)
           s += u->AlgCfg.bkz[p - pzaklad];
-	      else
+          else
           s+=u->AlgCfg.kk[p-pzaklad];
-	      if (typ == Koncovka) {
-	        for (i = 0; i < 8; i++)
-	        if(*(p + ofsety[i]) == -1) {/*Kral napada pesce*/
-	          for (j = 0; j < u->material.c[0]; j++)
-	            if (php->ct[j] & 2 && php->c[j] == (p - pzaklad) + ofsety[i])
+          if (typ == Koncovka) {
+            for (i = 0; i < 8; i++)
+            if(*(p + ofsety[i]) == -1) {/*Kral napada pesce*/
+              for (j = 0; j < u->material.c[0]; j++)
+                if (php->ct[j] & 2 && php->c[j] == (p - pzaklad) + ofsety[i])
                 /*Napada opozdeneho pesce*/
-		          s += u->AlgCfg.AlgKoef.SlabyPesecNapaden;
+                  s += u->AlgCfg.AlgKoef.SlabyPesecNapaden;
           }
         }
-	      break;
+          break;
       case -6:
         if (u->zasobnik.cm[hloubka] > StdCenyFigur[6] + 700)
           s -= u->AlgCfg.ckz[p - pzaklad];
-	      else
+          else
           s -= u->AlgCfg.kk[p - pzaklad];
-	      if (typ == Koncovka) {
-	        for (i = 0; i < 8; i++)
-	          if (*(p + ofsety[i]) == 1) {/*Kral napada pesce*/
-	          for(j = 0; j < u->material.b[0]; j++)
-	            if(php->bt[j] & 2 && php->b[j] == (p-pzaklad) + ofsety[i])/*Napada opozdeneho pesce*/
-		            s -= u->AlgCfg.AlgKoef.SlabyPesecNapaden;
+          if (typ == Koncovka) {
+            for (i = 0; i < 8; i++)
+              if (*(p + ofsety[i]) == 1) {/*Kral napada pesce*/
+              for(j = 0; j < u->material.b[0]; j++)
+                if(php->bt[j] & 2 && php->b[j] == (p-pzaklad) + ofsety[i])/*Napada opozdeneho pesce*/
+                    s -= u->AlgCfg.AlgKoef.SlabyPesecNapaden;
             }
         }
-      	break;
+          break;
   } /* od for cyklu pres pole */
   if (bily) h += s; else h -= s;
   u->zasobnik.hodpos[hloubka] = (bily ?  h : - h) - material;

@@ -1,4 +1,4 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* kontrola.c - test pripustnosti pozice                 */
 /* 6.1. 2001 Jan Nemec                                   */
 /*********************************************************/
@@ -10,10 +10,11 @@
 #include "lokruti.h"
 #include "kontrola.h"
 #include "pole.h"
-int MultiSach(TPozice *pos, int bilemu){
+
 /***********************************************************/
 /* Vice nez dvojsach neni pripustny                        */
 /***********************************************************/
+int MultiSach(TPozice* pos, int bilemu) {
  s8 k;
  s8 *p;
 
@@ -21,13 +22,14 @@ int MultiSach(TPozice *pos, int bilemu){
  for(p=pos->sch+a1;*p!=k;p++);
  return PocetOhrozeni(p, !bilemu);
 }
-int PripustnaPozice(TPozice *pos)
+
 /***********************************************************/
 /* PripustnaPozice - otestuje pozici a vrati 0, pokud je   */
-/* smysluplna a pripustna, jinak kladny chybovy kod		   */
-/* podle typu chyby										   */
+/* smysluplna a pripustna, jinak kladny chybovy kod           */
+/* podle typu chyby                                           */
 /***********************************************************/
- { s8 fgr[13];
+int PripustnaPozice(TPozice* pos)
+{ s8 fgr[13];
    int x,y;
 
  for (y=0;y<=11;(y==1) ? y=10 : y++) 

@@ -1,4 +1,4 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* myslitel.h - rekurzivni propocet (alfabeta)           */
 /* 31.12. 2000 Jan Nemec                                 */
 /*********************************************************/
@@ -9,26 +9,24 @@
 #include <stdio.h>
 #endif
 #include "cotyvar.h"
-cfunkce void UlozStav(TUloha *uloha);
-/***************************************************************************
-*   UlozStav - ulozi stav mimochodem a rosad na zasobnik do pos            *
- *   s pos nic nedela                                                      *
- ***************************************************************************/
-cfunkce void SectiMaterialBmCm(TUloha *uloha);
+
 /*************************************************/
-/* Nastavi podle aktualni pozice polozky		 */
+/* Nastavi podle aktualni pozice polozky         */
 /* uloha->zasobnik.bm[0], uloha->zasobnik.cm[0]  */
-/* a uloha->material							 */
+/* a uloha->material                             */
 /*************************************************/
-cfunkce void SectiJenMaterial(TUloha *uloha);
+cfunkce void SectiMaterialBmCm(TUloha* uloha);
+
 /*********************************************************/
 /* Nastavi podle aktualni pozice polozky uloha->material */
 /*********************************************************/
-cfunkce void InitVypocet(TUloha *uloha);
+cfunkce void SectiJenMaterial(TUloha* uloha);
+
 /**********************************************************/
 /* Inicializace pred zahajenim rekurzivniho propoctu      */
-/* vola se z DejTah										  */
+/* vola se z DejTah                                          */
 /**********************************************************/
+cfunkce void InitVypocet(TUloha* uloha);
 
 
 void KopirujHVar(TUloha *uloha, u16 t);
@@ -39,13 +37,13 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #endif
 );
 
+/*Zapis do tabulek historicke heuristiky v uloze u
+nejlepsi tah t na pozici
+prida x tak, aby nepreteklo*/
 #define PISDOHISTHEUR(u,t,x)\
 {if((u)->HistHeur[(u16)(t)]+x<=255)\
 (u)->HistHeur[(u16)(t)]+=(MIN((x),10));\
 else {(u)->HistHeur[(u16)(t)]=255;PulHistHeur(u);}}
-/*Zapis do tabulek historicke heuristiky v uloze u
-nejlepsi tah t na pozici
-prida x tak, aby nepreteklo*/
 
 void DotazNaCas(TUloha *u);
 

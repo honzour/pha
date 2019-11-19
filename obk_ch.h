@@ -1,12 +1,12 @@
-/* ©achovÈ centrum - Knihovna zah·jenÌ Petr KuËera 2000*/
-/* Deklarace konstant a maker pro chybov· hl·πenÌ */
+Ôªø/* ≈†achov√© centrum - Knihovna zah√°jen√≠ Petr Kuƒçera 2000*/
+/* Deklarace konstant a maker pro chybov√° hl√°≈°en√≠ */
 
 #ifndef __CHYBA_H__
 #define __CHYBA_H__
 
 #define CH_NIC 0
 #define CH_INICIALIZACE 1
-#define CH_PAMET 2 /*nedostatek pamÏti*/
+#define CH_PAMET 2 /*nedostatek pamƒõti*/
 #define CH_KON_SOUBORU 3
 #define CH_CISLO_TAHU 4
 #define CH_NENI_NA_TAHU 5
@@ -33,8 +33,8 @@
 #define CH_NEUKONCENE_VARIANTY 26
 #define CH_MAX 27
 
-#define CH_CT_FAIL (CH_MAX+1) /*Pozice p¯i ËtenÌ nenalezena*/
-#define CH_NEUKLADAT (CH_MAX+2) /*Dan· pozice, blok nebudou ukl·d·ny*/
+#define CH_CT_FAIL (CH_MAX+1) /*Pozice p≈ôi ƒçten√≠ nenalezena*/
+#define CH_NEUKLADAT (CH_MAX+2) /*Dan√° pozice, blok nebudou ukl√°d√°ny*/
 
 extern const char *chyby_str[CH_MAX];
 

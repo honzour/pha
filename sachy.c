@@ -1,4 +1,4 @@
-/*********************************************************/
+ï»¿/*********************************************************/
 /* sachy.c - obsahuje main a zakladni init a done        */
 /* 10.3. 2001 Jan Nemec                                   */
 /*********************************************************/
@@ -28,19 +28,23 @@
 #include "scio.h"
 #endif
 
-void PromazTabulky(TUloha *uloha) {
-  memset((void *)uloha->ht,0,(1 << uloha->HashCfg.DveNaXHash) * sizeof(THashPrvek));
-  memset((void *)uloha->hpt, 0, (1 << uloha->HashCfg.DveNaXHashPech) * sizeof(THashPech));
-  memset((void *)uloha->ntt, 0, (1 << uloha->HashCfg.DveNaXHashNejlepsi) * sizeof(THashPrvek));
+cfunkce void PromazTabulky(TUloha *uloha) {
+    if (uloha->ht != NULL)
+        memset((void *)uloha->ht,0,(1 << uloha->HashCfg.DveNaXHash) * sizeof(THashPrvek));
+    if (uloha->hpt != NULL)
+        memset((void *)uloha->hpt, 0, (1 << uloha->HashCfg.DveNaXHashPech) * sizeof(THashPech));
+    if (uloha->ntt != NULL)
+        memset((void *)uloha->ntt, 0, (1 << uloha->HashCfg.DveNaXHashNejlepsi) * sizeof(THashPrvek));
 }
 
 /*********************************************/
 /* Inicializace ulohy (Alokace tabulek atd)  */
 /*********************************************/
-TUloha *InitUlohu(int DveNaXHash, int DveNaXHashPech, int DveNaXHashNejlepsi) {
+cfunkce TUloha *InitUlohu(int DveNaXHash, int DveNaXHashPech, int DveNaXHashNejlepsi) {
   TUloha *uloha;
 
   uloha = (TUloha *)malloc(sizeof(TUloha));
+  if (uloha == NULL) return NULL;
   (void) memset((void *) uloha, 0, sizeof(TUloha));
   uloha->prt = NULL;
   uloha->pozice = ZakladniPostaveni;
@@ -48,7 +52,7 @@ TUloha *InitUlohu(int DveNaXHash, int DveNaXHashPech, int DveNaXHashNejlepsi) {
   NastavAlgCfgStd(&(uloha->AlgCfg));
   /*ZasumAlgCfg(&(uloha->AlgCfg), 5);*/
   uloha->KonecPartie = 0;
-	
+
   uloha->HashCfg.DveNaXHash = DveNaXHash;
   uloha->HashCfg.DveNaXHashPech = DveNaXHashPech;
   uloha->HashCfg.DveNaXHashNejlepsi = DveNaXHashNejlepsi;
@@ -61,18 +65,60 @@ TUloha *InitUlohu(int DveNaXHash, int DveNaXHashPech, int DveNaXHashNejlepsi) {
   return uloha;
 }
 
+/*
+AItems   Result
+0     => -1
+1     => 0
+2..3  => 1
+4..7  => 2
+8..15 => 3
+...
+*/
+int CalcLowShl(size_t AItems)
+{
+    int result = 0;
+    while (((unsigned)1 << result) <= AItems)
+    {
+        result++;
+    }
+    return result - 1;
+}
+
+cfunkce void SetUlohaHash(TUloha** AUloha, ptrdiff_t AHashSize) {
+    free((void*)((*AUloha)->ht));
+    (*AUloha)->ht = NULL;
+    size_t items = 1024 * 1024 * AHashSize / sizeof(THashPrvek);
+    int shr = CalcLowShl(items);
+    (*AUloha)->AlgCfg.AlgKoef.PovolHash = shr >= 0;
+    if ((*AUloha)->AlgCfg.AlgKoef.PovolHash)
+    {
+        (*AUloha)->HashCfg.DveNaXHash = shr;
+        (*AUloha)->ht = (THashPrvek*)malloc(sizeof(THashPrvek) * (1 << (*AUloha)->HashCfg.DveNaXHash));
+        if ((*AUloha)->ht == NULL)
+        {
+            /* Failed to allocate memory */
+            (*AUloha)->AlgCfg.AlgKoef.PovolHash = 0;
+            (*AUloha)->HashCfg.DveNaXHash = 0;
+        }
+    }
+    else
+    {
+        (*AUloha)->HashCfg.DveNaXHash = 0;
+    }
+}
+
 /**********************************/
 /* mazani ulohy a jejich tabulek  */
 /**********************************/
-void DoneUlohu(TUloha **uloha) {
-	DonePartie(&((*uloha)->prt));
+cfunkce void DoneUlohu(TUloha **uloha) {
+  DonePartie(&((*uloha)->prt));
   free((void *)((*uloha)->ht));
   free((void *)((*uloha)->hpt));
   free((void *)((*uloha)->ntt));
   free((void *)*uloha);
   *uloha = NULL;
 }
-void InitProgram(TUloha **uloha, char *knihsoubor)
+cfunkce void InitProgram(TUloha **uloha, const char *knihsoubor)
 /*********************************************/
 /* Provede inicializaci celeho programu      */
 /* (srand, knihovna...)                      */
@@ -82,7 +128,6 @@ void InitProgram(TUloha **uloha, char *knihsoubor)
 KontrolaTypu
 #endif
  HashInit();
- srand((unsigned)time(NULL));
 #if Typ_Produktu==Projekt
  switch(PrjData.typ){
 /* Sekretarka nepotrebuje velke hash tabulky
@@ -90,21 +135,21 @@ KontrolaTypu
   case 1: *uloha=InitUlohu(1,10); break;
   case 2: *uloha=InitUlohu(1,11); break;
   case 3: *uloha=InitUlohu(10,12); break;
-  case 4: *uloha=InitUlohu(16+rand()&1,13); break;
-  default: *uloha=InitUlohu(17+rand()&1,13); break;
+  case 4: *uloha=InitUlohu(17,13); break;
+  default: *uloha=InitUlohu(18,13); break;
  }
 #else
  *uloha=InitUlohu(19, 19, 19);
 #endif
  if(!!knihsoubor && !init_knihovna(knihsoubor)) {
 #if Typ_Produktu==Projekt
-	 SCioVypis("Nacetl jsem knihovnu");
+     SCioVypis("Nacetl jsem knihovnu");
 #endif
-	 MamKnihovnu=1;
+     MamKnihovnu=1;
  }
 #if Typ_Produktu==Projekt
  else
-	 SCioVypis("varovani: Neuspech nacitani knihovny");
+     SCioVypis("varovani: Neuspech nacitani knihovny");
 #endif
 }
 
@@ -169,17 +214,17 @@ data=(u8 *) strdup(
  free(data);
  return(0);
  }
-#elif Typ_Produktu==Win32_DLL
-#error DLL není implementována
-#elif Typ_Produktu==Win32_Program
+#elif Typ_Produktu==DLL
+/* Vse je v dllmain */
+#elif Typ_Produktu==WindowsProgram
 /* Vse je ve winmain.c*/
 #elif Typ_Produktu==Qt_Program
 /* Vse je ve qtsachy.c*/
 #elif Typ_Produktu==Projekt
+/*************************************/
+/* main pro projekt Sachove centrum  */
+/*************************************/
 int main(int argc, char **argv){
-/*************************************/
-/* main pro ptojekt Sachove centrum  */
-/*************************************/
 TUloha *uloha;
 
 #ifdef SCioLadim
@@ -194,7 +239,7 @@ TUloha *uloha;
   SCioVypis("Vstoupil jsem do main()");
   SCNactiArgumenty(argc,argv);
   SCioVypis("Volam InitProgram(&uloha,\"knihovna\");");
-  InitProgram(&uloha,"/home/honza/knihovna");
+  InitProgram(&uloha,"knihovna");
   SCOtevriSocket();
   SCCyklus(uloha);
   SCZavriSocket();
@@ -204,5 +249,5 @@ TUloha *uloha;
   return 0;
 }
 #else
-  #error Na co se to teda vlastne preklada ???
+  #error "Na co se to teda vlastne preklada?"
 #endif

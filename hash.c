@@ -1,12 +1,11 @@
-/* ©achové centrum - Knihovna zahájení Petr Kuèera 2000*/
-/* ha¹ovací funkce pøevzatá z hashtab.c - Jan Nìmec*/
-
+ï»¿/* Å achovÃ© centrum - Knihovna zahÃ¡jenÃ­ Petr KuÄera 2000*/
+/* haÅ¡ovacÃ­ funkce pÅ™evzatÃ¡ z hashtab.c - Jan NÄ›mec*/
 #include <stdlib.h>
 
 #include "hash.h"
 #include "cotyvar.h"
 
-/*Struktura s konstantami pou¾itımi pøi vıpoètu ha¹ovacího klíèe*/
+/*Struktura s konstantami pouÅ¾itÃ½mi pÅ™i vÃ½poÄtu haÅ¡ovacÃ­ho klÃ­Äe*/
 hash_nahoda_t hash_nahoda;
 
 u32 obk_hash(TPozice *pos)
@@ -34,7 +33,7 @@ int obk_init_hash()
 #endif
   for(i=0;i<=12;i++) {
     for(k=a1;k<=h8;k++) {
-	hash_nahoda.f[i][k]=MOJE_RAND();
+    hash_nahoda.f[i][k]=MOJE_RAND();
     }
   }
   for(i=0;i<=h5;i++) {
@@ -46,4 +45,3 @@ int obk_init_hash()
   }
   return 0;
 }
-

@@ -1,5 +1,4 @@
-/* ©achové centrum - Knihovna zahájení Petr Kuèera 2000*/
-
+ï»¿/* Å achovÃ© centrum - Knihovna zahÃ¡jenÃ­ Petr KuÄera 2000*/
 #include "datastr.h"
 #include "obk_ch.h"
 #include "hash.h"
@@ -14,10 +13,10 @@ int stejne_pozice(TPozice *a, TPozice *b)
     if(a->mimoch!=b->mimoch||
        a->roch!=b->roch||
        a->bily!=b->bily)
-	return 0;
+    return 0;
     for(i=20;i<h8;i++) {
-	if(i%10>0&&i%10<9&&a->sch[i]!=b->sch[i])
-	    return 0;
+    if(i%10>0&&i%10<9&&a->sch[i]!=b->sch[i])
+        return 0;
     }
     return 1;
 }
@@ -89,7 +88,7 @@ int dump_f_pozice(FILE *file,f_pozice_t *pozice)
     if(i%10>0&&i%10<9) {
       fprintf(file," %c",zn_fig(pozice->pozice.sch[(i/10)*10+9-i%10]));
       if(i%10==1)
-	fprintf(file,"\n");
+        fprintf(file,"\n");
     }
   }
   fprintf(file,"\n");
@@ -123,7 +122,7 @@ int print_pozice(FILE *file,TPozice *pozice)
     if(i%10>0&&i%10<9) {
       fprintf(file," %c",zn_fig(pozice->sch[i]));
       if(i%10==8)
-	fprintf(file,"\n");
+        fprintf(file,"\n");
     }
   }
   fprintf(file,"\n");
@@ -143,10 +142,10 @@ int pakuj(TPozice *pozice, f_tpozice_t *fpozice)
   for(i=21; i<99; i++) {
     if(i%10==0||i%10==9)
       continue;
-    if((i%10)%2) { /*liché*/
+    if((i%10)%2) { /*lichÃ©*/
       fpozice->sch[j]=6+pozice->sch[i];
     }
-    else { /*sudé*/
+    else { /*sudÃ©*/
       fpozice->sch[j++]|=((6+pozice->sch[i])<<4);
     }
   }

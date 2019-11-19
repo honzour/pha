@@ -1,4 +1,4 @@
-/*********************************************************/
+Ôªø/*********************************************************/
 /* globruti.h - globalni sachove rutiny                  */
 /* napr. zahrani a vraceni tahu v partii                 */ 
 /* 31.12. 2000 Jan Nemec                                 */
@@ -7,8 +7,7 @@
 #define globrutiH
 #include "volby.h"
 #include "cotyvar.h"
-#define LadeniGlobruti 100
-cfunkce void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...);
+
 /***********************************************************************/
 /*  GlobTahni - Tah v partii (nikoliv v propoctu)                      */
 /*  na zasobnik ani nesahne                                            */
@@ -17,68 +16,83 @@ cfunkce void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...);
 /*  je-li useknout false, nejsou zadne dalsi parametry, jde o          */
 /*  znovuzahrani vraceneho tahu - ten se nacte z partie, ta se posune  */
 /*  o 1 doprava, ocas se nemaze                                        */
-/*  Je-li TestKonnce true, otestuje se, neskonËila-li partie.          */
+/*  Je-li TestKonnce true, otestuje se, neskonƒçila-li partie.          */
 /***********************************************************************/
-cfunkce void GlobTahniZpet(TUloha *uloha);
+cfunkce void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...);
+
 /***************************************************************************/
 /*   GlobTahniZpet - Tahne zpet v partii (Nikoliv v propoctu)              */
 /*   Posune se v partii o 1 doleva, ocas nemaze, na zasobnik ani nesahne   */
 /***************************************************************************/
-cfunkce int KorektniTah(u16 tah, TUloha *uloha);
+cfunkce void GlobTahniZpet(TUloha *uloha);
+
 /*************************************************************************/
 /*  KorektniTah - je to pripustny tah ?                                  */
 /*  Zvedne uroven zasobniku, nalezne tahy, vyskrta nepripustne,          */
 /*  pokusi se tam ten tah najit a nakonec snizi uroven zasobniku zpet.   */
 /*************************************************************************/
-cfunkce int KTNehledej(u16 tah, TUloha *uloha);
+cfunkce int KorektniTah(u16 tah, TUloha* uloha);
+
 /*************************************************************************/
-/*  KTNehledej -  Analogie KorektiTah, jen uû vöe musÌ b˝t na z·sobnÌku. */
-/*  Ze z·sobnÌku pouze Ëte.												 */
+/*  KTNehledej -  Analogie KorektiTah, jen u≈æ v≈°e mus√≠ b√Ωt na z√°sobn√≠ku. */
+/*  Ze z√°sobn√≠ku pouze ƒçte.                                                 */
 /*************************************************************************/
-cfunkce void JenPripustne(TUloha *uloha);
+cfunkce int KTNehledej(u16 tah, TUloha* uloha);
+
 /*************************************************************************
  *  JenPripustne - Vynda z prvni dle pos volne (ale v praxi obsazene)    *
  *  urovne zasobniku nepripustne tahy.                                   *
  *  tj. ty vedouci k sachu. Pomerne pomale, neuzivat v rekurzi propoctu. *
  *  Nastavi pocatek nove prazdne urovne (snizi nebo necha)               *
  *************************************************************************/
-cfunkce int JeTam1(u8 odkud,TUloha *uloha);
+cfunkce void JenPripustne(TUloha* uloha);
+
 /****************************************************/
 /* Je mezi nalezenymi tahi nejaky vedouci z odkud ? */
 /****************************************************/
-cfunkce int JeTam2(u8 odkud,u8 kam,TUloha *uloha);
+cfunkce int JeTam1(u8 odkud, TUloha* uloha);
+
 /***********************************************************/
 /* Je mezi nalezenymi tahi nejaky vedouci z odkud do kam ? */
 /***********************************************************/
-#if Typ_Produktu==Win32_Program
-#include <windows.h>
-cfunkce u16 DoplnTah(HWND hwnd,u8 odkud,u8 kam,TUloha *uloha);
+cfunkce int JeTam2(u8 odkud, u8 kam, TUloha* uloha);
+
+#if Typ_Produktu==WindowsProgram
 /***************************************************/
 /* Jen windows - pripadny dialog promeny pesce     */
 /***************************************************/ 
+cfunkce u16 DoplnTah(HWND hwnd, u8 odkud, u8 kam, TUloha* uloha);
 #endif
+
 #if Typ_Produktu==Qt_Program
 cfunkce u16 DoplnTah(u8 odkud,u8 kam,TUloha *uloha);
 #endif
-cfunkce int Remiza50Nebo3(TUloha *uloha);
+
 /************************************************************************
-*  Je remÌza 50 tahy nebo 3x stejn· pozice ?                            *
-*  vracÌ 50, 3 nebo 0 (v˝znam je jasn˝)                                 *
+*  Je rem√≠za 50 tahy nebo 3x stejn√° pozice ?                            *
+*  vrac√≠ 50, 3 nebo 0 (v√Ωznam je jasn√Ω)                                 *
 ************************************************************************/
+cfunkce int Remiza50Nebo3(TUloha* uloha);
 
 #define BilyVMatu 1
+
 #define CernyVMatu 2
+
 #define Remis3 3
+
 #define Remis50 4
+
 #define RemisBilyVPatu 5
+
 #define RemisCernyVPatu 6
+
 #define RemisMaloMaterialu 7
-cfunkce void ZjistiTypKoncePartie(TUloha *uloha);
+
 /************************************************************************
- * Jak dopadla partie ? NastavÌ spr·vnÏ uloha->KonecPartie              *
+ * Jak dopadla partie ? Nastav√≠ spr√°vnƒõ uloha->KonecPartie              *
  ************************************************************************/
-#if Typ_Produktu==Win32_Program
+cfunkce void ZjistiTypKoncePartie(TUloha* uloha);
+#if Typ_Produktu==WindowsProgram
 extern char NazvyVysledku[8][38];
 #endif
 #endif
-

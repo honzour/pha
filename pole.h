@@ -1,8 +1,9 @@
-#ifndef poleH
+﻿#ifndef poleH
 #define poleH
 /**************************************/
 /*    Definice vsech poli             */
 /**************************************/
+
 #define a1 21
 #define b1 22
 #define c1 23

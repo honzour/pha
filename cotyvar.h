@@ -1,4 +1,4 @@
-/*********************************************************/
+ï»¿/*********************************************************/
 /* cotyvar.h - definice zakladnich typu a konstant       */
 /* 31.12. 2000 Jan Nemec                                 */
 /*********************************************************/
@@ -6,6 +6,7 @@
 #define cotyvarH
 #include <time.h>
 #include "volby.h"
+
 /******************************************/
 /*       Definice ciselnych typu          */
 /******************************************/
@@ -15,33 +16,38 @@
 #define u16 unsigned short
 #define s32 signed int
 #define u32 unsigned int
+#define s64 __int64
+#define u64 unsigned __int64
 /*#define bool int
 #define true 1
 #define false 0*/
 #define KontrolaTypu  if (sizeof(s8) != 1 || sizeof(u8) != 1||\
      sizeof(s16) != 2 || sizeof(u16) != 2||\
-     sizeof(s32) != 4 || sizeof(u32) != 4)\
+     sizeof(s32) != 4 || sizeof(u32) != 4||\
+     sizeof(s64) != 8 || sizeof(u64) != 8)\
   Chyba("Chyba: spatne nastavene ciselne typy");
 
+/* Klasicka sachovnice 12*10 */
 typedef s8 TSch[12*10];
- /* Klasicka sachovnice 12*10 */
+
 typedef struct {
 u8 roch;  /* binarne 00...00vmVM */
-	   /* V,v - moznost velke rosady bileho a cerneho
-	      M,m - totez s malou  */
+       /* V,v - moznost velke rosady bileho a cerneho
+          M,m - totez s malou  */
 u8 mimoch;  /* Pole, na nemz stoji pesec tahnuvsi v predchozim tahu o 2,
-	     nebo 0 pokud se minule netahlo pescem o 2 */
+         nebo 0 pokud se minule netahlo pescem o 2 */
  int bily;    /* Je bily na tahu ?*/
  TSch sch;} TPozice;
+
+/* Horni odhad delky vetve stromu propoctu - kvuli velikosti datovych struktur */
 #define MaxHloubkaPropoctu 30
-/* Horni odhad delky vetve stromu propoctu - kvuli velikosti
-   datovych struktur */
+
+/* Tohle neni zadny horni odhad. Jen kvuli velikosti zasobniku tahu.*/
 #define TahuZPozice 64
-/* Tohle neni zadny horni odhad. Jen kvuli velikosti zasobniku
- tahu.*/
-#define HloubkaZasobnikuTahu (TahuZPozice*MaxHloubkaPropoctu)
+
 /* Kolik tahu na zasobniku */
-typedef struct {u16 data;  s16 cena;} TTah1;
+#define HloubkaZasobnikuTahu (TahuZPozice*MaxHloubkaPropoctu)
+
 /* Format TTah1::data:   def.: Nenormalni tah je
 1) rosada
 2) promena pesce
@@ -51,15 +57,15 @@ typedef struct {u16 data;  s16 cena;} TTah1;
    a efektivni rutiny zejmena pro normalni tahy. (Nebot se s timto typem
    pocita v rekurzi a normalni tahy jsou skoro vsechny)
    binarne  1234567812345678
-	        nmoooooookkkkkkk (normalni tah a brani mimochodem)
-	        nmrcv00000000000 (rosada)
-	        nmrcppoookkk0000 (promena pesce)
+            nmoooooookkkkkkk (normalni tah a brani mimochodem)
+            nmrcv00000000000 (rosada)
+            nmrcppoookkk0000 (promena pesce)
 n - Je to nenormalni tah ?
   Pokud ne (tj. tah je normalni), je m=0 (MUSI byt 0) a ooooooo a kkkkkkk
    ma vyznam poli odkud a kam se tahne.
   Pokud ano (tj. tah je nenormalni):
    m - Je to rosada nebo promena pesce ?
-    Pokud ne (tj. je to brani mimochodem) ma ooooooo a kkkkkkk tak‚ vyse
+    Pokud ne (tj. je to brani mimochodem) ma ooooooo a kkkkkkk takÂ‚ vyse
      uvedeny vyznam.
    Pokud ano:
     r - Je to rosada ?
@@ -69,21 +75,26 @@ n - Je to nenormalni tah ?
       c: je to promena cerneho pesce ?
       pp: v co se pesec meni 0=kun, 1=strelec, 2=vez, 3=dama
       ooo: cislo, ktere se musi pricist k A7 (je-li to promena bileho pesce)
-	   nebo A2 (je-li to promena cerneho pesce), abychom dostali pole,
-	   odkud pesec tahne
+       nebo A2 (je-li to promena cerneho pesce), abychom dostali pole,
+       odkud pesec tahne
       kkk: totiz s polem promeny, jen misto A7 (resp. A2) se bere  A8
        (resp A1)
+*/
+typedef struct { u16 data;  s16 cena; } TTah1;
 
-Presne v duchu predchozi definice si napisu konstanty pro rosady */
+/* Konstanta TTah1::data pro malou rosadu bileho rosady */
 #define MBRoch (7<<13)
+/* Konstanta TTah1::data pro velkou rosadu bileho rosady */
 #define VBRoch ((7<<13)|(1<<11))
+/* Konstanta TTah1::data pro malou rosadu cerneho rosady */
 #define MCRoch (15<<12)
+/* Konstanta TTah1::data pro velkou rosadu cerneho rosady */
 #define VCRoch (31<<11)
 /**
   Jeden prvek partie.
 */
 typedef struct {
-    /*data tahu*/
+  /*data tahu*/
   u16 t;
   /*stav rosad pred zahranim - viz TPozice*/
   u8 roch;
@@ -96,34 +107,33 @@ typedef struct {
   /*kvuli detekci opakovani*/
   u32 hashF;
 #ifdef STRINGTAH
-  /*Kvùli partiáøi*/
+  /*KvÅ¯li partiÃ¡Å™i*/
   char nazev[15];
 #endif
 } TPartData;
 
+/*Partie je obousmerny spojak tahu. Prvni uzel je nevyuzity - to abych mohl byt ve stavu pred zahranim tahu.*/
 typedef struct tpartie{
  struct tpartie *l;
  struct tpartie *p;
  TPartData data;} TPartie;
- /*Partie je obousmerny spojak tahu. Prvni uzel je nevyuzity
- - to abych mohl byt ve stavu pred zahranim tahu.*/
+ 
 typedef struct{
- int VNT; /*Jsem v metodì nulového tahu ? Kolikrat vnorene ?*/
- int NulTah; /* Smim pouzit metodu nuloveho tahu. (Napr.
- v koncovce (nebo pri ladeni :-)) ne. */
+ int VNT; /*Jsem v metodÄ› nulovÃ©ho tahu ? Kolikrat vnorene ?*/
+ int NulTah; /* Smim pouzit metodu nuloveho tahu. (Napr. v koncovce (nebo pri ladeni :-)) ne. */
+ int SelDepth;
  time_t sKonceMysleni; /*Kdy mam koncit*/
  int msKonceMysleni;
- volatile int MamKoncitMysleni;
- /*Je-li true, prestane se pocitat a vylezu z rekurze*/
+ volatile int MamKoncitMysleni; /*Je-li true, prestane se pocitat a vylezu z rekurze*/
 } TStavPropoctu;
 
+/*Nastaveni hash tabulek */
 typedef struct {
   u32 DveNaXHash; /*Kdyz na to umocnim 2, mam velikost tabulky*/
   u32 DveNaXHashPech;/*Totez pro pescovou strukturu*/
   u32 DveNaXHashNejlepsi; /*Totez pro hash nejlepsiho*/
   int PrepisujHash;/*Mam prepisovat starsi ale hlubsi ? - normalne ano*/
-} THashCfg; /*Nastaveni hash tabulek */
-
+} THashCfg; 
 
 /** 
   Zasobnik tahu.
@@ -175,7 +185,6 @@ typedef struct {
   u8 druhRozsir[MaxHloubkaPropoctu];
 } TZasobnikTahu;
 
-
 #define ROZSIR_NE 0
 #define ROZSIR_FISCHER 1
 #define ROZSIR_DOBRANI 2
@@ -184,117 +193,142 @@ typedef struct {
 #define ROZSIR_HROZBA_DAMOU 16
 #define ROZSIR_VIDLE 32
 
-
+/* HashItem (8 bytes) */
 typedef struct{
-	u32 kod; /* hash funkce pozice */
-	s16 cena; /* cena pozice z hrace na tahu... */
-	u8 hloubka; /* ....pri propoctu do hloubky hloubka */
-	u8 priznak; /* xxxxxxHD
-	 D - pozice je stejná nebo lepsí nez cena
-	 H - pozice je stejná nebo horsí nez cena 
-	(=> H&D - pozice má pøesnì danou hodnotu) */
+    u32 kod; /* hash funkce pozice */
+    s16 cena; /* cena pozice z hrace na tahu... */
+    u8 hloubka; /* ....pri propoctu do hloubky hloubka */
+    u8 priznak; /* xxxxxxHD
+     D - pozice je stejnÃ¡ nebo lepsÃ­ nez cena
+     H - pozice je stejnÃ¡ nebo horsÃ­ nez cena 
+    (=> H&D - pozice mÃ¡ pÅ™esnÄ› danou hodnotu) */
 } THashPrvek;
 
+/* Tohle ukladam do hash tabulky pescove struktury (44 bytes) */
+/* Opozdeny pesec je takovy, ze neni kryty pescem a policko pred nim je vicekrat
+  napadeno pesci nez pokryto pesci a neni na nem pesec */
 typedef struct {
-	u32 kod;
-	s16 cena;
-	u8 b[8]; /* kde stoji bili pesci, je-li jich mene nez 8, je za poslednim 0*/
-	u8 c[8]; /* kde stoji cerni pesci, je-li jich mene nez 8, je za poslednim 0*/
-	u8 bt[8]; /*typ bilych pescu 0|0|izolovany|volny|kryty|vedle|opozdeny|blokovany*/
-/*Opozdeny pesec je takovy, ze neni kryty pescem a policko pred nim je vicekrat
-  napadeno pesci nez pokryto pesci a neni na nem pesec
- */
-	u8 ct[8]; /*typ cernych pescu 0|0|izolovany|volny|kryty|vedle|opozdeny|blokovany*/
-	u8  bb; /*bili na bilych polich (pocet) blokovani 2x*/
-	u8  bc; /*bili na cernych polich (pocet) blokovani 2x*/
-	u8  cb; /*cerni na bilych polich (pocet) blokovani 2x*/
-	u8  cc; /*cerni na cernych polich (pocet) blokovani 2x*/
-	u8  centr; /* pesci v centru (sloupce c az f)
-	blokovani se pocitaji dvakrat*/
-	u8  otsloupec; /*otevrene sloupce*/
-} THashPech; /* Tohle ukladam do hash tabulky pescove struktury*/
+    u32 kod;
+    s16 cena;
+    /* kde stoji bili pesci, je-li jich mene nez 8, je za poslednim 0*/
+    u8 b[8]; 
+    /* kde stoji cerni pesci, je-li jich mene nez 8, je za poslednim 0*/
+    u8 c[8];
+    /*typ bilych pescu 0|0|izolovany|volny|kryty|vedle|opozdeny|blokovany*/
+    u8 bt[8]; 
+    /*typ cernych pescu 0|0|izolovany|volny|kryty|vedle|opozdeny|blokovany*/
+    u8 ct[8]; 
+    /*bili na bilych polich (pocet) blokovani 2x*/
+    u8 bb; 
+    /*bili na cernych polich (pocet) blokovani 2x*/
+    u8 bc; 
+    /*cerni na bilych polich (pocet) blokovani 2x*/
+    u8 cb; 
+    /*cerni na cernych polich (pocet) blokovani 2x*/
+    u8 cc; 
+    /* pesci v centru (sloupce c az f) blokovani se pocitaji dvakrat*/
+    u8 centr; 
+    /*otevrene sloupce*/
+    u8 otsloupec; 
+} THashPech;
 
 /**
   Nastaveni algoritmu.
 */
 typedef struct{
-	s16 MaxPosZmena; 
-/* Maximalni zmena pozicni slozka hodnoty pozice
-   za jeden pultah. Uziva se k orezani ohodnocovaci
-   funkce. (Aby se neprovadela oh. f. v pozicich se
-   ztratou materialu.)
-	*/
-	s16 PesecKryty;/*Bonus za pesce kryteho jinym pescem*/
-	s16 PesecVedle;/*Bonus za pesce, ktery ma vedle sebe
-	jineho (Napr. e2 a d2)*/
-	s16 PesecE2Blok; /*Pesec na e2/e7 a na e3/e6 je kamen*/
-	s16 PesecD2Blok; /*Pesec na d2/d7 a na e3/e6 je kamen*/
-	s16 DvojPesec; /*Postih za pesce, pred kterym je alespon
-	jeden kolega*/
-	s16 PesecIzolovany;/*Kdyz na sousednich sloupcich neni
-	 pesec teze barvy*/
-	s16 PesecVolny;/*Neni blokovan zadnym pescem a postoupi-li
-	o 1, nebude ho moci sebrat zadny souperuv*/
-	s16 PesecSlaby;/*Neni blokovan pescem ani kryty ani volny*/
-	s16 SlabyPesecNapaden; /*Bonus za napadeni slabeho pesce
-	(zatim jen vezi a kralem v koncovce)*/
-	s16 VezNaSloupci;
-	s16 hh1Bonus;
-  s16 hh2Bonus;
-	s16 FischeruvStrelec; /*Strelec v pasti na a2/h2 a7/h7*/
-	/*Rozsirovaci meze - kdyz jsem provedl n+1 rozsireni,
-	nebudu uz delat dalsi (n zavisi na typu rozsireni)*/
-	u8 MaxRozsirSach; /* Rozsireni jsem-li v sachu*/
-	u8 MaxRozsirPredstav; /* Rozsireni pri kryti sachu predstavenim*/
-	u8 MaxRozsirDober;/* Rozsireni pri brani berouci figury*/
-	u8 MaxRozsirPesec7;/* Rozsireni v listu pri postupu pesce na 7. / 2. radu*/
-	u8 MaxRozsirFischer;/* Rozsireni pri pasti na strelce (1. partie Spasskij - Fischer)*/
-	u8 MaxHloubkaABB; /*Dopocet do tiche pozice*/
-	u8 PovolHash; /*Ma se vubec uvazovat hash tabulka ?*/
-	u8 PovolPechHash; /*Ma se vubec uvazovat hash tabulka pescu ?*/
-  u8 PovolNullTah; /*Povolit nulovy tah*/
+    /* Maximalni zmena pozicni slozka hodnoty pozice
+       za jeden pultah. Uziva se k orezani ohodnocovaci
+       funkce. (Aby se neprovadela oh. f. v pozicich se
+       ztratou materialu.)
+        */
+    s16 MaxPosZmena;
+    /*Bonus za pesce kryteho jinym pescem*/
+    s16 PesecKryty;
+    /*Bonus za pesce, ktery ma vedle sebe jineho (Napr. e2 a d2)*/
+    s16 PesecVedle;
+    /*Pesec na e2/e7 a na e3/e6 je kamen*/
+    s16 PesecE2Blok;
+    /*Pesec na d2/d7 a na e3/e6 je kamen*/
+    s16 PesecD2Blok;
+    /*Postih za pesce, pred kterym je alespon jeden kolega*/
+    s16 DvojPesec; 
+    /*Kdyz na sousednich sloupcich neni pesec teze barvy*/
+    s16 PesecIzolovany;
+    /*Neni blokovan zadnym pescem a postoupi-li o 1, nebude ho moci sebrat zadny souperuv*/
+    s16 PesecVolny;
+    /*Neni blokovan pescem ani kryty ani volny*/
+    s16 PesecSlaby;
+    /*Bonus za napadeni slabeho pesce (zatim jen vezi a kralem v koncovce)*/
+    s16 SlabyPesecNapaden; 
+    s16 VezNaSloupci;
+    s16 hh1Bonus;
+    s16 hh2Bonus;
+    /*Strelec v pasti na a2/h2 a7/h7*/
+    s16 FischeruvStrelec; 
+
+    /*Rozsirovaci meze - kdyz jsem provedl n+1 rozsireni, nebudu uz delat dalsi (n zavisi na typu rozsireni)*/
+
+    /* Rozsireni jsem-li v sachu*/
+    u8 MaxRozsirSach;
+    /* Rozsireni pri kryti sachu predstavenim*/
+    u8 MaxRozsirPredstav; 
+    /* Rozsireni pri brani berouci figury*/
+    u8 MaxRozsirDober;
+    /* Rozsireni v listu pri postupu pesce na 7. / 2. radu*/
+    u8 MaxRozsirPesec7;
+    /* Rozsireni pri pasti na strelce (1. partie Spasskij - Fischer)*/
+    u8 MaxRozsirFischer;
+    /*Dopocet do tiche pozice*/
+    u8 MaxHloubkaABB; 
+    /*Ma se vubec uvazovat hlavni hash tabulka ?*/
+    u8 PovolHash;
+    /*Ma se vubec uvazovat hash tabulka pescu ?*/
+    u8 PovolPechHash; 
+    /*Povolit nulovy tah*/
+    u8 PovolNullTah; 
 } TAlgKoef;
 
 typedef struct{
-  TAlgKoef AlgKoef;
   /*Jednoduche (ne pole) koeficienty*/
-  s16 bp[89],cp[89];
+  TAlgKoef AlgKoef;
   /*bily, cerny pesec*/
-  s16 bpv[89],cpv[89];
+  s16 bp[89],cp[89];
   /*bily, cerny volny pesec - aditivum k bp a cp*/
-  s16 bkz[99], ckz[99], kk[99], kkb[99], kkc[99];
+  s16 bpv[89],cpv[89];
   /*bily, cerny kral v zahajeni, libovolny kral v koncovce,
   kral tlaceny do bileho a cerneho kouta*/
-  s16 bj[99],cj[99];
+  s16 bkz[99], ckz[99], kk[99], kkb[99], kkc[99];
   /*bily, cerny kun*/
-  s16 bs[99],cs[99];
+  s16 bj[99],cj[99];  
   /*bily, cerny strelec*/
+  s16 bs[99],cs[99];  
 } TAlgCfg;
 
 typedef struct {
-/* Na kterem sloupci jsou bili/cerni pesci*/
+/* Na kterem sloupci jsou bili pesci*/
  u8 BPSloupec[8];
+ /* Na kterem sloupci jsou cerni pesci*/
  u8 CPSloupec[8];
 /* u8 BVSloupec[8];
  u8 CVSloupec[8];*/
- u8 b[5]; /*Pocet figur bileho - pesec..dama*/
- u8 c[5]; /*Totez pro cerneho*/
- u8 bk, ck; /*Kde jsou kralove*/
+ /*Pocet figur bileho - pesec..dama*/
+ u8 b[5]; 
+ /*Pocet figur cerneho - pesec..dama*/
+ u8 c[5];
+ /*Kde jsou kralove*/
+ u8 bk, ck; 
 } TMaterial;
 
+/*napr. NalezBileVazby spravne vyplni, obshuje policka. Neni-li jich vsech 8, je za posledni 0 */
 typedef u8 TVazby[8];
-/*napr. NalezBileVazby spravne vyplni, obshuje policka.
-Neni-li jich vsech 8, je za posledni 0*/
 
 typedef u32 TRemPol[101];
 
-/*Tabulka pozic z partie, ktere mohou nastat v propoctu
-(kvuli detekci remiz v propoctu)*/
+/*Tabulka pozic z partie, ktere mohou nastat v propoctu (kvuli detekci remiz v propoctu)*/
 typedef struct {
  TRemPol RemPol;
  int poc;
 } TRemTab;
-
 
 typedef struct {
   u32 MS,OH,OH2,OHP,UZ, TA;
@@ -311,7 +345,6 @@ typedef struct {
   ALFA_POCET[MaxHloubkaPropoctu],
   ALFA_CELKEM[MaxHloubkaPropoctu];
 } TStatistika;
-
 
 /* 
    TUloha.
@@ -368,18 +401,25 @@ typedef struct {
   /*kde jsou jake vazby (kvuli spec. pripadum v generatoru)*/
   TVazby Vazby;
 
+  int Analyze;
+
 #ifdef Statistika
   TStatistika stat; 
 #endif
 } TUloha;
 
-#define mat 30000
 /*Konstanta pro hodnotu pozice*/
+#define mat 30000
+#define ZadnaCena -32768
+#define FoundInEndgameDatabaseScore 1000
+
+/*inicializacni konstantni promenna*/
 extern const TPozice ZakladniPostaveni;
+
 /*inicializacni konstantni promenna*/
 extern const TAlgKoef STDAlgKoef;
-/*inicializacni konstantni promenna*/
+
+/*obecne uzitecna makra*/
 #define MAX(X,Y)((X)>(Y)?(X):(Y))
 #define MIN(X,Y)((X)<(Y)?(X):(Y))
-/*obecne uzitecna makra*/
 #endif

@@ -1,14 +1,17 @@
-/* ©achovÈ centrum - Knihovna zah·jenÌ Petr KuËera 2000*/
-/* Definice funkcÌ pot¯ebn˝ch pro p¯Ìstup do knihovny zah·jenÌ na nejvyππÌ ˙rovni
+Ôªø/* ≈†achov√© centrum - Knihovna zah√°jen√≠ Petr Kuƒçera 2000*/
+/* Definice funkc√≠ pot≈ôebn√Ωch pro p≈ô√≠stup do knihovny zah√°jen√≠ na nejvy≈°≈°√≠ √∫rovni
  */
-
 #include "knihovna.h"
 #include "cteni.h"
 #include "obk_ch.h"
 #include <stdlib.h>
 #include <math.h>
+#if Typ_Produktu==DLL
+#include <string.h>
+#include "interface.h"
+#endif
 
-int init_knihovna(char *jmsoub)
+int init_knihovna(const char *jmsoub)
 {
   return init_cteni(jmsoub);
 }
@@ -17,7 +20,8 @@ u16 query_knihovna(TPozice *pozice, char *eco)
 {
   f_pozice_t f_pozice;
   int ch,j,vybran=0;
-  char vaha=1+rand()%100;
+  srand((unsigned)time(NULL));
+  char vaha = 1 + rand() % 100;
   f_tah_t tah;
   u16 tah_data;
   if(cteni_soubor==NULL) {
@@ -65,7 +69,17 @@ u16 query_knihovna(TPozice *pozice, char *eco)
 u16 KnihDejTah(TPozice *pos)
 {
   char eco[4];
-  return query_knihovna(pos,eco);
+  u16 result = query_knihovna(pos, eco);
+#if Typ_Produktu==DLL
+  if (result != 0)
+  {
+    char message[40];
+    strcpy_s(message, "Found in opening book, ECO: ");
+    strcat_s(message, eco);
+    Callbacks.TellGUIInfo(message);
+  }
+#endif
+  return result;
 }
 
 int knih_dej_vsechny_tahy(TPozice *pozice, f_tah_t **tahy, int *pocet_tahu)

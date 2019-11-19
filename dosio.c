@@ -1,6 +1,6 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* dosio.c - consolovy vstup a vystup                    */
-/* 11.1. 2001 Jan Nemec                                  */
+/* 11. 1. 2001 Jan Nemec                                 */
 /* Pro consolovou variantu programu a pro ladici vypisy  */
 /*********************************************************/
 #include <string.h>
@@ -19,7 +19,6 @@
 #include "generato.h"
 #include "globruti.h"
 #include "partie.h"
-#include "soubvv.h"
 #include "tabulky.h"
 #include "hashtab.h"
 #include "kontrola.h"
@@ -51,7 +50,7 @@ static void TestujGenerator(TUloha *uloha) {
   }
   SetridTahy(uloha);
   for(i = 0; i < uloha->zasobnik.hranice[1];i++) {
-    TahToStr(uloha->zasobnik.tahy[i].data,uloha,s);
+    TahToLongStr(uloha->zasobnik.tahy[i].data,s);
     printf("%s (%i)(%i); ",s,
       (int)uloha->zasobnik.tahy[i].data,
       (int)uloha->zasobnik.tahy[i].cena);
@@ -60,14 +59,14 @@ static void TestujGenerator(TUloha *uloha) {
   puts("");
 }
 
-static const char JmenaFigur[7]={' ','p','j','s','v','d','k'};
+static const char JmenaFigur[7]={' ','p','n','b','r','q','k'};
 
 static void TiskniFiguru(s8 figura, FILE *f) {
   putc(figura > 0 ? '*' : ' ',f);
   putc(toupper(JmenaFigur[abs(figura)]),f);
 }
 
-static void TiskniSachovnici(TPozice *pos,FILE *f) {
+extern void TiskniSachovnici(TPozice *pos,FILE *f) {
   int x,y;
   for (y = 7; y >= 0; y--) {
     fprintf(f, "%d  |", y + 1);
@@ -147,16 +146,16 @@ void HTMLTiskniSachovnici(TPozice *pos, FILE *f) {
 
 void createMissingPath(char *path)
 {
-	int i;
-	for (i = 0; path[i]; i++)
-	{
-		if (path[i] == '/')
-		{
-			path[i] = 0;
-			mkdir(path, 0755);
-			path[i] = '/';
-		}
-	}
+    int i;
+    for (i = 0; path[i]; i++)
+    {
+        if (path[i] == '/')
+        {
+            path[i] = 0;
+            mkdir(path, 0755);
+            path[i] = '/';
+        }
+    }
 
 }
 
@@ -190,9 +189,6 @@ void zavriHtmlLog(FILE *f) {
 
 #endif
 
-
-
-
 #if Typ_Produktu==DOS_UNIX 
 
 #define HelpStr "\
@@ -223,17 +219,17 @@ int Cas=5000;
 int Hloubka=40;
 
 static void CasMysleni(void){
-	char s[256];
-	printf("Cas mysleni je %i ms.\nZadej novy v ms:",Cas);
-	fgets(s,254,stdin);
-	sscanf(s,"%i",&Cas);
+    char s[256];
+    printf("Cas mysleni je %i ms.\nZadej novy v ms:",Cas);
+    fgets(s,254,stdin);
+    sscanf(s,"%i",&Cas);
 }
 
 static void HloubkaMysleni(void){
-	char s[256];
-	printf("Hloubka mysleni je %i.\nZadej novou hloubku:", Hloubka);
-	fgets(s,254,stdin);
-	sscanf(s,"%i",&Hloubka);
+    char s[256];
+    printf("Hloubka mysleni je %i.\nZadej novou hloubku:", Hloubka);
+    fgets(s,254,stdin);
+    sscanf(s,"%i",&Hloubka);
 }
 
 static void TiskniOhrozeni(TUloha *uloha)
@@ -246,7 +242,7 @@ static void TiskniOhrozeni(TUloha *uloha)
    {i=Ohrozeno(&(uloha->pozice.sch[21+x+y*10]),0)+
       (Ohrozeno(&(uloha->pozice.sch[21+x+y*10]),1)<<1);
     putchar('0'+i);TiskniFiguru(uloha->pozice.sch[21+x+y*10],stdout);
-	putchar('|');}
+    putchar('|');}
     putchar('\n');}
   printf("   ");
   for (x=0;x<=7;x++) {putchar(' ');putchar(x+'a');putchar(' ');}
@@ -269,13 +265,13 @@ void ZadejPozici(TUloha *uloha){
  (void)memset((void *)&(pos.sch),100,sizeof(TSch));
  for(i=2;i<=9;i++)
   for(j=1;j<=8;j++)
-	  pos.sch[i*10+j]=0;
+      pos.sch[i*10+j]=0;
   pos.roch=0;
   pos.mimoch=0;
   pos.bily=0;
 start:
   puts("Zadej bile figury, kazdou na novy radek, prazdny je konec.\n"
-	  "napr. Jc3 Pa2 nebo prazdne policko Ne4.");
+      "napr. Jc3 Pa2 nebo prazdne policko Ne4.");
   while(1){
 bstart:
    fgets(s,255,stdin);
@@ -286,8 +282,8 @@ bstart:
    switch(s[0]){
    case 'N':f=0;break;
    case 'P':
-	   if(s[2]=='1'||s[2]=='8') goto bchyba;
-	   f=1;break;
+       if(s[2]=='1'||s[2]=='8') goto bchyba;
+       f=1;break;
    case 'J':f=2;break;
    case 'S':f=3;break;
    case 'V':f=4;break;
@@ -295,7 +291,7 @@ bstart:
    case 'K':f=6;break;
    default:
 bchyba:
-	   puts("Chybne zadani");goto bstart;
+       puts("Chybne zadani");goto bstart;
    }
    if(s[1]<'a'||s[1]>'h' || s[2]<'1'||s[2]>'8') goto bchyba;
    pos.sch[(s[2]-'1')*10+a1+s[1]-'a']=f;
@@ -311,8 +307,8 @@ cstart:
    switch(s[0]){
    case 'N':f=0;break;
    case 'P':
-	   if(s[2]=='1'||s[2]=='8') goto cchyba;
-	   f=-1;break;
+       if(s[2]=='1'||s[2]=='8') goto cchyba;
+       f=-1;break;
    case 'J':f=-2;break;
    case 'S':f=-3;break;
    case 'V':f=-4;break;
@@ -320,27 +316,27 @@ cstart:
    case 'K':f=-6;break;
    default:
 cchyba:
-	   puts("Chybne zadani");goto cstart;
+       puts("Chybne zadani");goto cstart;
    }
    if(s[1]<'a'||s[1]>'h' || s[2]<'1'||s[2]>'8') goto cchyba;
    pos.sch[(s[2]-'1')*10+a1+s[1]-'a']=f;
   }
   c=b=0;
   for(i=a1;i<=h8;i++){
-	  if(pos.sch[i]==-6)c++;
-	  if(pos.sch[i]==6)b++;
+      if(pos.sch[i]==-6)c++;
+      if(pos.sch[i]==6)b++;
   }
   if(c!=1 || b!=1){
-	  puts("Kazda strana musi mit prave jednoho krale");
-	  TiskniSachovnici(&pos,stdout);
-	  goto start;
+      puts("Kazda strana musi mit prave jednoho krale");
+      TiskniSachovnici(&pos,stdout);
+      goto start;
   }
   puts("Kdo je na tahu ? (b-c)");
   if(getchar()!='c')pos.bily=1;
   if(PripustnaPozice(&pos)){
       puts("Nepripustna pozice");
-	  TiskniSachovnici(&pos,stdout);
-	  goto start;
+      TiskniSachovnici(&pos,stdout);
+      goto start;
   }
   puts("Zadano uspesne");
   TiskniSachovnici(&pos,stdout);
@@ -377,7 +373,7 @@ void TahPocitace(TUloha *uloha) {
    fputs("B ",stdout);
    for(i=0;i<15;i++)
      printf("%i%% ", (uloha->stat.BETA_CELKEM[i] ? 100 * uloha->stat.BETA_PORADI[i] / uloha->stat.BETA_CELKEM[i] : 0));
-	 puts("");
+     puts("");
    fputs("A ",stdout);
    for(i=0;i<15;i++)
      printf("%i%% ", (uloha->stat.ALFA_CELKEM[i] ? 100 * uloha->stat.ALFA_PORADI[i] / uloha->stat.ALFA_CELKEM[i] : 0));
@@ -385,28 +381,28 @@ void TahPocitace(TUloha *uloha) {
 
    fputs("AB ",stdout);
    for(i=0;i<15;i++)
-	   printf("%i ",uloha->stat.AB[i]);
-	   puts("");
+       printf("%i ",uloha->stat.AB[i]);
+       puts("");
    fputs("PR ", stdout);
    for(i=0;i<15;i++)
-	   printf("%i ",uloha->stat.PR[i]);
-	   puts("");
-	fputs("ABB ", stdout);
+       printf("%i ",uloha->stat.PR[i]);
+       puts("");
+    fputs("ABB ", stdout);
    for(i=0;i<15;i++)
-	   printf("%i ",uloha->stat.ABB[i]);
-	   puts("");
-	 fputs("NTU ", stdout);
-	for(i = 0; i < 15; i++)
-	   printf("%i ", uloha->stat.NTU[i]);
-	   puts("");
-	fputs("NTN ", stdout);
-	for(i=0;i<15;i++)
-	  printf("%i ", uloha->stat.NTN[i]);
-	puts("");
-	fputs("HU ", stdout);
-	for(i=0;i<15;i++)
-	  printf("%i ", uloha->stat.HU[i]);
-	puts("");
+       printf("%i ",uloha->stat.ABB[i]);
+       puts("");
+     fputs("NTU ", stdout);
+    for(i = 0; i < 15; i++)
+       printf("%i ", uloha->stat.NTU[i]);
+       puts("");
+    fputs("NTN ", stdout);
+    for(i=0;i<15;i++)
+      printf("%i ", uloha->stat.NTN[i]);
+    puts("");
+    fputs("HU ", stdout);
+    for(i=0;i<15;i++)
+      printf("%i ", uloha->stat.HU[i]);
+    puts("");
   printf("MS=%i\nUZ=%i,OH=%i,OH2=%i,OHP=%i\n",
     (int)uloha->stat.MS,(int)uloha->stat.UZ,(int)uloha->stat.OH,(int)uloha->stat.OH2,(int)uloha->stat.OHP);
 #endif
@@ -419,32 +415,32 @@ void TahPocitace(TUloha *uloha) {
 }
 
 void OhodTest(TUloha *u){
-	SectiMaterialBmCm(u);
-	u->zasobnik.hPechF[0]=HashPechF(&(u->pozice));
+    SectiMaterialBmCm(u);
+    u->zasobnik.hPechF[0]=HashPechF(&(u->pozice));
     u->zasobnik.hPechG[0]=HashPechG(&(u->pozice));
-	printf("Hodnota pozice (z pohledu %s) %i\n",(u->pozice.bily ? "bileho" : "cerneho"),(int)HodnotaPozice(u,-mat,mat));
+    printf("Hodnota pozice (z pohledu %s) %i\n",(u->pozice.bily ? "bileho" : "cerneho"),(int)HodnotaPozice(u,-mat,mat));
 }
 void Uloz(TUloha *uloha){
-	char s[256];
+    char s[256];
 
-	puts("Jmeno souboru:");
-	fgets(s,255,stdin);
+    puts("Jmeno souboru:");
+    fgets(s,255,stdin);
   BezCRLF(s);
-	if(UlozDoSouboru(s,uloha))
-		puts("Partie ulozena"); else
-		puts("Neuspech pri ukladani !");
+    if(UlozDoSouboru(s,uloha))
+        puts("Partie ulozena"); else
+        puts("Neuspech pri ukladani !");
 }
 void Otevri(TUloha *uloha){
-	char s[256];
+    char s[256];
 
-	puts("Jmeno souboru:");
-	fgets(s,255,stdin);
+    puts("Jmeno souboru:");
+    fgets(s,255,stdin);
   BezCRLF(s);
-	if(OtevriZeSouboru(s,uloha))
-		puts("Partie otevrena"); else
-		puts("Neuspech pri otvirani !");
+    if(OtevriZeSouboru(s,uloha))
+        puts("Partie otevrena"); else
+        puts("Neuspech pri otvirani !");
 }
-void HlavniDosCyklus(TUloha *uloha)
+cfunkce void HlavniDosCyklus(TUloha *uloha)
 {char s[256];
  u16 tah;
  
@@ -457,7 +453,7 @@ void HlavniDosCyklus(TUloha *uloha)
    if (!strcmp(s,"tb\n")) {TSchTypStr(uloha->pozice.sch, s); puts(s); continue;}
    if (!strcmp(s,"?\n")) {(void) puts(HelpStr); continue;}
    if (!strcmp(s,"np\n")) {DoneUlohu(&uloha);
-		  uloha=InitUlohu(19, 19, 19);TiskniSachovnici(&(uloha->pozice),stdout); continue;}
+          uloha=InitUlohu(19, 19, 19);TiskniSachovnici(&(uloha->pozice),stdout); continue;}
    if (!strcmp(s,"zp\n")) {ZadejPozici(uloha);continue;};
    if (!strcmp(s,"of\n")) {OhodTest(uloha);continue;};
    if (!strcmp(s,"ta\n")) {TahPocitace(uloha);continue;};
@@ -498,7 +494,7 @@ void HlavniDosCyklus(TUloha *uloha)
 
     InitVypocet(uloha);
     NastavPesce(uloha,&h);
-	continue;};
+    continue;};
    if(NalezTahy(uloha),JenPripustne(uloha),StrToTah(s,uloha,&tah))
     {if (KorektniTah(tah,uloha))  GlobTahni(1,uloha,1,(unsigned)tah);
        else printf("\"%s\" neni pripustny tah\n",s);

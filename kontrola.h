@@ -1,4 +1,4 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* kontrola.h - test pripustnosti pozice                 */
 /* 6.1. 2001 Jan Nemec                                   */
 /*********************************************************/
@@ -31,10 +31,11 @@
 #define K_VCRoch 22
 #define K_Mimochodem 23
 #define K_MocSachu 24
-cfunkce int PripustnaPozice(TPozice *pos);
+
 /***********************************************************/
 /* PripustnaPozice - otestuje pozici a vrati 0, pokud je   */
-/* smysluplna a pripustna, jinak kladny chybovy kod		   */
-/* podle typu chyby										   */
+/* smysluplna a pripustna, jinak kladny chybovy kod           */
+/* podle typu chyby                                           */
 /***********************************************************/
+cfunkce int PripustnaPozice(TPozice *pos);
 #endif

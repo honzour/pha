@@ -1,7 +1,6 @@
-/* ©achové centrum - Knihovna zahájení Petr Kuèera 2000*/
-/* Definice øetìzcù se slovním popisem chybovıch hlá¹ení programu
+ï»¿/* Å achovÃ© centrum - Knihovna zahÃ¡jenÃ­ Petr KuÄera 2000*/
+/* Definice Å™etÄ›zcÅ¯ se slovnÃ­m popisem chybovÃ½ch hlÃ¡Å¡enÃ­ programu
  */
-
 #include "obk_ch.h"
 
 const char *chyby_str[CH_MAX]={

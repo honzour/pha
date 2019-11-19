@@ -1,5 +1,5 @@
-/* ©achové centrum - Knihovna zahájení Petr Kuèera 2000*/
-/* ha¹ovací funkce pøevzata z hashtab.h - Jan Nìmec*/
+ï»¿/* Å achovÃ© centrum - Knihovna zahÃ¡jenÃ­ Petr KuÄera 2000*/
+/* haÅ¡ovacÃ­ funkce pÅ™evzata z hashtab.h - Jan NÄ›mec*/
 
 #ifndef __HASH_H__
 #define __HASH_H__
@@ -7,8 +7,8 @@
 #include "cotyvar.h"
 #include "pole.h"
 
-/*Struktura popisující konstanty pou¾ité pøi vıpoètu ha¹ovacího klíèe
-  - pøevzato od Jana Nìmce ze souboru hashtab.h
+/*Struktura popisujÃ­cÃ­ konstanty pouÅ¾itÃ© pÅ™i vÃ½poÄtu haÅ¡ovacÃ­ho klÃ­Äe
+  - pÅ™evzato od Jana NÄ›mce ze souboru hashtab.h
  */
 typedef struct {
   u32 f[13][h8];
@@ -17,22 +17,22 @@ typedef struct {
   u32 mimoch[h5+1];
 } hash_nahoda_t;
 
-/*Promìnná, která obsahuje konstanty pou¾ité pøi vıpoètu ha¹ovacího klíèe
+/*PromÄ›nnÃ¡, kterÃ¡ obsahuje konstanty pouÅ¾itÃ© pÅ™i vÃ½poÄtu haÅ¡ovacÃ­ho klÃ­Äe
  */
 extern hash_nahoda_t hash_nahoda;
 
-/*Funkce puèítá ha¹ovací klíè pro pozici
-  - pøevzato od Jana Nìmce ze souboru hashtab.h
+/*Funkce puÄÃ­tÃ¡ haÅ¡ovacÃ­ klÃ­Ä pro pozici
+  - pÅ™evzato od Jana NÄ›mce ze souboru hashtab.h
   
-  parametr poz pozice, pro ni¾ je poèítán ha¹vací klíè
-  vrací ha¹ovací klíè pozice poz
+  parametr poz pozice, pro niÅ¾ je poÄÃ­tÃ¡n haÅ¡vacÃ­ klÃ­Ä
+  vracÃ­ haÅ¡ovacÃ­ klÃ­Ä pozice poz
  */
 u32 obk_hash(TPozice *poz);
 
-/*Provede inicializaci mechanismu vıpoètu ha¹ovacího klíèe
-  vyplnìním promìnné hash_nahoda náhodnımi velièinami
+/*Provede inicializaci mechanismu vÃ½poÄtu haÅ¡ovacÃ­ho klÃ­Äe
+  vyplnÄ›nÃ­m promÄ›nnÃ© hash_nahoda nÃ¡hodnÃ½mi veliÄinami
 
-  vrací 0 pøi úspì¹né inicializaci, jinak kód chyby danı souborem obk_ch.h
+  vracÃ­ 0 pÅ™i ÃºspÄ›Å¡nÃ© inicializaci, jinak kÃ³d chyby danÃ½ souborem obk_ch.h
  */
 int obk_init_hash();
 
