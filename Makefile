@@ -42,7 +42,7 @@ volby=${opt} ${qtvlakno} ${qtdef} ${qtinclude} -c
 endif # ifeq (${target}, qt)
 
 ifeq (${target},konzole)
-def=-DTyp_Produktu=2
+def=-DTyp_Produktu=3
 konallobj=${baseobj}
 volby=${def} ${opt} -c
 endif

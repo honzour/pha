@@ -1,6 +1,7 @@
 ﻿/* Šachové centrum - Knihovna zahájení Petr Kučera 2000*/
 /* Definice funkcí potřebných pro přístup do knihovny zahájení na nejvyšší úrovni
  */
+#include "volby.h"
 #include "knihovna.h"
 #include "cteni.h"
 #include "obk_ch.h"

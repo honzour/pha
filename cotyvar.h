@@ -16,11 +16,14 @@
 #define u16 unsigned short
 #define s32 signed int
 #define u32 unsigned int
+#ifdef _WIN32
 #define s64 __int64
 #define u64 unsigned __int64
-/*#define bool int
-#define true 1
-#define false 0*/
+#else
+#include <inttypes.h>
+#define s64 int64_t
+#define u64 uint64_t
+#endif
 #define KontrolaTypu  if (sizeof(s8) != 1 || sizeof(u8) != 1||\
      sizeof(s16) != 2 || sizeof(u16) != 2||\
      sizeof(s32) != 4 || sizeof(u32) != 4||\

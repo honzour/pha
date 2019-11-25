@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <stddef.h>
 #include "cotyvar.h"
 #include "partie.h"
 #include "kontrola.h"

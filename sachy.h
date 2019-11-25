@@ -5,6 +5,8 @@
 #ifndef sachyH
 #define sachyH
 
+#include <stddef.h>
+
 /*********************************************/
 /* Provede inicializaci celeho programu      */
 /* (srand, knihovna...)                      */

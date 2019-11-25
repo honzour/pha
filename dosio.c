@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
+#include <stddef.h>
 #include "volby.h"
 #include "cotyvar.h"
 #include "ohodnoc.h"
