@@ -1,4 +1,5 @@
 ﻿#include <string.h>
+#include "volby.h"
 #include "interface.h"
 #include "dejtah.h"
 #include "dllmain.h"
@@ -9,6 +10,8 @@
 #include "sachy.h"
 #include "dosio.h"
 #include "perft.h"
+
+#pragma warning(disable : 4996)
 
 TCallbacks Callbacks;
 
@@ -27,13 +30,18 @@ void DoMove(char* AMove)
 {
     u16 tah1;
     if (LongStrToTah(AMove, globalUloha, &tah1)) {
-        GlobTahni(0, globalUloha, true, tah1);
+        GlobTahni(0, globalUloha, 1, tah1);
     }
     else
     {
+		/*
+		TODO PSA
+		
         std::string str(AMove);
         std::string s = "Invalid move: " + str;
         Callbacks.TellGUIError(s.c_str());
+		*/
+		Callbacks.TellGUIError(AMove);
     }
 }
 
@@ -74,10 +82,9 @@ void WriteBoardToConsole()
 
 void WriteEvalToConsole()
 {
-    std::string message[20];
-    message->append("Total Score: ");
-    message->append(std::to_string(HodnotaPozice(globalUloha, -mat, mat)));
-    Callbacks.TellGUIInfo(message->c_str());
+	char str[64];
+	sprintf(str, "Total Score: %i", (int)HodnotaPozice(globalUloha, -mat, mat));
+	Callbacks.TellGUIInfo(str);
 }
 
 u64 Perft(u8 AValue)
@@ -85,9 +92,9 @@ u64 Perft(u8 AValue)
     return GetPerft(globalUloha, AValue);
 }
 
-void SetCallbacks(TCallbacks& ACallbacks)
+void SetCallbacks(TCallbacks *ACallbacks)
 {
-    Callbacks = ACallbacks;
+    Callbacks = *ACallbacks;
 }
 
 void SetOptionOwnBook(u8 AValue)

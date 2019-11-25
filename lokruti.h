@@ -23,10 +23,10 @@ cfunkce int HrozbaBilemuKraliDamou(TUloha *u);
 cfunkce int HrozbaCernemuKraliDamou(TUloha *u);
 
 /***************************************************************************/
- *   JednoTahni - Tahne v testu pripustnosti tahu                          */
- *   Na zasobnik ulozi jen udaje pro TahniZpet a hodpos,                   */
- *   nic nepocita, ani hash funkce                                         */
- ***************************************************************************/
+/*   JednoTahni - Tahne v testu pripustnosti tahu                          */
+/*   Na zasobnik ulozi jen udaje pro TahniZpet a hodpos,                   */
+/*   nic nepocita, ani hash funkce                                         */
+/***************************************************************************/
 cfunkce void JednoTahni(u16 tah, TUloha *uloha);
 
 /***************************************************************************/

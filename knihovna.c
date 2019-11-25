@@ -73,10 +73,12 @@ u16 KnihDejTah(TPozice *pos)
 #if Typ_Produktu==DLL
   if (result != 0)
   {
+/* TODO PSA
     char message[40];
     strcpy_s(message, "Found in opening book, ECO: ");
     strcat_s(message, eco);
-    Callbacks.TellGUIInfo(message);
+	*/
+    Callbacks.TellGUIInfo(eco);
   }
 #endif
   return result;

@@ -205,11 +205,13 @@ void Nejlepsi(TUloha* uloha, TTah1* ATah1, u8 AScoreBound) {
     TahToLongStr(ATah1->data, MoveAsText);
     /*    Callbacks.NextBestMove(MoveAsText, CenaToScore(ATah1->cena), AScoreBound); */
 
+	/*
+	TODO PSA
     std::string moves;
     moves.append(MoveAsText);
     moves.append(" ");
-
-    for (int i = 1; i < 99; i++) /* TODO : cut end of variant */
+	
+    for (int i = 1; i < 99; i++) // TODO : cut end of variant
     {
         if (uloha->hvar[1][i] != 0)
         {
@@ -220,7 +222,8 @@ void Nejlepsi(TUloha* uloha, TTah1* ATah1, u8 AScoreBound) {
         else
             break;
     }
-    Callbacks.NextBestMove(moves.c_str(), CenaToScore(ATah1->cena), AScoreBound);
+	*/
+    Callbacks.NextBestMove(MoveAsText, CenaToScore(ATah1->cena), AScoreBound);
 }
 #endif
 
@@ -244,6 +247,8 @@ cfunkce void GetBookMoves(TUloha* uloha)
         for (int j = 0; j < f_pozice.pocet_tahu; j++) {
             char MoveAsText[MAX_LONG_MOVE_SIZE];
             TahToLongStr(f_pozice.tahy[j].tah, MoveAsText);
+			/*
+			TODO PSA
             std::string message;
             message.append(MoveAsText);
             message.append(", ECO: ");
@@ -253,8 +258,9 @@ cfunkce void GetBookMoves(TUloha* uloha)
             message.append(", Probability: ");
             message.append(std::to_string((int)f_pozice.tahy[j].vaha));
             message.append(" %");
+			*/
 #if Typ_Produktu==DLL
-            Callbacks.TellGUIInfo(message.c_str());
+            Callbacks.TellGUIInfo(MoveAsText);
 #endif
         }
     }
