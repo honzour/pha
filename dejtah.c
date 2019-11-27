@@ -1,4 +1,4 @@
-#include <stdio.h>
+Ôªø#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "volby.h"
@@ -12,6 +12,10 @@
 #include "myslitel.h"
 #include "globruti.h"
 #include "lokruti.h"
+#if Typ_Produktu==WindowsProgram
+#include "winmysl.h"
+#endif
+#include "cteni.h"
 #if Typ_Produktu==DOS_UNIX
 #include "dosio.h"
 #include "strtah.h"
@@ -19,13 +23,14 @@
 #ifdef unix
 #include <sys/timeb.h>
 #endif
-#if Typ_Produktu==Win32_Program
-#include "winmysl.h"
+#if Typ_Produktu==DLL
+#include "interface.h"
 #endif
+#include "strtah.h"
+#include "obk_ch.h"
 
-
-int MamKnihovnu=0; /*Pri inicializaci se (zrejme)
-prepise na 1*/
+int ChciKnihovnu;
+int MamKnihovnu; /*Pri inicializaci se (zrejme) prepise na 1*/
 
 void NastavCas(int ms, TUloha *u) {
 /* Nastavi cas tak, aby program koncil premysleni
@@ -52,9 +57,9 @@ u->StavPropoctu.msKonceMysleni=(clock()*1000)/CLK_TCK+ms;
 
 void SectiMaterialBmCm(TUloha *uloha)
 /*************************************************/
-/* Nastavi podle aktualni pozice polozky		 */
+/* Nastavi podle aktualni pozice polozky         */
 /* uloha->zasobnik.bm[0], uloha->zasobnik.cm[0]  */
-/* a uloha->material							 */
+/* a uloha->material                             */
 /*************************************************/
  {s8 *p;
   s8 *konec;
@@ -89,16 +94,16 @@ void SectiMaterialBmCm(TUloha *uloha)
 
 static s16 UpravHodPos(TUloha *u, s16 hodpos){
 /*********************************************************/
-/* UpravHodPos											 */
-/* - vstup = hodnota pozice i s materialem z hlediska 	 */
-/*   strany ktera je na tahu							 */
-/* - vystup = hodnota pozice bez materialu z hlediska	 */
-/*  bileho												 */
+/* UpravHodPos                                           */
+/* - vstup = hodnota pozice i s materialem z hlediska    */
+/*   strany ktera je na tahu                             */
+/* - vystup = hodnota pozice bez materialu z hlediska    */
+/*  bileho                                               */
 /*********************************************************/
-	if(!u->pozice.bily)hodpos=(s16)-hodpos;
-	return (s16)(hodpos+
-		u->zasobnik.cm[u->zasobnik.pos]-
-		u->zasobnik.bm[u->zasobnik.pos]);
+    if(!u->pozice.bily)hodpos=(s16)-hodpos;
+    return (s16)(hodpos+
+        u->zasobnik.cm[u->zasobnik.pos]-
+        u->zasobnik.bm[u->zasobnik.pos]);
 }
 
 static void NastavNullTah(TUloha *uloha)
@@ -111,13 +116,13 @@ uloha->StavPropoctu.NulTah=1;
 if(!uloha->AlgCfg.AlgKoef.PovolNullTah
    || !uloha->material.b[3]&&!uloha->material.b[4]&&(uloha->material.b[1]+uloha->material.b[2])<2||
  /*bily ma nejvyse jednu nejvyse lehkou figuru*/
-	!uloha->material.c[3]&&!uloha->material.c[4]&&(uloha->material.c[1]+uloha->material.c[2])<2
+    !uloha->material.c[3]&&!uloha->material.c[4]&&(uloha->material.c[1]+uloha->material.c[2])<2
  /*cerny ma nejvyse jednu nejvyse lehkou figuru*/
-	)
-	 uloha->StavPropoctu.NulTah=0;
+    )
+     uloha->StavPropoctu.NulTah=0;
 
 
-  //uloha->StavPropoctu.NulTah=0;
+  /* uloha->StavPropoctu.NulTah=0; */
  }
 
 int cmprem (const void *ho1, const void *ho2){
@@ -151,7 +156,7 @@ static void NastavRemTab(TUloha *u) {
 
 /**********************************************************/
 /* Inicializace pred zahajenim rekurzivniho propoctu      */
-/* vola se z DejTah										  */
+/* vola se z DejTah                                       */
 /**********************************************************/
 void InitVypocet(TUloha *uloha) {
   int i;
@@ -167,7 +172,7 @@ void InitVypocet(TUloha *uloha) {
   /*(void)memset((void *)&(uloha->hh),0,sizeof(uloha->hh));*/
   for(i=0;i<(1<<16);i++)uloha->HistHeur[i]>>=3;
   (void)memset((void *)&(uloha->HistHeur),0,sizeof(uloha->HistHeur));
-  (void)memset((void *)&(uloha->hvar[0][0]),0,sizeof(uloha->hvar));
+  (void)memset((void *)&(uloha->hvar),0,sizeof(uloha->hvar));
   uloha->StavPropoctu.VNT=0;
   NastavRemTab(uloha);
 #if 0
@@ -179,10 +184,93 @@ void InitVypocet(TUloha *uloha) {
 #endif
 }
 
+s16 CenaToScore(s16 ACena)
+{
+    #define MaxMate 1000
+    #define ScoreMate 32766
+    if (ACena > mat - MaxMate)
+    {
+        return ACena - mat + ScoreMate;
+    }
+    else if (ACena < -(mat - MaxMate))
+    {
+        return ACena + mat - ScoreMate;
+    }
+    return 2 * ACena; // pawn is 50
+}
+
+#if Typ_Produktu==DLL
+void Nejlepsi(TUloha* uloha, TTah1* ATah1, u8 AScoreBound) {
+    char MoveAsText[MAX_LONG_MOVE_SIZE];
+    TahToLongStr(ATah1->data, MoveAsText);
+    /*    Callbacks.NextBestMove(MoveAsText, CenaToScore(ATah1->cena), AScoreBound); */
+
+	/*
+	TODO PSA
+    std::string moves;
+    moves.append(MoveAsText);
+    moves.append(" ");
+	
+    for (int i = 1; i < 99; i++) // TODO : cut end of variant
+    {
+        if (uloha->hvar[1][i] != 0)
+        {
+            TahToLongStr(uloha->hvar[1][i], MoveAsText);
+            moves.append(MoveAsText);
+            moves.append(" ");
+        }
+        else
+            break;
+    }
+	*/
+    Callbacks.NextBestMove(MoveAsText, CenaToScore(ATah1->cena), AScoreBound);
+}
+#endif
+
+int IsBookAvailable()
+{
+    if (!MamKnihovnu)
+    {
+        MamKnihovnu = init_knihovna("Opening Book.dat");
+    }
+    return MamKnihovnu;
+}
+
+cfunkce void GetBookMoves(TUloha* uloha)
+{
+    if (IsBookAvailable()) {
+        f_pozice_t f_pozice;
+        int ch = hledej_pozici(&uloha->pozice, &f_pozice);
+        if (ch || !f_pozice.pocet_tahu)
+            return;
+        
+        for (int j = 0; j < f_pozice.pocet_tahu; j++) {
+            char MoveAsText[MAX_LONG_MOVE_SIZE];
+            TahToLongStr(f_pozice.tahy[j].tah, MoveAsText);
+			/*
+			TODO PSA
+            std::string message;
+            message.append(MoveAsText);
+            message.append(", ECO: ");
+            message += f_pozice.tahy[j].ECO_pismeno;
+            message.append(std::to_string((int)f_pozice.tahy[j].ECO_cislo / 10));
+            message.append(std::to_string((int)f_pozice.tahy[j].ECO_cislo % 10));
+            message.append(", Probability: ");
+            message.append(std::to_string((int)f_pozice.tahy[j].vaha));
+            message.append(" %");
+			*/
+#if Typ_Produktu==DLL
+            Callbacks.TellGUIInfo(MoveAsText);
+#endif
+        }
+    }
+}
+
 /*************************************************/
 /*  Dejtah - Myslici algoritmus (jeho volani)    */
 /*************************************************/
-int DejTah(TUloha *uloha, TTah1 *t1, u32 cas, int maxHloubka, int *PrijmiRemis, int *VzdejSe) {
+cfunkce int DejTah(TUloha *uloha, TTah1 *t1, u32 cas, int maxHloubka, int *PrijmiRemis, int *VzdejSe) {
+  uloha->StavPropoctu.MamKoncitMysleni = 0;
   TTah1 *pt0,*pt1,*pt2,tmp;
   s16 alfa,beta,h,stara,RemCena=0;
   int rozdil;
@@ -196,7 +284,7 @@ int DejTah(TUloha *uloha, TTah1 *t1, u32 cas, int maxHloubka, int *PrijmiRemis, 
   FILE *soub = otevriHtmlLog(uloha, "koren");
   if (soub) fputs("DejTah, propocet z korene.<BR>\n", soub);
 #endif
-				
+
   if (PrijmiRemis) *PrijmiRemis=0;
   if (VzdejSe) {
     *VzdejSe=0;
@@ -225,21 +313,28 @@ nedeterministicky, aby to nehralo porad stejne. */
   /* Mistr */
   }
 
-  if(PrjData.typ > 2) /*Sekretarka a normal neznaji zahajeni*/
+  if (PrjData.typ > 2) /*Sekretarka a normal neznaji zahajeni*/
 #endif /* projekt */
-  if (MamKnihovnu && (t1->data = KnihDejTah(&(uloha->pozice)))) {
+  if (ChciKnihovnu != 0) {
+      if (IsBookAvailable() && (t1->data = KnihDejTah(&(uloha->pozice)))) {
 #ifdef HTML_VYPISY
-    if (soub)
-      fprintf(
-        soub,
-        "Pozice je v knihovne zahajeni, vracim %x.<BR>\n", t1->data);
-    zavriHtmlLog(soub);
+          if (soub)
+              fprintf(
+                  soub,
+                  "Pozice je v knihovne zahajeni, vracim %x.<BR>\n", t1->data);
+          zavriHtmlLog(soub);
 #endif
-    /*Kdyz jsem nasel pozici v knihovne, hned koncim.*/
-	  return 1;
+          /*Kdyz jsem nasel pozici v knihovne, hned koncim.*/
+#if Typ_Produktu==DLL
+          t1->cena = 0;
+          Nejlepsi(uloha, t1, ScoreBoundExact);
+#endif
+          if (!uloha->Analyze)
+            return 1;
+      }
   }
  
-  if(t1->data=TabDejTah(uloha)){
+  if (t1->data=TabDejTah(uloha)){
 #ifdef HTML_VYPISY
     if (soub)
       fprintf(
@@ -248,15 +343,24 @@ nedeterministicky, aby to nehralo porad stejne. */
     zavriHtmlLog(soub);
 #endif
    /*Kdyz jsem nasel pozici v databazi koncovek, hned koncim.*/
-	 return 1;
+#if Typ_Produktu==DLL
+    Callbacks.EndgameTablebasesHit;
+#endif
+#if Typ_Produktu==DLL
+    t1->cena = FoundInEndgameDatabaseScore;
+    Nejlepsi(uloha, t1, ScoreBoundExact);
+#endif
+    if (!uloha->Analyze)
+        return 1;
   }
  
-  uloha->StavPropoctu.MamKoncitMysleni=0;
+#if Typ_Produktu!=DLL
   NastavCas(cas,uloha);
+#endif
   InitVypocet(uloha);
 #ifdef Vypisy
   printf("\nFunkce DejTah. Na tahu je %s. BM=%i, CM=%i\n",
-		uloha->pozice.bily ? "bily" : "cerny",
+        uloha->pozice.bily ? "bily" : "cerny",
  (int) uloha->zasobnik.bm[0],(int) uloha->zasobnik.cm[0]);
 #endif
  if (PrijmiRemis) {
@@ -279,7 +383,7 @@ nedeterministicky, aby to nehralo porad stejne. */
     return 0;
   }
   
-  if (uloha->zasobnik.hranice[1] == 1){
+  if ((uloha->zasobnik.hranice[1] == 1) && (!uloha->Analyze)) {
 #ifdef Vypisy
     puts("Je jen jeden pripustny tah");
 #endif
@@ -293,31 +397,42 @@ nedeterministicky, aby to nehralo porad stejne. */
     zavriHtmlLog(soub);
 #endif
     Vzdavam=0;
+#if Typ_Produktu==DLL
+    Nejlepsi(uloha, uloha->zasobnik.tahy, ScoreBoundExact);
+#endif
     goto zaver;
   }
-/* tedy m·m alespoÚ dva tahy*/
+/* tedy m√°m alespo≈à dva tahy*/
   pt0 = pt1 = uloha->zasobnik.tahy;
   pt2 = uloha->zasobnik.tahy + uloha->zasobnik.hranice[1];
   SetridTahy(uloha);
-#if Typ_Produktu==Win32_Program
+#if Typ_Produktu==WindowsProgram
   VypAktualizujNejlepsi(uloha, pt0->data);
 #endif
- 
+#if Typ_Produktu==DLL
+  Nejlepsi(uloha, pt0, ScoreBoundExact);
+#endif
+
   if (HodnotaPozice(uloha, -mat, mat) >= -250) Vzdavam = 0;
- /* HodnotaPozice musÌm zavolat kv˘li nastavenÌ tabulek.
- NavÌc mi to pomuze pri rozhodov·nÌ,
- zda se m·m vzd·t. Nevzd·v·m se jen tehdy, pokud HodPos >= -vez
- nebo propoËet do aspon jednÈ hloubky >= -vez nebo m·m materi·lu za
- d·mu. */
+ /* HodnotaPozice mus√≠m zavolat kv≈Øli nastaven√≠ tabulek.
+ Nav√≠c mi to pom≈Ø≈æe p≈ôi rozhodov√°n√≠,
+ zda se m√°m vzd√°t. Nevzd√°v√°m se jen tehdy, pokud HodPos >= -vƒõ≈æ
+ nebo propoƒçet do aspo≈à jedn√© hloubky >= -vƒõ≈æ nebo m√°m materi√°lu za
+ d√°mu. */
   UlozStav(uloha);
 
   for(h = 0; h < maxHloubka; h++) {
+#if Typ_Produktu==DLL
+      Callbacks.NextDepth();
+      uloha->StavPropoctu.SelDepth = 0;
+      Callbacks.SetSelDepth(0);
+#endif
 #ifdef HTML_VYPISY
     if (soub)
       fprintf(soub, "<H2>Propocet do hloubky %i</H2>\n", h);
     hloubka_oh = Stav(uloha);
 #endif
-		
+
 #if 0
 #ifdef Vypisy
     memset((void *)BETA_POCET,0,sizeof(BETA_POCET));
@@ -328,8 +443,8 @@ nedeterministicky, aby to nehralo porad stejne. */
     memset((void *)ALFA_CELKEM,0,sizeof(ALFA_CELKEM));
 #endif
 #endif
-		
-#if Typ_Produktu==Win32_Program
+
+#if Typ_Produktu==WindowsProgram
     VypAktualizujHloubku(uloha,h);
 #endif
 
@@ -352,7 +467,7 @@ nedeterministicky, aby to nehralo porad stejne. */
         beta = (s16)(pt1->cena + rozdil + 10);
       }
     } else {
-       /* pt0 1 a 2 uz m·m nastavenÈ*/
+       /* pt0 1 a 2 uz m√°m nastaven√©*/
       alfa = -mat;
       beta = mat;
       rozdil = 20;
@@ -364,7 +479,8 @@ nedeterministicky, aby to nehralo porad stejne. */
     if (soub) fprintf(soub, " alfa = %i, beta = %i<BR>", (int) alfa, (int) beta);
 #endif
 
-   /* Cyklus p¯es tahy*/
+    /* Cyklus p≈ôes tahy*/
+    int MoveIndex = 0;
     for(; pt1 < pt2; pt1++) {
       uloha->hvar[h][h] = 0;
 #ifdef Vypisy
@@ -384,10 +500,15 @@ nedeterministicky, aby to nehralo porad stejne. */
       }
 #endif
 
-#if Typ_Produktu==Win32_Program
+#if Typ_Produktu==WindowsProgram
       VypAktualizujTah(uloha,pt1->data);
 #endif
-
+#if Typ_Produktu==DLL
+      char MoveAsText[MAX_LONG_MOVE_SIZE];
+      TahToLongStr(pt1->data, MoveAsText);
+      Callbacks.NextMove(MoveIndex, MoveAsText);
+#endif
+      MoveIndex++;
       Tahni(pt1->data,uloha);
 #ifdef HTML_VYPISY
       tmp_oh = Stav(uloha);
@@ -403,18 +524,18 @@ nedeterministicky, aby to nehralo porad stejne. */
       TahniZpet(pt1->data,uloha);
       tmp = *pt1;
       if (tmp.cena >= -250) Vzdavam = 0;
-      if (uloha->StavPropoctu.MamKoncitMysleni)	{
+      if (uloha->StavPropoctu.MamKoncitMysleni)    {
         goto ZaverKoncimMysleni;
       }
 
-      if (pt1 == pt0) { /* pocÌt·m prvnÌ tah*/
+      if (pt1 == pt0) { /* poc√≠t√°m prvn√≠ tah*/
         RemCena=pt1->cena;
-#if Typ_Produktu==Win32_Program
+#if Typ_Produktu==WindowsProgram
         VypAktualizujCenu(uloha,pt1->cena);
 #endif
         if (pt1->cena <= alfa) {
-	    /* PrvnÌ tah podtekl alfa. PoËÌtaË zaËÌn· tusit nestÏstÌ.
-	    NejspÌs by podtekly i vsechny dalsÌ tahy*/
+            /* Prvn√≠ tah podtekl alfa. Poƒç√≠taƒç zaƒç√≠n√° tusit nestƒõst√≠.
+        Nejsp√≠s by podtekly i vsechny dals√≠ tahy*/
 #ifdef HTML_VYPISY
           if (soub) fputs("alfa podteceni, pocitam znovu \n", soub);
 
@@ -423,11 +544,14 @@ nedeterministicky, aby to nehralo porad stejne. */
           
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif
+#if Typ_Produktu==DLL
+          Nejlepsi(uloha, pt1, ScoreBoundUpper);
+#endif
           Tahni(pt1->data,uloha);
 #ifdef HTML_VYPISY
           tmp_oh = Stav(uloha);
 #endif
-	        pt1->cena = (s16)-AlfaBeta(uloha, (s16)(-alfa - 1), (s16)(mat), h
+            pt1->cena = (s16)-AlfaBeta(uloha, (s16)(-alfa - 1), (s16)(mat), h
 #ifdef HTML_VYPISY
         , varianta
 #endif
@@ -435,8 +559,11 @@ nedeterministicky, aby to nehralo porad stejne. */
 #ifdef HTML_VYPISY
       if (soub) fprintf(soub, "(%i) ", Stav(uloha) - tmp_oh);
 #endif
-	        TahniZpet(pt1->data,uloha);
-          if (uloha->StavPropoctu.MamKoncitMysleni)	{
+            TahniZpet(pt1->data,uloha);
+#if Typ_Produktu==DLL
+            Nejlepsi(uloha, pt1, ScoreBoundExact);
+#endif
+            if (uloha->StavPropoctu.MamKoncitMysleni)    {
             ZaverKoncimMysleni:
 #ifdef HTML_VYPISY
             if (soub) fputs("Dosel cas<BR>\n", soub);
@@ -449,22 +576,25 @@ nedeterministicky, aby to nehralo porad stejne. */
 #endif
           
           RemCena=pt1->cena;
-#if Typ_Produktu==Win32_Program
-          VypAktualizujCenu(uloha,pt1->cena);
+#if Typ_Produktu==WindowsProgram
+          (uloha,pt1->cena);
 #endif
         } else
         if (pt1->cena >= beta) {
-        /*PrvnÌ tah p¯etekl beta*/
-      	  KopirujHVar(uloha, pt1->data);
+#if Typ_Produktu==DLL
+            Nejlepsi(uloha, pt1, ScoreBoundLower);
+#endif
+            /*Prvn√≠ tah p≈ôetekl beta*/
+            KopirujHVar(uloha, pt1->data);
 #ifdef HTML_VYPISY
           if (soub) fputs("beta preteceni, pocitam znovu \n", soub);
 
           sprintf(varianta, "%i" ODDELOVAC_VARIANT "%s_beta" ODDELOVAC_VARIANT, h, posledniTah);
           sprintf(odkaz,  "%skoren.html", varianta);
-			
+
           if (soub) fprintf(soub, "<A HREF=\"%s\">%s</A> ", odkaz, posledniTah);
 #endif
-      	  Tahni(pt1->data,uloha);
+            Tahni(pt1->data,uloha);
 #ifdef HTML_VYPISY
           tmp_oh = Stav(uloha);
 #endif
@@ -477,13 +607,23 @@ nedeterministicky, aby to nehralo porad stejne. */
           if (soub) fprintf(soub, "(%i) ", Stav(uloha) - tmp_oh);
 #endif
           TahniZpet(pt1->data,uloha);
-          if (uloha->StavPropoctu.MamKoncitMysleni)	goto ZaverKoncimMysleni;
+#if Typ_Produktu==DLL
+          Nejlepsi(uloha, pt1, ScoreBoundExact);
+#endif
+          if (uloha->StavPropoctu.MamKoncitMysleni)
+            goto ZaverKoncimMysleni;
 #ifdef Vypisy
           fputs(" Beta preteceni", stdout);
 #endif
           RemCena = pt1->cena;
-#if Typ_Produktu==Win32_Program
+#if Typ_Produktu==WindowsProgram
           VypAktualizujCenu(uloha,pt1->cena);
+#endif
+        }
+        else
+        {
+#if Typ_Produktu==DLL
+            Nejlepsi(uloha, pt1, ScoreBoundExact);
 #endif
         }
         alfa = pt1->cena;
@@ -506,8 +646,8 @@ nedeterministicky, aby to nehralo porad stejne. */
         if (soub) fprintf(soub, " %i ", (int)pt1->cena);
         if (soub) fprintf(soub, "a=%i, b=%i ", (int) alfa, (int) beta);
 #endif
-      } /* od prvnÌho tahu */ else {
-      /* jin˝ nez prvnÌ tah */
+      } /* od prvn√≠ho tahu */ else {
+      /* jin√Ω nez prvn√≠ tah */
 #ifdef Vypisy
         printf(" %i ",(int) pt1->cena);
 #endif
@@ -516,10 +656,13 @@ nedeterministicky, aby to nehralo porad stejne. */
 #endif
         tmp = *pt1;
         if (tmp.cena > alfa) {
-      	  memmove(pt0 + 1, pt0, (pt1 - pt0) * sizeof(TTah1));
+          memmove(pt0 + 1, pt0, (pt1 - pt0) * sizeof(TTah1));
           *pt0 = tmp;
-      	  alfa = tmp.cena;
-#if Typ_Produktu==Win32_Program
+          alfa = tmp.cena;
+#if Typ_Produktu==DLL
+          Nejlepsi(uloha, pt0, ScoreBoundLower);
+#endif
+#if Typ_Produktu==WindowsProgram
           VypAktualizujNejlepsi(uloha, pt0->data);
           VypAktualizujCenu(uloha, pt0->cena);
 #endif
@@ -548,9 +691,12 @@ nedeterministicky, aby to nehralo porad stejne. */
       if (soub) fprintf(soub, "(%i) ", Stav(uloha) - tmp_oh);
 #endif
           TahniZpet(tmp.data,uloha);
+#if Typ_Produktu==DLL
+          Nejlepsi(uloha, pt0, ScoreBoundExact);
+#endif
           if (pt0->cena >= -250) Vzdavam = 0;
           if (uloha->StavPropoctu.MamKoncitMysleni) goto ZaverKoncimMysleni;
-#if Typ_Produktu==Win32_Program
+#if Typ_Produktu==WindowsProgram
           VypAktualizujCenu(uloha, pt0->cena);
 #endif
           RemCena = pt0->cena;
@@ -564,7 +710,7 @@ nedeterministicky, aby to nehralo porad stejne. */
             goto zaver;
           }
           alfa = (s16)(pt0->cena);
-          beta = (s16)(alfa + 1);	
+          beta = (s16)(alfa + 1);
 #ifdef Vypisy
           printf(" %i ", pt0->cena);
           printf("a=%i, b=%i ", (int)alfa, (int)beta);
@@ -573,21 +719,21 @@ nedeterministicky, aby to nehralo porad stejne. */
           if (soub) fprintf(soub, " %i ", pt0->cena);
           if (soub) fprintf(soub, "a=%i, b=%i ", (int)alfa, (int)beta);
 #endif
-        } /* Od pretecenÌ alfa */
-      } /* Od jinÈho nez prvnÌho tahu*/
-    } /*od cyklu pres tahy*/
+        } /* Od p≈ôeteƒçen√≠ alfa */
+      } /* Od jin√©ho ne≈æ¬û prvn√≠ho tahu*/
+    } /*od cyklu p≈ôes tahy*/
 #ifdef HTML_VYPISY
       if (soub) fprintf(soub, " <P>\n%i", Stav(uloha) - hloubka_oh);
 #endif
 
     if (alfa <= -mat + h) {
 #ifdef Vypisy
-  	  printf(" Dostanu mat %i. pultahem", mat + alfa + 1);
+      printf(" Dostanu mat %i. pultahem", mat + alfa + 1);
 #endif
 #ifdef HTML_VYPISY
       if (soub) fprintf(soub, " Dostanu mat %i. pultahem", mat + alfa + 1);
 #endif
-  	  break;
+      break;
     }
     if (h) rozdil = abs(stara - pt0->cena) + 10;
     stara = pt0->cena;

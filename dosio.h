@@ -1,4 +1,4 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* dosio.h - consolovy vstup a vystup                    */
 /* 11.1. 2001 Jan Nemec                                  */
 /*********************************************************/
@@ -8,14 +8,17 @@
 #include <stdio.h>
 #include "cotyvar.h"
 
-cfunkce void TestujGeneratorCas(TUloha *uloha);
 /*********************************************************/
 /* Test rychlosti generatoru tahu                        */
 /*********************************************************/
-cfunkce void TiskniSachy(TUloha *uloha);
+cfunkce void TestujGeneratorCas(TUloha* uloha);
+
 /*********************************************************/
 /* Test detekce sachu                                    */
 /*********************************************************/
+cfunkce void TiskniSachy(TUloha* uloha);
+
+cfunkce void TiskniSachovnici(TPozice* pos, FILE* f);
 
 /**
  Vytiskne aktualni pozici do HTML.
@@ -32,12 +35,13 @@ cfunkce FILE *otevriHtmlLog(TUloha *u, char *varianta);
 */
 cfunkce void zavriHtmlLog(FILE *f);
 
-cfunkce void TahPocitace(TUloha *uloha);
 /*********************************************************/
 /* Volani mysliciho algoritmu a IO                       */
 /*********************************************************/
-cfunkce void HlavniDosCyklus(TUloha *uloha);
+cfunkce void TahPocitace(TUloha * uloha);
+
 /*********************************************************/
 /* Rezim zadavani a plneni prikazu                       */
 /*********************************************************/
+cfunkce void HlavniDosCyklus(TUloha * uloha);
 #endif

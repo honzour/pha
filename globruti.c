@@ -1,4 +1,4 @@
-/*********************************************************/
+ï»¿/*********************************************************/
 /* globruti.c - globalni sachove rutiny                  */
 /* napr. zahrani a vraceni tahu v partii                 */ 
 /* 31.12. 2000 Jan Nemec                                 */
@@ -16,24 +16,25 @@
 #include "lokruti.h"
 #include "strtah.h"
 #include "pole.h"
-#if Typ_Produktu==Win32_Program
+#if Typ_Produktu==WindowsProgram
 char NazvyVysledku[8][38]={
- "Hrajeme dál",
- "Bílý dostal mat",
- "Èerný dostal mat",
- "Remíza trojnásobným opakováním pozice",
- "Remíza díky pravidlu padesáti tahù",
- "Remíza, bílý dostal pat",
- "Remíza, èerný dostal pat",
- "Remíza, není matící materiál"
+ "Hrajeme dÃ¡l",
+ "BÃ­lÃ½ dostal mat",
+ "ÄŒernÃ½ dostal mat",
+ "RemÃ­za trojnÃ¡sobnÃ½m opakovÃ¡nÃ­m pozice",
+ "RemÃ­za dÃ­ky pravidlu padesÃ¡ti tahÅ¯",
+ "RemÃ­za, bÃ­lÃ½ dostal pat",
+ "RemÃ­za, ÄernÃ½ dostal pat",
+ "RemÃ­za, nenÃ­ matÃ­cÃ­ materiÃ¡l"
 };
 /*Pouze pro Windows*/
 #endif
-void ZjistiTypKoncePartie(TUloha *uloha)
+
 /************************************************************************
- * Jak dopadla partie ? Nastaví správnì uloha->KonecPartie              *
+ * Jak dopadla partie ? NastavÃ­ sprÃ¡vnÄ› uloha->KonecPartie              *
  ************************************************************************/
- {int i,bbs,bcs,cbs,ccs,cj,bj;
+void ZjistiTypKoncePartie(TUloha* uloha)
+{int i,bbs,bcs,cbs,ccs,cj,bj;
  uloha->KonecPartie=0;
  NalezTahy(uloha);
  JenPripustne(uloha);
@@ -55,26 +56,25 @@ void ZjistiTypKoncePartie(TUloha *uloha)
  if(uloha->KonecPartie)return;
  bbs=bcs=cbs=ccs=cj=bj=0;
  for(i=a1;i<=h8;i++){
-	 switch(uloha->pozice.sch[i]){
-	 case 1:return;
-	 case 4:return;
-	 case 5:return;
-	 case -1:return;
-	 case -4:return;
-	 case -5:return;
-	 case 2:bj++;break;
-	 case -2:cj++;break;
-	 case 3:if(((i/10)+(i%10))&1)bbs++;else bcs++;break;
-	 case -3:if(((i/10)+(i%10))&1)cbs++;else ccs++;break;
-	 }
+     switch(uloha->pozice.sch[i]){
+     case 1:return;
+     case 4:return;
+     case 5:return;
+     case -1:return;
+     case -4:return;
+     case -5:return;
+     case 2:bj++;break;
+     case -2:cj++;break;
+     case 3:if(((i/10)+(i%10))&1)bbs++;else bcs++;break;
+     case -3:if(((i/10)+(i%10))&1)cbs++;else ccs++;break;
+     }
  }
  if((i=bbs+bcs+cbs+ccs+cj+bj)<=1||i==bbs+cbs||i==bcs+ccs)
-	 uloha->KonecPartie=RemisMaloMaterialu;
+     uloha->KonecPartie=RemisMaloMaterialu;
  /*Je-li zadna nebo jen jedna lehka figura nebo
   jsou na sachovnici jen strelci jedne barvy, nebude mat*/
 }
 
-void JenPripustne(TUloha *uloha)
 /*************************************************************************
  *  JenPripustne - Vynda z prvni dle pos volne (ale v praxi obsazene)    *
  *   urovne zasobniku nepripustne tahy tj. ty vedouci k sachu.           *
@@ -82,6 +82,7 @@ void JenPripustne(TUloha *uloha)
  *  Pomerne pomale, neuzivat v rekurzi propoctu.                         *
  *  Nastavi pocatek druhe prazdne urovne (snizi nebo necha)              *
  *************************************************************************/
+void JenPripustne(TUloha* uloha)
 {TTah1 *pz,*pdo,*pkonec; /*pointery do zasobniku tahu
  pz - odkud beru testovane tahy
  pdo - kam je davam
@@ -104,12 +105,12 @@ void JenPripustne(TUloha *uloha)
      (mohl jsem neco vyskrtat) */
 }
 
-int KorektniTah(u16 tah, TUloha *uloha)
 /*************************************************************************/
 /*  KorektniTah - je to pripustny tah ?                                  */
 /*  Zvedne uroven zasobniku, nalezne tahy, vyskrta nepripustne,          */
 /*  pokusi se tam ten tah najit a nakonec snizi uroven zasobniku zpet.   */
 /*************************************************************************/
+int KorektniTah(u16 tah, TUloha* uloha)
 {s16 i;
 
  uloha->zasobnik.pos++;
@@ -123,11 +124,11 @@ int KorektniTah(u16 tah, TUloha *uloha)
  return 0;
 }
 
-int KTNehledej(u16 tah, TUloha *uloha)
 /*************************************************************************/
-/*  KTNehledej -  Analogie KorektiTah, jen už vše musí být na zásobníku. */
-/*  Ze zásobníku pouze ète.												 */
+/*  KTNehledej -  Analogie KorektiTah, jen uÂž vÂše musÃ­ bÃ½t na zÃ¡sobnÃ­ku. */
+/*  Ze zÃ¡sobnÃ­ku pouze Äte.                                                 */
 /*************************************************************************/
+int KTNehledej(u16 tah, TUloha* uloha)
 {s16 i;
 
  for(i=uloha->zasobnik.hranice[uloha->zasobnik.pos];
@@ -135,7 +136,7 @@ int KTNehledej(u16 tah, TUloha *uloha)
   if(tah==uloha->zasobnik.tahy[i].data) return 1;
  return 0;
 }
-void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...)
+
 /*************************************************************************
  *   GlobTahni - Tah v partii (nikoliv v propoctu)                       *
  *   na zasobnik ani nesahne                                             *
@@ -148,7 +149,8 @@ void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...)
  Tahy jsou unsigned a ne u16 kvuli nesmyslne iso norme
  (u16 by byla chyba pri prekladu !!!)
  *************************************************************************/
- {s8 odkud;
+void GlobTahni(int TestKonce, TUloha* uloha, int useknout, ...)
+{s8 odkud;
   s8 kam;
   va_list ptr;
   TPartData data;
@@ -167,7 +169,7 @@ void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...)
    va_end(ptr);
 #ifdef STRINGTAH
    NalezTahy(uloha);
-   TahToStr(tah,uloha,data.nazev);
+   TahToLongStr(tah,data.nazev);
 #endif
   }
   else
@@ -179,15 +181,15 @@ void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...)
   if(!(tah>>15)) /* Normalni tah*/
    {kam=(s8)(tah&127);
     odkud=(s8)(tah>>7);
-	if(abs(uloha->pozice.sch[odkud])==1)data.zmena=1;
+    if(abs(uloha->pozice.sch[odkud])==1)data.zmena=1;
     if(/* bud cerny tahne pescem o 2*/
-		odkud-kam==20 && uloha->pozice.sch[odkud]==-1
-		/* a bily pesec ciha */
-	&& (uloha->pozice.sch[kam+1]==1 || uloha->pozice.sch[kam-1]==1)
-	/* nebo bily tahne pescem o 2 */
-	|| odkud-kam==-20 && uloha->pozice.sch[odkud]==1
-		/* a cerny pesec ciha */
-	&& (uloha->pozice.sch[kam+1]==-1 || uloha->pozice.sch[kam-1]==-1))
+        odkud-kam==20 && uloha->pozice.sch[odkud]==-1
+        /* a bily pesec ciha */
+    && (uloha->pozice.sch[kam+1]==1 || uloha->pozice.sch[kam-1]==1)
+    /* nebo bily tahne pescem o 2 */
+    || odkud-kam==-20 && uloha->pozice.sch[odkud]==1
+        /* a cerny pesec ciha */
+    && (uloha->pozice.sch[kam+1]==-1 || uloha->pozice.sch[kam-1]==-1))
       uloha->pozice.mimoch=kam;
  /* Niceni rosad
    Pozn.: nejde dat vsude 'else', protoze napr. Va1xa8 nici obe velke rosady*/
@@ -288,19 +290,20 @@ void GlobTahni(int TestKonce, TUloha *uloha, int useknout, ...)
  else uloha->prt=uloha->prt->p;
  if(TestKonce)ZjistiTypKoncePartie(uloha);
 }
-void GlobTahniZpet(TUloha *uloha)
+
 /***************************************************************************
  *   GlobTahniZpet - Tahne zpet v partii (Nikoliv v propoctu)              *
  *   Posune se v partii o 1 doleva, ocas nemaze, na zasobnik ani nesahne   *
  ***************************************************************************/
+void GlobTahniZpet(TUloha *uloha)
  {register u8 odkud;
   register u8 kam;
 /*  u8 hloubka;*/
   u16 data;
 
-#if LadeniGlobruti > 10
- if (!uloha->prt || !uloha->prt->l) Chyba("GlobTahniZpet");
-#endif
+  if (!uloha->prt || !uloha->prt->l) 
+    return;
+ 
   uloha->KonecPartie=0;
   uloha->pozice.mimoch=uloha->prt->data.mimoch;
   uloha->pozice.roch=uloha->prt->data.roch;
@@ -309,13 +312,13 @@ void GlobTahniZpet(TUloha *uloha)
   uloha->prt=uloha->prt->l;
 
   if(!(data>>15)) /* Normalni tah*/
-   {kam=(s8)(data&127);
+  {
+    kam=(s8)(data&127);
     odkud=(s8)(data>>7);
- uloha->pozice.sch[odkud]=uloha->pozice.sch[kam];
- uloha->pozice.sch[kam]=uloha->prt->p->data.brani;
-
- return;
- }
+    uloha->pozice.sch[odkud]=uloha->pozice.sch[kam];
+    uloha->pozice.sch[kam]=uloha->prt->p->data.brani;
+    return;
+  }
   /* Nenormalni tah
      Mala bila rosada*/
   if (data==MBRoch)
@@ -359,7 +362,7 @@ void GlobTahniZpet(TUloha *uloha)
    uloha->pozice.sch[a1+((data>>4)&7)]=uloha->prt->p->data.brani;
    return;
   }
- /* Brani mimochodem (nic jin‚ho to uz byt nemuze)*/
+ /* Brani mimochodem (nic jinÂ‚ho to uz byt nemuze)*/
  data&=0x3fff; /* odstraneni prvnich dvou bitu, aby se lepe siftovalo*/
  kam=(s8)(data&127);
  odkud=(s8)(data>>7);
@@ -372,10 +375,10 @@ void GlobTahniZpet(TUloha *uloha)
  uloha->pozice.sch[kam]=0;
  }
 
-int JeTam1(u8 odkud,TUloha *uloha)
 /****************************************************/
 /* Je mezi nalezenymi tahi nejaky vedouci z odkud ? */
 /****************************************************/
+int JeTam1(u8 odkud,TUloha *uloha)
 {TTah1 *p,*k;
  u16 t;
 
@@ -397,11 +400,10 @@ int JeTam1(u8 odkud,TUloha *uloha)
  return 0;
 }
 
-int JeTam2(u8 odkud,u8 kam,TUloha *uloha)
 /***********************************************************/
-
 /* Je mezi nalezenymi tahi nejaky vedouci z odkud do kam ? */
 /***********************************************************/
+int JeTam2(u8 odkud,u8 kam,TUloha *uloha)
 {TTah1 *p,*k;
  u16 t;
 
@@ -412,7 +414,7 @@ int JeTam2(u8 odkud,u8 kam,TUloha *uloha)
    t=p->data;
  /* Normalni tah*/
 if(!(t>>15))  if(kam==(t&127) && odkud==(t>>7)) return 1; else continue;
-/*Rošády*/
+/*RoÅ¡Ã¡dy*/
 if (t==MBRoch) if(odkud==e1 && kam==g1) return 1; else continue;
 if (t==VBRoch) if(odkud==e1 && kam==c1) return 1; else continue;
 if (t==MCRoch) if(odkud==e8 && kam==g8) return 1; else continue;
@@ -429,50 +431,12 @@ if(kam==(t&127) && odkud==(t>>7)) return 1; else continue;
 } /* konec while cyklu*/
  return 0;
 }
-#if Typ_Produktu==Win32_Program
-#include "promdlg.h"
-u16 DoplnTah(HWND hwnd,u8 odkud,u8 kam,TUloha *uloha)
-/***************************************************/
-/* Jen windows - pripadny dialog promeny pesce     */
-/***************************************************/
- {
- TTah1 *p,*k;
- u16 t;
-
- p=&uloha->zasobnik.tahy[uloha->zasobnik.hranice[uloha->zasobnik.pos]]-1;
- k=&uloha->zasobnik.tahy[uloha->zasobnik.hranice[uloha->zasobnik.pos+1]]-1;
- while(p<k)
-  {p++;
-   t=p->data;
- /* Normalni tah*/
-if(!(t>>15))  if(kam==(t&127) && odkud==(t>>7)) return t; else continue;
-/*Rošády*/
-if (t==MBRoch) if(odkud==e1 && kam==g1)  return t; else continue;
-if (t==VBRoch) if(odkud==e1 && kam==c1)  return t; else continue;
-if (t==MCRoch) if(odkud==e8 && kam==g8)  return t; else continue;
-if (t==VCRoch) if(odkud==e8 && kam==c8)  return t; else continue;
-  /*Promena bileho pesce*/
-if ((t>>12)==12)
- if(odkud==a7+((t>>7)&7) && kam==a8+((t>>4)&7))
-  return(t&(0xFFFF^(3<<10)))|(DialogPromeny(hwnd,1)<<10);
- else continue;
-  /*Promena cerneho pesce*/
-if ((t>>12)==13)
- if(odkud==a2+((t>>7)&7) && kam==a1+((t>>4)&7))
-  return(t&(0xFFFF^(3<<10)))|(DialogPromeny(hwnd,0)<<10);
- else continue;
-/* Brani mimochodem (nic jineho to uz byt nemuze)*/
-if(kam==(t&0x3fff&127) && odkud==((t&0x3fff)>>7)) return t; else continue;
-} /* konec while cyklu*/
- return 0;
- }
-#endif
 
 #if Typ_Produktu==Qt_Program
-u16 DoplnTah(u8 odkud,u8 kam,TUloha *uloha)
 /***************************************************/
 /* Jen Qt - pripadny dialog promeny pesce     */
 /***************************************************/
+u16 DoplnTah(u8 odkud,u8 kam,TUloha *uloha)
  {
  TTah1 *p,*k;
  u16 t;
@@ -484,7 +448,7 @@ u16 DoplnTah(u8 odkud,u8 kam,TUloha *uloha)
    t=p->data;
  /* Normalni tah*/
 if(!(t>>15))  if(kam==(t&127) && odkud==(t>>7)) return t; else continue;
-/*Ro¹ády*/
+/*RoÅ¡Ã¡dy*/
 if (t==MBRoch) if(odkud==e1 && kam==g1)  return t; else continue;
 if (t==VBRoch) if(odkud==e1 && kam==c1)  return t; else continue;
 if (t==MCRoch) if(odkud==e8 && kam==g8)  return t; else continue;
@@ -506,20 +470,21 @@ if(kam==(t&0x3fff&127) && odkud==((t&0x3fff)>>7)) return t; else continue;
  }
 #endif
 
+/****************************/
+/* jsou 2 Å¡achovnice stejnÃ© */
+/****************************/
 int stejne(s8 *s1,s8 *s2)
-/****************************/
-/* jsou 2 šachovnice stejné */
-/****************************/
 {int i;
   for (i=a1;i<=h8;i++) if (s1[i]!=s2[i]) return 0;
   return 1;
 }
-int DulezityTah(TPozice *pos,u16 t)
+
 /*********************************************/
-/* Pozice je pøed zahráním tahu t.           */
-/* vrací 1 - je to tah pìšcem nebo braní  */
+/* Pozice je pÅ™ed zahrÃ¡nÃ­m tahu t.           */
+/* vracÃ­ 1 - je to tah pÄ›Âšcem nebo branÃ­  */
 /* 0 - jindy                             */
 /*********************************************/
+int DulezityTah(TPozice *pos,u16 t)
  {
   if (t&(1<<15))
    {
@@ -541,11 +506,12 @@ int DulezityTah(TPozice *pos,u16 t)
      else return 0;
    }
  }
-int Remiza50Nebo3(TUloha *uloha)
+
 /************************************************************************
-*  Je remíza 50 tahy nebo 3x stejná pozice ?                            *
-*  vrací 50, 3 nebo 0 (význam je jasný)                                 *
+*  Je remÃ­za 50 tahy nebo 3x stejnÃ¡ pozice ?                            *
+*  vracÃ­ 50, 3 nebo 0 (vÃ½znam je jasnÃ½)                                 *
 ************************************************************************/
+int Remiza50Nebo3(TUloha *uloha)
 {int i,stejnych;
  TPozice pos;
 
@@ -564,4 +530,3 @@ int Remiza50Nebo3(TUloha *uloha)
  if (stejnych<2)stejnych=0;else stejnych++;
  return stejnych;
 }
-

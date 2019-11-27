@@ -1,5 +1,5 @@
-/* Sachové centrum - Knihovna zahájení Petr Kuèera 2000*/
-/* Deklarace funkcí potøebnıch pro pøístup do souboru s knihovnou zahájení
+ï»¿/* SachovÃ© centrum - Knihovna zahÃ¡jenÃ­ Petr KuÄera 2000*/
+/* Deklarace funkcÃ­ potÅ™ebnÃ½ch pro pÅ™Ã­stup do souboru s knihovnou zahÃ¡jenÃ­
  */
 
 #ifndef __CTENI_H__
@@ -9,57 +9,60 @@
 #include "datastr.h"
 #include "cotyvar.h"
 
-/*Promìnná obsahující odkaz na ètenı soubor s knihovnou zahájení*/
+/*PromÄ›nnÃ¡ obsahujÃ­cÃ­ odkaz na ÄtenÃ½ soubor s knihovnou zahÃ¡jenÃ­*/
 extern FILE *cteni_soubor;
 
-/*Funkce inicializující modul ètení knihovny, nutno volat pøed
-  prvním pou¾itím nìkteré ze zbylıch funkcí ètecího modulu.
+/*Funkce inicializujÃ­cÃ­ modul ÄtenÃ­ knihovny, nutno volat pÅ™ed
+  prvnÃ­m pouÅ¾itÃ­m nÄ›kterÃ© ze zbylÃ½ch funkcÃ­ ÄtecÃ­ho modulu.
 
-  parametr jmsoub jméno souboru obsahujícího knihovnu zahájení
-  vrací 0 pøi úspì¹né inicializaci, jinak kód chyby danı konstantami
+  parametr jmsoub jmÃ©no souboru obsahujÃ­cÃ­ho knihovnu zahÃ¡jenÃ­
+  vracÃ­ 0 pÅ™i ÃºspÄ›Å¡nÃ© inicializaci, jinak kÃ³d chyby danÃ½ konstantami
         v souboru obk_ch.h
  */
-int init_cteni(char *jmsoub);
+int init_cteni(const  char *jmsoub);
 
-/*Funkce pøeète blok adresáøe ze souboru s knihovnou zahájení
+/*Funkce pÅ™eÄte blok adresÃ¡Å™e ze souboru s knihovnou zahÃ¡jenÃ­
 
-  parametr blok_adr ukazuje na místo, kam se má ulo¾it pøeètenı blok adresáøe
-  parametr adresa obsahuje adresu èteného bloku v souboru vzta¾enou k aktuálnímu
-           obsahu konstanty ZAC_ADR deklarované v souboru datastr.h. Adresa 0L v¾dy
-           ukazuje na základní blok, z nìj¾ vedou odkazy dál.
-  vrací 0 pøi úspì¹ném ètení, jinak kód chyby danı konstantami
+  parametr blok_adr ukazuje na mÃ­sto, kam se mÃ¡ uloÅ¾it pÅ™eÄtenÃ½ blok adresÃ¡Å™e
+  parametr adresa obsahuje adresu ÄtenÃ©ho bloku v souboru vztaÅ¾enou k aktuÃ¡lnÃ­mu
+           obsahu konstanty ZAC_ADR deklarovanÃ© v souboru datastr.h. Adresa 0L vÅ¾dy
+           ukazuje na zÃ¡kladnÃ­ blok, z nÄ›jÅ¾ vedou odkazy dÃ¡l.
+  vracÃ­ 0 pÅ™i ÃºspÄ›Å¡nÃ©m ÄtenÃ­, jinak kÃ³d chyby danÃ½ konstantami
         v souboru obk_ch.h
  */
 int cti_blok_adresare(f_blok_adresare_t *blok_adr, long adresa);
-/*Funkce pøeète blok s pozicemi ze souboru s knihovnou zahájení
 
-  parametr blok ukazuje na místo, kam má bıt pøeètenı blok ulo¾en
-  parametr adresa obsahuje adresu èteného bloku v souboru vzta¾enou
-           k aktuálnímu obsahu konstanty ZAC_POZIC deklarované
+/*Funkce pÅ™eÄte blok s pozicemi ze souboru s knihovnou zahÃ¡jenÃ­
+
+  parametr blok ukazuje na mÃ­sto, kam mÃ¡ bÃ½t pÅ™eÄtenÃ½ blok uloÅ¾en
+  parametr adresa obsahuje adresu ÄtenÃ©ho bloku v souboru vztaÅ¾enou
+           k aktuÃ¡lnÃ­mu obsahu konstanty ZAC_POZIC deklarovanÃ©
            v souboru datastr.h.
-  vrací 0 pøi úspì¹ném ètení, jinak kód chyby danı konstantami
+  vracÃ­ 0 pÅ™i ÃºspÄ›Å¡nÃ©m ÄtenÃ­, jinak kÃ³d chyby danÃ½ konstantami
         v souboru obk_ch.h
  */
 int cti_blok_pozic(f_blok_pozic_t *blok, long adresa);
-/*Funkce pøeète pozici ze souboru s knihovnou zahájení
 
-  parametr blok ukazuje na místo, kam má bıt pøeètená pozice ulo¾ena
-  parametr adresa obsahuje adresu ètené pozice v souboru vzta¾enou
-           k aktuálnímu obsahu konstanty ZAC_POZIC deklarované
+/*Funkce pÅ™eÄte pozici ze souboru s knihovnou zahÃ¡jenÃ­
+
+  parametr blok ukazuje na mÃ­sto, kam mÃ¡ bÃ½t pÅ™eÄtenÃ¡ pozice uloÅ¾ena
+  parametr adresa obsahuje adresu ÄtenÃ© pozice v souboru vztaÅ¾enou
+           k aktuÃ¡lnÃ­mu obsahu konstanty ZAC_POZIC deklarovanÃ©
            v souboru datastr.h. 
-  vrací 0 pøi úspì¹ném ètení, jinak kód chyby danı konstantami
+  vracÃ­ 0 pÅ™i ÃºspÄ›Å¡nÃ©m ÄtenÃ­, jinak kÃ³d chyby danÃ½ konstantami
         v souboru obk_ch.h
  */
 int cti_pozice(f_pozice_t *pozice, long adresa);
-/*Nalezne pozici v souboru s knihovnou zahájení.
 
-  parametr pozice obsahuje pozici, která má bıt nalezena v souboru
-  parametr f_pozice ukazuje na místo, kam má bıt ulo¾ena pøeètená
+/*Nalezne pozici v souboru s knihovnou zahÃ¡jenÃ­.
+
+  parametr pozice obsahuje pozici, kterÃ¡ mÃ¡ bÃ½t nalezena v souboru
+  parametr f_pozice ukazuje na mÃ­sto, kam mÃ¡ bÃ½t uloÅ¾ena pÅ™eÄtenÃ¡
            pozice
-  vrací 0, nedojde-li k ¾ádné chybì a pozice je úspì¹nì nalezena
-        CH_CT_FAIL, nedojde-li k ¾ádné chybì, ale pozice nebyla nalezena
-        kód chyby danı jinou konstantou deklarovanou v souboru obk_ch.h,
-        dojde-li k jiné chybì.
+  vracÃ­ 0, nedojde-li k Å¾Ã¡dnÃ© chybÄ› a pozice je ÃºspÄ›Å¡nÄ› nalezena
+        CH_CT_FAIL, nedojde-li k Å¾Ã¡dnÃ© chybÄ›, ale pozice nebyla nalezena
+        kÃ³d chyby danÃ½ jinou konstantou deklarovanou v souboru obk_ch.h,
+        dojde-li k jinÃ© chybÄ›.
  */
 int hledej_pozici(TPozice *pozice, f_pozice_t *f_pozice);
 

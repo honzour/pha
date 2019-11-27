@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cotyvar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="myslitel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="volby.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ticho.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tabulky.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="knihovna.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="chyba.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="globruti.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hashpech.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hashtab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="datastr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cteni.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="obk_ch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ohodnoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kontrola.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lokruti.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="partie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="strtah.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dosio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sachy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dejtah.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generato.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dllmain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="perft.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="chyba.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cotyvar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cteni.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="datastr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dejtah.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dosio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generato.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="globruti.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hashpech.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hashtab.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="knihovna.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kontrola.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lokruti.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="myslitel.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="obk_ch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ohodnoc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="partie.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="perft.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sachy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="strtah.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tabulky.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ticho.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="interface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Honzovy Sachy.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -1,4 +1,4 @@
-#include <stdlib.h>
+﻿#include <stdlib.h>
 #include "volby.h"
 #include "cotyvar.h"
 #include "myslitel.h"
@@ -8,13 +8,15 @@
 #include "ohodnoc.h"
 #include "lokruti.h"
 #include "generato.h"
+#if Typ_Produktu==DLL
+#include "interface.h"
+#endif
 
 /******************************************************************************/
 /* AlfaBetaBrani do dane hloubky.Vraci hodnotu z hlediska toho,kdo je na tahu.*/
 /* Hleda hodnotu na otevrenem intervalu(alfa,beta),vraci cislo z uzavreneho   */
 /* intervalu <alfa,beta>                                                      */
 /******************************************************************************/
-
 s16 AlfaBetaBrani(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka) {
   TTah1 *pt1, *pt2, *pt0;
   s16 BezPropoctu, pomhod;
@@ -25,9 +27,23 @@ s16 AlfaBetaBrani(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka) {
   uloha->stat.UZ++;
 #endif
 
+#if Typ_Produktu==DLL
+  Callbacks.NextNode();
+  if (uloha->StavPropoctu.MamKoncitMysleni) {
+      return ZadnaCena;
+  }
+#endif
   if (GetHash(uloha, alfa, beta, 1, &BezPropoctu))
     return BezPropoctu;
   zanor = uloha->zasobnik.pos;
+  int selDepth = zanor + uloha->StavPropoctu.NulTah;
+  if (selDepth > uloha->StavPropoctu.SelDepth)
+  {
+      uloha->StavPropoctu.SelDepth = selDepth;
+#if Typ_Produktu==DLL
+      Callbacks.SetSelDepth(selDepth);
+#endif
+  }
   if (zanor>MaxHloubkaPropoctu - 4)
     return HodnotaPozice(uloha, alfa, beta);
   hassert(uloha->zasobnik.pos < MaxHloubkaPropoctu, "Hloubka propoctu");
@@ -100,8 +116,10 @@ s16 AlfaBetaBrani(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka) {
     if (pt1->cena>alfa)
       alfa = pt1->cena;
     TahniZpet(pt1->data,uloha);
+    if (uloha->StavPropoctu.MamKoncitMysleni) {
+        return ZadnaCena;
+    }
     if(pt1->cena>=beta) return beta; /*prelezeni okenka */
   }
   return alfa;
 }
-

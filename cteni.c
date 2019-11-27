@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 
 #include "hash.h"
@@ -9,9 +9,10 @@
 
 FILE *cteni_soubor=NULL;
 
-int init_cteni(char *jmsoub)
+int init_cteni(const char *jmsoub)
 {
   /*int i,j;*/
+#pragma warning (disable : 4996)
   cteni_soubor=fopen(jmsoub,"rb");
   if(cteni_soubor==NULL) {
     return CH_CT_SOUBOR;
@@ -128,6 +129,3 @@ int hledej_pozici(TPozice *pozice, f_pozice_t *f_pozice)
   }
   return CH_CT_FAIL;
 }
-
-
-

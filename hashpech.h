@@ -1,4 +1,4 @@
-#ifndef hashpechH
+﻿#ifndef hashpechH
 #define hashpechH
 #include "volby.h"
 #include "cotyvar.h"

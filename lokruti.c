@@ -1,4 +1,4 @@
-/*********************************************************/
+ï»¿/*********************************************************/
 /* lokruti.c - Test sachu ohrozeni a lokalni             */
 /* (tj. nikoliv v partii) tahy                           */
 /* 9.1. 2001 Jan Nemec                                   */
@@ -22,11 +22,12 @@ static int PocetCernych(char *sch){
  return p;
 }
 #endif
+
 /***************************************************/
 /**  Ohrozeno   Je dane policko ohrozene ?        **/
 /***************************************************/
 int Ohrozeno(const s8 *p, int bilym) /*bilym - ohrozuje to pole bily*/
-/* p je pointer do sachovnice na zkouman‚ policko*/
+/* p je pointer do sachovnice na zkoumanÃ© policko*/
  {int j,k;
 
  if (bilym)
@@ -61,11 +62,11 @@ int Ohrozeno(const s8 *p, int bilym) /*bilym - ohrozuje to pole bily*/
  return 0;
  }
 
- static int OhrozenoNekralem(s8 *p, int bilym){
 /*Jako Ohrozeno z lokruti.h, ale neuvazuje napadeni
 kralem*/
- /*bilym - ohrozuje to pole bily*/
-/* p je pointer do sachovnice na zkouman‚ policko*/
+/*bilym - ohrozuje to pole bily*/
+/* p je pointer do sachovnice na zkoumanÃ© policko*/
+static int OhrozenoNekralem(s8 *p, int bilym){
  {int j,k;
 
  if (bilym)
@@ -114,13 +115,13 @@ static int CistoMezi(s8 *p1, s8 *p2, int o) {
   return 1;
 }
 
-int HrozbaBilemuKraliDamou(TUloha *u){
 /*vraci 1 kdyz existuje policko vedle krale
 ktere je napadeno (nejakou) souperovou damou a jeste
 necim jinym (to neco jineho muze byt i za tou potencialne
 ohrozujici damou) a neni kryte nicim jinym nez kralem
 
 - to je casty obrazek banalnich jednotahovych matu*/
+int HrozbaBilemuKraliDamou(TUloha* u) {
 int i,dx,dy,x,y,kx,ky;
 int o,p;
 div_t t;
@@ -135,30 +136,30 @@ s8 *pole;
    for(y=ky-1;y<ky+2;y++,pole+=7)
     for(x=kx-1;x<kx+2;x++,pole++)
     {
-	 if(x==kx && y==ky ||
-	 *pole<0||*pole>6) continue;
-	 p=0;
-	 if(x==dx){
-	  if(CistoMezi(u->pozice.sch+i,pole,10))p=1;
-	 } else
-	 if(y==dy){
-	  if(CistoMezi(u->pozice.sch+i,pole,1))p=1;
-	 }
-	 else
-	 if(y-dy==x-dx){
-	  if(CistoMezi(u->pozice.sch+i,pole,11))p=1;
-	 }
-	 else
-	 if(y-dy==dx-x){
-	  if(CistoMezi(u->pozice.sch+i,pole,9))p=1;
-	 }
-	 if(!p) continue; /*Dama to policko nenapada*/
+     if(x==kx && y==ky ||
+     *pole<0||*pole>6) continue;
+     p=0;
+     if(x==dx){
+      if(CistoMezi(u->pozice.sch+i,pole,10))p=1;
+     } else
+     if(y==dy){
+      if(CistoMezi(u->pozice.sch+i,pole,1))p=1;
+     }
+     else
+     if(y-dy==x-dx){
+      if(CistoMezi(u->pozice.sch+i,pole,11))p=1;
+     }
+     else
+     if(y-dy==dx-x){
+      if(CistoMezi(u->pozice.sch+i,pole,9))p=1;
+     }
+     if(!p) continue; /*Dama to policko nenapada*/
 
    if(!OhrozenoNekralem(pole,1))
     {
     u->pozice.sch[i]=0;
-	o=Ohrozeno(pole,0);
-	u->pozice.sch[i]=-5;
+    o=Ohrozeno(pole,0);
+    u->pozice.sch[i]=-5;
     if(o)return 1;
    }
  }/* od for cyklu pres okoli krale*/
@@ -167,14 +168,14 @@ s8 *pole;
  return 0;
 }
 
-int HrozbaCernemuKraliDamou(TUloha *u){
 /*vraci 1 kdyz existuje policko vedle krale
 ktere je napadeno (nejakou) souperovou damou a jeste
 necim jinym (to neco jineho muze byt i za tou potencialne
 ohrozujici damou) a neni kryte nicim jinym nez kralem
 
 - to je casty obrazek banalnich jednotahovych matu*/
-int i,dx,dy,x,y,kx,ky;
+int HrozbaCernemuKraliDamou(TUloha* u) {
+    int i,dx,dy,x,y,kx,ky;
 int o,p;
 div_t t;
 s8 *pole;
@@ -188,29 +189,29 @@ s8 *pole;
    for(y=ky-1;y<ky+2;y++,pole+=7)
     for(x=kx-1;x<kx+2;x++,pole++)
     {
-	 if(x==kx && y==ky || *pole>0) continue;
-	 p=0;
-	 if(x==dx){
-	  if(CistoMezi(u->pozice.sch+i,pole,10))p=1;
-	 } else
-	 if(y==dy){
-	  if(CistoMezi(u->pozice.sch+i,pole,1))p=1;
-	 }
-	 else
-	 if(y-dy==x-dx){
-	  if(CistoMezi(u->pozice.sch+i,pole,11))p=1;
-	 }
-	 else
-	 if(y-dy==dx-x){
-	  if(CistoMezi(u->pozice.sch+i,pole,9))p=1;
-	 }
-	 if(!p) continue; /*Dama to policko nenapada*/
+     if(x==kx && y==ky || *pole>0) continue;
+     p=0;
+     if(x==dx){
+      if(CistoMezi(u->pozice.sch+i,pole,10))p=1;
+     } else
+     if(y==dy){
+      if(CistoMezi(u->pozice.sch+i,pole,1))p=1;
+     }
+     else
+     if(y-dy==x-dx){
+      if(CistoMezi(u->pozice.sch+i,pole,11))p=1;
+     }
+     else
+     if(y-dy==dx-x){
+      if(CistoMezi(u->pozice.sch+i,pole,9))p=1;
+     }
+     if(!p) continue; /*Dama to policko nenapada*/
 
    if(!OhrozenoNekralem(pole,0))
     {
     u->pozice.sch[i]=0;
-	o=Ohrozeno(pole,1);
-	u->pozice.sch[i]=5;
+    o=Ohrozeno(pole,1);
+    u->pozice.sch[i]=5;
     if(o)return 1;
    }
  }/* od for cyklu pres okoli krale*/
@@ -223,7 +224,6 @@ s8 *pole;
    Sach. Je komu v sachu ?
    sch - pointr na 1. policko sachovnice 12*10 (tedy nikoliv a1)
 */
-
 int Sach(int komu, s8 *sch) {
   s8 kral;
   if (komu) kral = 6; else kral = -6;
@@ -254,14 +254,14 @@ void JednoTahni(u16 tah, TUloha *uloha) {
    {kam=(u8)(tah&127);
     odkud=(u8)(tah>>7);
     if(/* bud cerny tahne pescem o 2*/
-		odkud-kam==20 && uloha->pozice.sch[odkud]==-1
-		/* a bily pesec ciha */
-	&& (uloha->pozice.sch[kam+1]==1 || uloha->pozice.sch[kam-1]==1)
-	/* nebo bily tahne pescem o 2 */
-	|| odkud-kam==-20 && uloha->pozice.sch[odkud]==1
-		/* a cerny pesec ciha */
-	&& (uloha->pozice.sch[kam+1]==-1 || uloha->pozice.sch[kam-1]==-1))
-		
+        odkud-kam==20 && uloha->pozice.sch[odkud]==-1
+        /* a bily pesec ciha */
+    && (uloha->pozice.sch[kam+1]==1 || uloha->pozice.sch[kam-1]==1)
+    /* nebo bily tahne pescem o 2 */
+    || odkud-kam==-20 && uloha->pozice.sch[odkud]==1
+        /* a cerny pesec ciha */
+    && (uloha->pozice.sch[kam+1]==-1 || uloha->pozice.sch[kam-1]==-1))
+        
       uloha->pozice.mimoch=kam;
  /* Niceni rosad
    Pozn.: nejde dat vsude 'else', protoze napr. Va1xa8 nici obe velke rosady*/
@@ -340,7 +340,7 @@ Konec:;
   odkud=(u8)(a2+((tah>>7)&7));
    kam=(u8)(a1+((tah>>4)&7));
    co=(s8)(-(2+((tah>>10)&3))); 
-	
+    
    /* Ulozim si, co jsem sebral */
    uloha->zasobnik.brani[hloubka]=uloha->pozice.sch[kam];
    uloha->pozice.sch[odkud]=0;
@@ -403,18 +403,18 @@ void Tahni(u16 tah, TUloha *uloha) {
     kam = (u8)(tah & 127);
     odkud = (u8)(tah >> 7);
     uloha->zasobnik.kam[hloubka] = kam;
-	/*Kdyz tahnu pescem, doslo ke zmene*/
-	  if (abs(uloha->pozice.sch[odkud]) == 1)
+    /*Kdyz tahnu pescem, doslo ke zmene*/
+      if (abs(uloha->pozice.sch[odkud]) == 1)
       (uloha->zasobnik.zmen[hloubka])++;
     if (/* bud cerny tahne pescem o 2*/
-		  odkud-kam == 20 && uloha->pozice.sch[odkud] == -1
-		/* a bily pesec ciha */
+          odkud-kam == 20 && uloha->pozice.sch[odkud] == -1
+        /* a bily pesec ciha */
       && (uloha->pozice.sch[kam+1]==1 || uloha->pozice.sch[kam-1]==1)
-	/* nebo bily tahne pescem o 2 */
-	   || odkud-kam==-20 && uloha->pozice.sch[odkud]==1
-		/* a cerny pesec ciha */
+    /* nebo bily tahne pescem o 2 */
+       || odkud-kam==-20 && uloha->pozice.sch[odkud]==1
+        /* a cerny pesec ciha */
      && (uloha->pozice.sch[kam+1]==-1 || uloha->pozice.sch[kam-1]==-1))
-		
+        
       uloha->pozice.mimoch=kam;
  /* Niceni rosad
    Pozn.: nejde dat vsude 'else', protoze napr. Va1xa8 nici obe velke rosady*/
@@ -499,7 +499,7 @@ if(uloha->pozice.sch[kam]==1){
  /* zakladni rutina normalniho tahu:*/
  uloha->zasobnik.hF[hloubka+1]^=hnF.f[uloha->pozice.sch[odkud]+6][odkud];
  uloha->zasobnik.hG[hloubka+1]^=hnG.f[uloha->pozice.sch[odkud]+6][odkud];
-/* Z výchozího policka zmizi puvodni figura */
+/* Z vÅ™chozÃho policka zmizi puvodni figura */
  uloha->zasobnik.hF[hloubka+1]^=hnF.f[6][odkud];
  uloha->zasobnik.hG[hloubka+1]^=hnG.f[6][odkud];
 /* A bude tam prazdno */
@@ -520,11 +520,11 @@ Konec:;
   if(!uloha->StavPropoctu.VNT){
   if(uloha->zasobnik.hF[hloubka+1]!=HashF(&(uloha->pozice)) ||
      uloha->zasobnik.hG[hloubka+1]!=HashG(&(uloha->pozice)) ||
-	uloha->zasobnik.hPechF[hloubka+1]!=HashPechF(&(uloha->pozice))||
-	uloha->zasobnik.hPechG[hloubka+1]!=HashPechG(&(uloha->pozice))
-	 )
+    uloha->zasobnik.hPechF[hloubka+1]!=HashPechF(&(uloha->pozice))||
+    uloha->zasobnik.hPechG[hloubka+1]!=HashPechG(&(uloha->pozice))
+     )
   { TiskniSachovnici(&(uloha->pozice));
-	 fputs("\nChyba hash funkce !!!!!!!\n",stderr);}
+     fputs("\nChyba hash funkce !!!!!!!\n",stderr);}
   }
 #endif
 /*
@@ -546,19 +546,19 @@ Konec:;
     uloha->pozice.sch[f1]=4;
     uloha->pozice.roch&=12;
     uloha->zasobnik.brani[hloubka]=0;
-	/* Rosada zmenila hodnotu pozice*/
-	uloha->zasobnik.hF[hloubka+1]^=
+    /* Rosada zmenila hodnotu pozice*/
+    uloha->zasobnik.hF[hloubka+1]^=
      hnF.f[6+6][e1]^hnF.f[6+6][g1]
-	^hnF.f[4+6][h1]^hnF.f[4+6][f1]^
-	 hnF.f[6][e1]^hnF.f[6][h1]
-	^hnF.f[6][g1]^hnF.f[6][f1];
-	uloha->zasobnik.hG[hloubka+1]^=
+    ^hnF.f[4+6][h1]^hnF.f[4+6][f1]^
+     hnF.f[6][e1]^hnF.f[6][h1]
+    ^hnF.f[6][g1]^hnF.f[6][f1];
+    uloha->zasobnik.hG[hloubka+1]^=
      hnG.f[6+6][e1]^hnG.f[6+6][g1]
-	^hnG.f[4+6][h1]^hnG.f[4+6][f1]^
-	 hnG.f[6][e1]^hnG.f[6][h1]
-	^hnG.f[6][g1]^hnG.f[6][f1];
-	uloha->material.bk=g1;
-	uloha->zasobnik.kam[hloubka]=g1;
+    ^hnG.f[4+6][h1]^hnG.f[4+6][f1]^
+     hnG.f[6][e1]^hnG.f[6][h1]
+    ^hnG.f[6][g1]^hnG.f[6][f1];
+    uloha->material.bk=g1;
+    uloha->zasobnik.kam[hloubka]=g1;
     goto Konec;}
   /*Velka bila rosada*/
   if (tah==VBRoch)
@@ -570,16 +570,16 @@ Konec:;
     uloha->zasobnik.brani[hloubka]=0;
     uloha->zasobnik.hF[hloubka+1]^=
      hnF.f[6+6][e1]^hnF.f[6+6][c1]
-	^hnF.f[4+6][a1]^hnF.f[4+6][d1]^
-	 hnF.f[6][e1]^hnF.f[6][a1]
-	^hnF.f[6][c1]^hnF.f[6][d1];
-	uloha->zasobnik.hG[hloubka+1]^=
+    ^hnF.f[4+6][a1]^hnF.f[4+6][d1]^
+     hnF.f[6][e1]^hnF.f[6][a1]
+    ^hnF.f[6][c1]^hnF.f[6][d1];
+    uloha->zasobnik.hG[hloubka+1]^=
      hnG.f[6+6][e1]^hnG.f[6+6][c1]
-	^hnG.f[4+6][a1]^hnG.f[4+6][d1]^
-	 hnG.f[6][e1]^hnG.f[6][a1]
-	^hnG.f[6][c1]^hnG.f[6][d1];
-	uloha->material.bk=c1;
-	uloha->zasobnik.kam[hloubka]=c1;
+    ^hnG.f[4+6][a1]^hnG.f[4+6][d1]^
+     hnG.f[6][e1]^hnG.f[6][a1]
+    ^hnG.f[6][c1]^hnG.f[6][d1];
+    uloha->material.bk=c1;
+    uloha->zasobnik.kam[hloubka]=c1;
     goto Konec;}
  /*Mala cerna rosada*/
   if (tah==MCRoch)
@@ -589,18 +589,18 @@ Konec:;
     uloha->pozice.sch[f8]=-4;
     uloha->pozice.roch&=3;
     uloha->zasobnik.brani[hloubka]=0;
-	uloha->zasobnik.hF[hloubka+1]^=
+    uloha->zasobnik.hF[hloubka+1]^=
      hnF.f[6-6][e8]^hnF.f[6-6][g8]
-	^hnF.f[6-4][h8]^hnF.f[6-4][f8]^
-	 hnF.f[6][e8]^hnF.f[6][h8]
-	^hnF.f[6][f8]^hnF.f[6][g8];
-	uloha->zasobnik.hG[hloubka+1]^=
+    ^hnF.f[6-4][h8]^hnF.f[6-4][f8]^
+     hnF.f[6][e8]^hnF.f[6][h8]
+    ^hnF.f[6][f8]^hnF.f[6][g8];
+    uloha->zasobnik.hG[hloubka+1]^=
      hnG.f[6-6][e8]^hnG.f[6-6][g8]
-	^hnG.f[6-4][h8]^hnG.f[6-4][f8]^
-	 hnG.f[6][e8]^hnG.f[6][h8]
-	^hnG.f[6][f8]^hnG.f[6][g8];
-	uloha->material.ck=g8;
-	uloha->zasobnik.kam[hloubka]=g8;
+    ^hnG.f[6-4][h8]^hnG.f[6-4][f8]^
+     hnG.f[6][e8]^hnG.f[6][h8]
+    ^hnG.f[6][f8]^hnG.f[6][g8];
+    uloha->material.ck=g8;
+    uloha->zasobnik.kam[hloubka]=g8;
     goto Konec;}
   /*Velka cerna rosada*/
   if (tah==VCRoch)
@@ -610,18 +610,18 @@ Konec:;
     uloha->pozice.sch[d8]=-4;
     uloha->pozice.roch&=3;
     uloha->zasobnik.brani[hloubka]=0;
-	uloha->zasobnik.hF[hloubka+1]^=
+    uloha->zasobnik.hF[hloubka+1]^=
      hnF.f[6-6][e8]^hnF.f[6-6][c8]
-	^hnF.f[6-4][a8]^hnF.f[6-4][d8]^
-	 hnF.f[6][e8]^hnF.f[6][a8]
-	^hnF.f[6][c8]^hnF.f[6][d8];
-	uloha->zasobnik.hG[hloubka+1]^=
+    ^hnF.f[6-4][a8]^hnF.f[6-4][d8]^
+     hnF.f[6][e8]^hnF.f[6][a8]
+    ^hnF.f[6][c8]^hnF.f[6][d8];
+    uloha->zasobnik.hG[hloubka+1]^=
      hnG.f[6-6][e8]^hnG.f[6-6][c8]
-	^hnG.f[6-4][a8]^hnG.f[6-4][d8]^
-	 hnG.f[6][e8]^hnG.f[6][a8]
-	^hnG.f[6][c8]^hnG.f[6][d8];
-	uloha->material.ck=c8;
-	uloha->zasobnik.kam[hloubka]=c8;
+    ^hnG.f[6-4][a8]^hnG.f[6-4][d8]^
+     hnG.f[6][e8]^hnG.f[6][a8]
+    ^hnG.f[6][c8]^hnG.f[6][d8];
+    uloha->material.ck=c8;
+    uloha->zasobnik.kam[hloubka]=c8;
     goto Konec;}
   /*Promena bileho pesce*/
  if ((tah>>12)==12)
@@ -640,16 +640,16 @@ Konec:;
    uloha->zasobnik.brani[hloubka]=uloha->pozice.sch[kam];
    /* jak se zmenil material bileho */
    uloha->zasobnik.bm[hloubka+1]+=
-	   StdCenyFigur[co]-StdCenyFigur[1];
+       StdCenyFigur[co]-StdCenyFigur[1];
    /* a cerneho */
    uloha->zasobnik.cm[hloubka+1]-=StdCenyFigur[-uloha->pozice.sch[kam]];
    /* Take se zmenila pozice*/
-	uloha->zasobnik.hF[hloubka+1]^=
+    uloha->zasobnik.hF[hloubka+1]^=
      hnF.f[uloha->pozice.sch[kam]+6][kam]^hnF.f[co+6][kam]^
-	 hnF.f[1+6][odkud]^hnF.f[6][odkud];
-	uloha->zasobnik.hG[hloubka+1]^=
+     hnF.f[1+6][odkud]^hnF.f[6][odkud];
+    uloha->zasobnik.hG[hloubka+1]^=
      hnG.f[uloha->pozice.sch[kam]+6][kam]^hnG.f[co+6][kam]^
-	 hnG.f[1+6][odkud]^hnG.f[6][odkud];
+     hnG.f[1+6][odkud]^hnG.f[6][odkud];
    uloha->zasobnik.hPechF[hloubka+1]^=hnF.f[7][odkud];
    uloha->zasobnik.hPechG[hloubka+1]^=hnG.f[7][odkud];
     uloha->pozice.sch[odkud]=0;
@@ -674,21 +674,21 @@ Konec:;
    if(pom>=0 && pom<5){
     uloha->material.b[pom]--;
    }
-	
+    
    /* Ulozim si, co jsem sebral */
    uloha->zasobnik.brani[hloubka]=uloha->pozice.sch[kam];
    /* jak se zmenil material cerneho */
    uloha->zasobnik.cm[hloubka+1]+=
-	   StdCenyFigur[-co]-StdCenyFigur[1];
+       StdCenyFigur[-co]-StdCenyFigur[1];
    /* a bileho */
    uloha->zasobnik.bm[hloubka+1]-=StdCenyFigur[uloha->pozice.sch[kam]];
    /* Take se zmenila pozice*/
-	uloha->zasobnik.hF[hloubka+1]^=
+    uloha->zasobnik.hF[hloubka+1]^=
      hnF.f[uloha->pozice.sch[kam]+6][kam]^hnF.f[co+6][kam]^
-	 hnF.f[6-1][odkud]^hnF.f[6][odkud];
-	uloha->zasobnik.hG[hloubka+1]^=
+     hnF.f[6-1][odkud]^hnF.f[6][odkud];
+    uloha->zasobnik.hG[hloubka+1]^=
      hnG.f[uloha->pozice.sch[kam]+6][kam]^hnG.f[co+6][kam]^
-	 hnG.f[6-1][odkud]^hnG.f[6][odkud];
+     hnG.f[6-1][odkud]^hnG.f[6][odkud];
    uloha->zasobnik.hPechF[hloubka+1]^=hnF.f[5][odkud];
    uloha->zasobnik.hPechG[hloubka+1]^=hnG.f[5][odkud];
    uloha->pozice.sch[odkud]=0;
@@ -729,7 +729,8 @@ Konec:;
    /* cerny*/
  goto BeznyTah; /* zbytek je stejny jako pro normalni tah*/
  }
-/***************************************************************************
+
+ /***************************************************************************
  *   TahniZpet - Tahne zpet v propoctu (Nikoliv v partii)                  *         *
  *    V zasobniku nejprve snizi pos o 1 a pak cte z urovne pos             *
  ***************************************************************************/
@@ -806,7 +807,7 @@ TiskniSachovnici(&uloha->pozice,stdout);
     uloha->pozice.sch[g1]=0;
     uloha->pozice.sch[h1]=4;
     uloha->pozice.sch[f1]=0;
-	uloha->material.bk=e1;
+    uloha->material.bk=e1;
     goto konec;}
   /*Velka bila rosada*/
   if (tah==VBRoch)
@@ -814,7 +815,7 @@ TiskniSachovnici(&uloha->pozice,stdout);
     uloha->pozice.sch[c1]=0;
     uloha->pozice.sch[a1]=4;
     uloha->pozice.sch[d1]=0;
-	uloha->material.bk=e1;
+    uloha->material.bk=e1;
     goto konec;}
  /*Mala cerna rosada*/
   if (tah==MCRoch)
@@ -822,7 +823,7 @@ TiskniSachovnici(&uloha->pozice,stdout);
     uloha->pozice.sch[g8]=0;
     uloha->pozice.sch[h8]=-4;
     uloha->pozice.sch[f8]=0;
-	uloha->material.ck=e8;
+    uloha->material.ck=e8;
     goto konec;}
   /*Velka cerna rosada*/
   if (tah==VCRoch)
@@ -830,7 +831,7 @@ TiskniSachovnici(&uloha->pozice,stdout);
     uloha->pozice.sch[c8]=0;
     uloha->pozice.sch[a8]=-4;
     uloha->pozice.sch[d8]=0;
-	uloha->material.ck=e8;
+    uloha->material.ck=e8;
     goto konec;}
   /*Promena bileho pesce*/
  if ((tah>>12)==12)
@@ -842,7 +843,7 @@ TiskniSachovnici(&uloha->pozice,stdout);
    uloha->material.b[uloha->pozice.sch[kam]-1]--;
    if(co<0 && co>-6){
     uloha->material.c[-co-1]++;
-	}
+    }
    uloha->pozice.sch[odkud]=1;
    uloha->pozice.sch[kam]=co;
    goto konec;
@@ -858,7 +859,7 @@ TiskniSachovnici(&uloha->pozice,stdout);
    uloha->material.c[-uloha->pozice.sch[kam]-1]--;
    if(co>0 && co<6){
     uloha->material.b[co-1]++;
-	}
+    }
    uloha->pozice.sch[odkud]=-1;
    uloha->pozice.sch[kam]=co;
    goto konec;

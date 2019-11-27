@@ -1,4 +1,4 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* myslitel.c - rekurzivni propocet (alfabeta)           */
 /* 10.1. 2001 Jan Nemec                                   */
 /*********************************************************/
@@ -26,17 +26,14 @@
 #include "tabulky.h"
 #include "lokruti.h"
 #include "myslitel.h"
-#if Typ_Produktu==Win32_Program
-#include "kontrola.h"
-#include "winmysl.h"
-#include <windows.h>
-#endif
 #if Typ_Produktu==Projekt
 #include "scio.h"
 #endif
 #include "ticho.h"
 #include "pole.h"
-
+#if Typ_Produktu==DLL
+#include "interface.h"
+#endif
 
 #ifdef Statistika
 int Stav(const TUloha *u) {
@@ -155,7 +152,7 @@ static int NulovyTah(TUloha *uloha, s16 prah, s16 hloubka
 
   if (hloubka > 1) {
     char odkaz[256];
-	sprintf(odkaz, "%snullkoren", varianta);
+    sprintf(odkaz, "%snullkoren", varianta);
     if (varianta) soub = otevriHtmlLog(uloha, odkaz);
     if (soub) {
       fprintf(soub, "\n<P>Metoda nuloveho tahu(%i) do hloubky %i, zanoreni = %i, varianta = %s<BR>\n",
@@ -282,7 +279,7 @@ static u8 prohloubeni(TUloha *uloha, int zanor, int hloubka) {
     uloha->zasobnik.sach[zanor - 1] &&
     /* Ale reakci nebyl ani tah kralem */
     abs(uloha->pozice.sch[pom]) != 6 &&
-    /* ani bran� */
+    /* ani braní */
     !uloha->zasobnik.brani[zanor - 1]
     )
     return ROZSIR_PREDSTAVENI;
@@ -298,7 +295,7 @@ static u8 prohloubeni(TUloha *uloha, int zanor, int hloubka) {
           pom==h7 &&
           uloha->pozice.sch[f7]==-1 &&
           uloha->pozice.sch[g7]==-1)
-	  return ROZSIR_FISCHER;
+      return ROZSIR_FISCHER;
       break;
     case 5:
       /* Ohrozeni krale damou */
@@ -322,17 +319,17 @@ static u8 prohloubeni(TUloha *uloha, int zanor, int hloubka) {
     case 2:
       if (!hloubka) {
         for (poc = 0, i = 8; i < 16; i++)
-	  if (*(uk + (ofsety[i])) < -2)
-	    poc++;
-	  if(poc > 1) return ROZSIR_VIDLE; /* vidle */
-	}
+      if (*(uk + (ofsety[i])) < -2)
+        poc++;
+      if(poc > 1) return ROZSIR_VIDLE; /* vidle */
+    }
       break;
     case -2:
       if (!hloubka) {
         for (poc = 0, i = 8; i < 16; i++)
           if (*(uk + (ofsety[i])) > 2 && *(uk + ofsety[i]) < 7)
             poc++;
-	  if(poc>1) return ROZSIR_VIDLE; /* vidle */
+      if(poc>1) return ROZSIR_VIDLE; /* vidle */
         }
       break;
     case 1: 
@@ -352,7 +349,7 @@ static u8 prohloubeni(TUloha *uloha, int zanor, int hloubka) {
         uloha->pozice.sch[f7] == -1 ||
         pom == b6 && uloha->pozice.sch[a7] == 3 &&
         uloha->pozice.sch[c7] == -1)
-      	return ROZSIR_FISCHER;
+          return ROZSIR_FISCHER;
       break;
   }
   return 0;
@@ -370,15 +367,25 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
  , char *varianta
 #endif
              ) {
-  
   TTah1 *pt0, *pt1, *pt2;
+  pt0 = NULL;
+  pt1 = NULL;
+  pt2 = NULL;
   int MamPripustnyTah, prohlub;
   u16 *nt1, *nt2;
+  nt1 = NULL;
+  nt2 = NULL;
   int zanor, pom;
   s16 cena, a, b, h;
-#ifdef Statistika
   int alfaporadi = -1;
+  int selDepth = uloha->zasobnik.pos + uloha->StavPropoctu.NulTah;
+  if (selDepth > uloha->StavPropoctu.SelDepth)
+  {
+      uloha->StavPropoctu.SelDepth = selDepth;
+#if Typ_Produktu==DLL
+      Callbacks.SetSelDepth(selDepth);
 #endif
+  }
 #ifdef HTML_VYPISY
   int tmp_oh;
   char posledniTah[20];
@@ -406,6 +413,12 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
   uloha->stat.UZ++;
 #endif
 
+#if Typ_Produktu==DLL
+  Callbacks.NextNode();
+  if (uloha->StavPropoctu.MamKoncitMysleni) {
+      return ZadnaCena;
+  }
+#endif
   zanor = uloha->zasobnik.pos;
 
   if (zanor > MaxHloubkaPropoctu - 4) {
@@ -467,6 +480,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
       return 0;
     }
 /*Konec detekce remiz*/
+#if Typ_Produktu!=DLL
   DotazNaCas(uloha);
   if (uloha->StavPropoctu.MamKoncitMysleni) {
     /*Kdyz mi dosel cas...*/    
@@ -478,6 +492,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #endif
     return alfa;
   }
+#endif  
 
   a = alfa;
   b = beta;
@@ -485,7 +500,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 /* Promenne alfa, beta a hloubka ukladam kvuli pozdejsimu zapisu do hash
    tabulky */
 
-/* Nasleduje cteni z hash tabulky */
+  /* Nasleduje cteni z hash tabulky */
   if (GetHash(uloha, a, b, (u8)(h + 1), &cena)) {
 #ifdef Statistika
     uloha->stat.HU[hloubka]++;
@@ -517,8 +532,10 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
 #ifdef HTML_VYPISY
       tmp_oh = Stav(uloha);
 #endif
-    cena = AlfaBetaBrani(uloha, alfa, beta,
-      uloha->AlgCfg.AlgKoef.MaxHloubkaABB);
+    cena = AlfaBetaBrani(uloha, alfa, beta, uloha->AlgCfg.AlgKoef.MaxHloubkaABB);
+    if (uloha->StavPropoctu.MamKoncitMysleni) {
+        return ZadnaCena;
+    }
 #ifdef Statistika
     uloha->stat.UZ--;
 #endif
@@ -540,7 +557,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
     if (uloha->StavPropoctu.NulTah
       && !uloha->zasobnik.sach[zanor] && beta < mat - 100) {
 #ifdef HTML_VYPISY
-    	if (hloubka && soub) {
+        if (hloubka && soub) {
         tmp_oh = Stav(uloha);
         sprintf(podvarianta, "%snull"  ODDELOVAC_VARIANT , varianta);
         fprintf(soub, "zkousim <A HREF=\"null/nullkoren.html\">nulltah</A><BR>\n", odkaz);
@@ -560,9 +577,12 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
       } 
 #ifdef HTML_VYPISY
       else {
-       	if (soub) fprintf(soub, "Neuspech nulltahu (%i)<BR>\n",  Stav(uloha) - tmp_oh);
+           if (soub) fprintf(soub, "Neuspech nulltahu (%i)<BR>\n",  Stav(uloha) - tmp_oh);
       }
 #endif
+      if (uloha->StavPropoctu.MamKoncitMysleni) {
+          return ZadnaCena;
+      }
     }
   if (!prohlub) {
 /* Kdyz v hloubce 3 mam o damu mene nez alfa, snizim na 2 */
@@ -570,7 +590,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
     if (!uloha->pozice.bily) pom = -pom;
     if (hloubka == 3 && pom + 450 < alfa) {
 #ifdef HTML_VYPISY
-     	if (soub) fputs("O damu min, snizuju hloubku o 1<BR>\n", soub);
+         if (soub) fputs("O damu min, snizuju hloubku o 1<BR>\n", soub);
 #endif
       hloubka--;
     }
@@ -631,9 +651,9 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
   }
   if (
 #ifdef NE_HH
-			0 &
+            0 &
 #endif
-			!uloha->StavPropoctu.VNT) {
+            !uloha->StavPropoctu.VNT) {
     nt1 = &(uloha->hh[zanor][0]);
     nt2 = nt1 + 1;
     for (;pt1 < pt2; pt1++) {
@@ -652,7 +672,7 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
   }
 
 #ifdef HTML_VYPISY
- 	if (soub) fprintf(soub, "Po prohlubovani i rozsirovani je hloubka %i.<BR>\n", hloubka);
+     if (soub) fprintf(soub, "Po prohlubovani i rozsirovani je hloubka %i.<BR>\n", hloubka);
 #endif
 
   SetridTahy(uloha);
@@ -745,14 +765,15 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
     }
     pt1->cena = DalOdMatu(pt1->cena);
     TahniZpet(pt1->data, uloha);
+    if (uloha->StavPropoctu.MamKoncitMysleni) {
+        return ZadnaCena;
+    }
 #ifdef HTML_VYPISY
     if (soub) fprintf(soub," (%i) %i ", Stav(uloha) - tmp_oh, (int)pt1->cena);
 #endif
     MamPripustnyTah = 1;
     if (pt1->cena>alfa) {
-#ifdef Statistika
       alfaporadi = pt1 - pt0;
-#endif
 #ifndef NE_HH
       if (!uloha->StavPropoctu.VNT) {
         *nt2 = *nt1; *nt1 = pt1->data;
@@ -815,4 +836,3 @@ Konec:
 #endif
   return cena;
 }
-

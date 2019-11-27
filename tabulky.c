@@ -1,4 +1,4 @@
-/*********************************************************/
+﻿/*********************************************************/
 /* tabulky.c - prace s databazi koncovek                 */
 /* 8.4. 2002 Jan Nemec                                 */
 /*********************************************************/
@@ -16,6 +16,7 @@
 #include "lokruti.h"
 #include "tabulky.h"
 #include "pole.h"
+#include "sachy.h"
 /*
 Format ukladani:
 Nejvice ovlivnuji pozici v souboru figury dle poradi
@@ -38,9 +39,9 @@ Hodnoty v tabulce:
 ...
 -k - totez jako +k, jen opacne barvy
 Behem vytvareni -128 -zatim neznamo
-
 */
-#define TABDIR "tab/"
+
+#define TABDIR "Endgames/"
 
 static int KdeVPack[h8+1]={
  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -121,7 +122,7 @@ void TSchTypStr(s8 *sch, char *s){
  char f[2][6];
  s8 *k;
  int i,j,l,b;
- char *fgr="pjsvdk";
+ const char *fgr="pjsvdk";
 
  k=sch+h8;
  memset((void *)f,0,12);
@@ -147,6 +148,7 @@ void TSchTypStr(s8 *sch, char *s){
 
 static int fileexists(char *s){
  FILE *f;
+#pragma warning (disable : 4996)
  f=fopen(s,"rb");
  if(!f)return 0;
  fclose(f); return 1;
@@ -157,14 +159,14 @@ static int cena(char s){
   case 0: return 0;
   case 'k': return 0;
   case 'p': return 1;
-  case 'j': return 2;
-  case 's': return 3;
-  case 'v': return 4;
-  case 'd': return 5;
-  default: return -1;
+  case 'n': return 2;
+  case 'b': return 3;
+  case 'r': return 4;
+  case 'q': return 5;
+  default: return -1; /* TODO : Chyba() */
  }
 }
-static char jm[4]={'j','s','v','d'};
+static char jm[4]={'n','b','r','q'};
 static int Normalizuj(char *s){
 /* Z "kkd udela kdk a podobne" */
  int i;
@@ -315,7 +317,7 @@ static int IntToPozice(int i, char *typ, TPozice *pos){
  return 1;
 }
 
-static char DejTypPole[7]={'?', 'p', 'j', 's', 'v', 'd', 'k'};
+static char DejTypPole[7]={'?', 'p', 'n', 'b', 'r', 'q', 'k'};
 
 static int DejTyp(s8 *sch,char *typ){
 /* Vraci 0, z hlediska cerneho; 1 z hlediska bileho*/
@@ -477,6 +479,7 @@ static char CenaPozice(TPozice *pos, char *typ, char *p){
   strcpy(s,TABDIR);
   strcat(s,t);
   strcat(s,".tab");
+#pragma warning (disable : 4996)
   f=fopen(s,"rb");
   if(!f)return(-128);
   fseek(f,index,SEEK_SET);
@@ -496,7 +499,7 @@ static int GenerujBezRekurze(char *typ){
  d=TabDelka(typ);
  if(typ[strlen(typ)-1]=='k')CernyJenKrale=1; else CernyJenKrale=0;
  printf("Generuji %s delky %i\n",typ,d);
- p=malloc(d);
+ p=(char*)malloc(d);
  if(!p)return -1;
  u=InitUlohu(0,0,0);
  oh1 = oh2 = oh3 = 0;
@@ -597,6 +600,7 @@ static int GenerujBezRekurze(char *typ){
  strcpy(t,TABDIR);
  strcat(t,typ);
  strcat(t,".tab");
+#pragma warning (disable : 4996)
  f=fopen(t,"wb");
  if (!f) {
     printf("Nemůžu otevřít %s\n", t);
@@ -608,11 +612,48 @@ static int GenerujBezRekurze(char *typ){
  return 0;
 }
 
+void GenerujTabulky() {
+    /* Warning: Take many hours to generate */
+
+    /* 2 pieces */
+    /* Draw */
+    GenerujTabulku("kk");
+
+    /* 3 pieces */
+    /* Win */
+    GenerujTabulku("kqk");
+    GenerujTabulku("krk");
+    /* ? */
+    GenerujTabulku("kpk");
+    /* Draw */
+    GenerujTabulku("knk");
+    GenerujTabulku("kbk");
+
+    /* 4 pieces */
+    /* Win */
+    GenerujTabulku("kqkn");
+    GenerujTabulku("kqkb");
+    GenerujTabulku("kqkr");
+    GenerujTabulku("kbnk");
+    GenerujTabulku("kbbk");
+    GenerujTabulku("kppk");
+
+    /* Draw */
+    GenerujTabulku("knnk");
+    GenerujTabulku("kqkq");
+
+    /* ? */
+    GenerujTabulku("kqkp"); 
+    GenerujTabulku("kpkp");
+}
+
 int GenerujTabulku(const char *typ){
   char s[50], p[10], t[10];
-  int d, i ,j;
+  unsigned int i ,j;
 
-  if ((d = strlen(typ)) > 8)return -1;
+  size_t d = strlen(typ);
+  if (d > 8)
+    return -1;
   strcpy(p, typ);
   
   Normalizuj(p);
@@ -654,7 +695,7 @@ Proto je treba volat Normalizuj()
 u16 TabDejTah(TUloha *u){
  TTah1 *p1,*p2;
  char s[10];
- u16 data;
+ u16 data = 0;
  s8 cena,nejcena;
 
  if(PocetKamenu(u->pozice.sch)>4)return 0;

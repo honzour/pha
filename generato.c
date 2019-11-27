@@ -1,4 +1,4 @@
-/*********************************************************/
+ï»¿/*********************************************************/
 /* generato.c - generator tahu                           */
 /* 31.12. 2000 Jan Nemec                                 */
 /*********************************************************/
@@ -13,52 +13,53 @@
 #include "generato.h"
 #include "pole.h"
 
-#define CENA(t) ((t).cena+u->HistHeur[(t).data])
 /* Tridim podle ceny+hist. heur.*/
+#define CENA(t) ((t).cena+u->HistHeur[(t).data])
 
-void TahQuickSort(TUloha *u,TTah1 *p1,TTah1 *p2)
 /*************************************************/
 /* Rekurzivni trideni tahu podle nadejnosti      */
 /* knihovni qsort je moc obecny a tedy i pomaly  */
 /*************************************************/
+void TahQuickSort(TUloha *u,TTah1 *p1,TTah1 *p2)
 {TTah1 t1,*a,*b;
  s16 pivo;
- 	
-	if(p2-p1==1){ /*jsou-li jen 2*/
-		if(p1->cena<p2->cena){t1=*p1;*p1=*p2;*p2=t1;}
-		return;
-	}
-	if(p2-p1<10){ /*je-li jich malo, je rychlejsi
-	kvadraticky minimax*/
-		for(;p1<p2;p1++){
-			b=p1;
-			for(a=p1+1;a<=p2;a++)
-				if(a->cena>b->cena){t1=*a;*a=*b;*b=t1;}
-		}
-		return;
-	}
-	pivo=(p1+((p2-p1)>>1))->cena;
-	a=p1;b=p2;
-	do{
-	 while(a->cena>pivo)a++;
-	 while(b->cena<pivo)b--;
-	 if(a<=b){
-		 {t1=*a;*a=*b;*b=t1;}
-		 a++;
-		 b--;
-	 }
-	}
-	while(a<=b);
-	if(a<p2)TahQuickSort(u,a,p2); /*rekurze*/
-	if(b>p1)TahQuickSort(u,p1,b);
+     
+    if(p2-p1==1){ /*jsou-li jen 2*/
+        if(p1->cena<p2->cena){t1=*p1;*p1=*p2;*p2=t1;}
+        return;
+    }
+    if(p2-p1<10){ /*je-li jich malo, je rychlejsi kvadraticky minimax*/
+        for(;p1<p2;p1++){
+            b=p1;
+            for(a=p1+1;a<=p2;a++)
+                if(a->cena>b->cena){t1=*a;*a=*b;*b=t1;}
+        }
+        return;
+    }
+    pivo=(p1+((p2-p1)>>1))->cena;
+    a=p1;b=p2;
+    do{
+     while(a->cena>pivo)a++;
+     while(b->cena<pivo)b--;
+     if(a<=b){
+         {t1=*a;*a=*b;*b=t1;}
+         a++;
+         b--;
+     }
+    }
+    while(a<=b);
+    if(a<p2)TahQuickSort(u,a,p2); /*rekurze*/
+    if(b>p1)TahQuickSort(u,p1,b);
 }
-void SetridTahy(TUloha *uloha) {
+
 /**********************************/
 /* Jen zavola quicksort           */
 /**********************************/
+void SetridTahy(TUloha *uloha) {
   TahQuickSort(uloha,uloha->zasobnik.tahy+uloha->zasobnik.hranice[uloha->zasobnik.pos],
     uloha->zasobnik.tahy+uloha->zasobnik.hranice[uloha->zasobnik.pos+1]-1);
 }
+
 /* Zmena materialu po promene pesce v kone..damu*/
 const int StdCenyPromen[4]={110,115,225,375};
 
@@ -66,35 +67,30 @@ const int StdCenyPromen[4]={110,115,225,375};
    Pozor hodnota strelec + jezdec nesmi jit dosahnout jinak (ohodnocovaci funkce) */
 const s16 StdCenyFigur[7] = {0, 50, 163, 165, 265, 425, 20000};
 
+/* Jak chodi figury (na 10x12) - hlavne pro generator */
 const s8 ofsety[16]=
 {  1,  -1,  10,  -10, /* Vez*/
   11, -11,   9,  -9,  /* Strelec*/
   21,  19,  12,   8, -21, -19, -12, - 8 /* Kun*/
 };
-/* Jak chodi figury (na 10x12) - hlavne pro generator */
+/* X slozka posunuti */
 const s8 ofsetyX[16]=
 {  1,  -1,   0,   0, /* Vez*/
    1,  -1,  -1,   1,  /* Strelec*/
    1,  -1,   2,  -2, -1,  1, -2, 2 /* Kun*/
 };
-/* X slozka posunuti */
+/* Y slozka posunuti */
 const s8 ofsetyY[16]=
 {  0,  0,  1,  -1, /* Vez*/
    1, -1,  1,  -1,  /* Strelec*/
    2,  2,  1,   1, -2, -2, -1, -1 /* Kun*/
 };
-/* Y slozka posunuti */
 
 /***********************************************************/
 /* Makra pro pridavani nalezenych tahu v generatoru        */
 /* na zasobik                                              */
 /***********************************************************/
-#define ZaradTah(pzas,p1,p2) \
- {\
- (pzas)->cena=0;\
- (pzas)->data=(u16)(((p1)<<7) | (p2));\
- (pzas)++;\
- }
+
 /* ZaradTah
  Zaradi tah na zasobnik
  Tah nesmi byt
@@ -102,41 +98,41 @@ const s8 ofsetyY[16]=
  2) brani (tah by byl spravny, ale byla by spatne cena)
  3) brani mimochodem
  4) rosada*/
-
+#define ZaradTah(pzas,p1,p2) \
+ {\
+ (pzas)->cena=0;\
+ (pzas)->data=(u16)(((p1)<<7) | (p2));\
+ (pzas)++;\
+ }
 
 /*Obe nasledujici makra na bezne brani (ne brani mimochodem a brani
   promenou pesce) mohou byt pouzity i na tah, ktery vubec branim neni.*/
 
+/* Bezne brani (ne mimochodem) - bily bere cernou figuru*/
 #define ZaradBileBrani(pzas, p1, p2, p, cim)\
  {\
  (pzas)->cena = (s16)((StdCenyFigur[-*(p)]) - (*(p) ? (cim) : 0));\
   (pzas)->data = (u16) (( (p1) << 7 ) | (p2) );\
   (pzas)++;\
  }
-/* Bezne brani (ne mimochodem) - bily bere cernou figuru*/
+
+/* Bezna brani (ne mimochodem) - cerny bere bilou figuru*/
 #define ZaradCerneBrani(pzas,p1, p2, p, cim)\
  {\
   (pzas)->cena=(s16)(StdCenyFigur[*(p)] + (*(p) ? (cim) : 0));\
   (pzas)->data=(u16)(((p1)<<7) | (p2));\
   (pzas)++;\
  }
-/* Bezna brani (ne mimochodem) - cerny bere bilou figuru*/
+
+/*brani mimochodem (pro obe barvy) */
 #define ZaradMimochodem(pzas,p1, p2)\
  {\
   (pzas)->cena=(s16)(StdCenyFigur[1]);\
   (pzas)->data=(u16)((1<<15)|((p1)<<7) | (p2));\
   (pzas)++;\
  }
-/*brani mimochodem (pro obe barvy) */
 
-#define ZaradBilouPromenu(pzas,p1, p2, fig, k)\
- {\
-  (pzas)->cena=(s16)(StdCenyPromen[fig]\
-   +StdCenyFigur[-(k)]);\
-  (pzas)->data=(u16)((3<<14)|(fig<<10)|((p1-a7)<<7)|((p2-a8)<<4));\
-  (pzas)++;\
- }
- /* Zaradi promenu bileho pesce
+/* Zaradi promenu bileho pesce
 p1 - odkud
 p2 - kam
 fig - v co se meni
@@ -147,15 +143,15 @@ fig - v co se meni
       3 - dama
 k - absolutni hodnota kodu sebrane figury (neni-li tah zaroven brani, tak 0)
       */
-
-#define ZaradCernouPromenu(pzas,p1, p2, fig, k)\
+#define ZaradBilouPromenu(pzas,p1, p2, fig, k)\
  {\
   (pzas)->cena=(s16)(StdCenyPromen[fig]\
-   +StdCenyFigur[k]);\
-  (pzas)->data=(u16)((13<<12)|(fig<<10)|((p1-a2)<<7)|((p2-a1)<<4));\
+   +StdCenyFigur[-(k)]);\
+  (pzas)->data=(u16)((3<<14)|(fig<<10)|((p1-a7)<<7)|((p2-a8)<<4));\
   (pzas)++;\
  }
- /* Zaradi promenu cerneho pesce
+ 
+/* Zaradi promenu cerneho pesce
 p1 - odkud
 p2 - kam
 fig - v co se meni
@@ -166,6 +162,19 @@ fig - v co se meni
       3 - dama
 k - kod sebrane figury (neni-li tah zaroven brani, tak 0)
       */
+#define ZaradCernouPromenu(pzas,p1, p2, fig, k)\
+ {\
+  (pzas)->cena=(s16)(StdCenyPromen[fig]\
+   +StdCenyFigur[k]);\
+  (pzas)->data=(u16)((13<<12)|(fig<<10)|((p1-a2)<<7)|((p2-a1)<<4));\
+  (pzas)++;\
+ }
+
+/*Strelec, dama, vez
+  pzas - zasobnik
+  o1, o2 - od jakeho ofsetu do jakeho
+  q - pointer na pole, kam se hraje
+  k pomocna promenna */
 #define DlouhaBilaFigura(pzas, o1, o2, q, k, ktera)\
 {\
  for(j=(o1);j<=(o2);j++)\
@@ -176,11 +185,8 @@ k - kod sebrane figury (neni-li tah zaroven brani, tak 0)
     }\
   }\
 }
-/*Strelec, dama, vez
-  pzas - zasobnik
-  o1, o2 - od jakeho ofsetu do jakeho
-  q - pointer na pole, kam se hraje
-  k pomocna promenna */
+
+/* Obdoba pri kryti dlouheho sachu*/
 #define DlSDlouhaBilaFigura(pzas, o1, o2, q, k, ktera)\
 {\
  for(j=(o1);j<=(o2);j++)\
@@ -192,7 +198,12 @@ k - kod sebrane figury (neni-li tah zaroven brani, tak 0)
     }\
   }\
 }
-/* Obdoba pri kryti dlouheho sachu*/
+
+/*Strelec, dama, vez
+  pzas - zasobnik
+  o1, o2 - od jakeho ofsetu do jakeho
+  q - pointer na pole, kam se hraje
+  k pomocna promenna */
 #define DlouhaCernaFigura(pzas,o1,o2,q,k, ktera)\
 {\
  for(j=o1;j<=o2;j++)\
@@ -203,11 +214,8 @@ k - kod sebrane figury (neni-li tah zaroven brani, tak 0)
     }\
   }\
 }
-/*Strelec, dama, vez
-  pzas - zasobnik
-  o1, o2 - od jakeho ofsetu do jakeho
-  q - pointer na pole, kam se hraje
-  k pomocna promenna */
+
+/* Obdoba pri kryti dlouheho sachu*/
 #define DlSDlouhaCernaFigura(pzas,o1,o2,q,k, ktera)\
 {\
  for(j=(o1);j<=(o2);j++)\
@@ -220,38 +228,37 @@ k - kod sebrane figury (neni-li tah zaroven brani, tak 0)
     }\
   }\
 }
-/* Obdoba pri kryti dlouheho sachu*/
+
+/* Zaradi rosadu */
 #define ZaradRosadu(pzas,jakou)\
 {\
   (pzas)->data=(u16)jakou;\
   (pzas)->cena=0;\
   (pzas)++;\
 }
-/* Zaradi rosadu */
+
+/* neco jako DlouhaBilaFigura pro NalezBrani*/
 #define DlouhaBilaFiguraBrani(pzas,o1,o2, ktera)\
 {\
  for(j=o1;j<=o2;j++)\
    for(q=p+ofsety[j],k=i+ofsety[j];*q<=0;q+=ofsety[j],k+=ofsety[j])\
      if(*q<0) {ZaradBileBrani(pzas,i,k,q, (ktera)) break;}\
  }
-/* neco jako DlouhaBilaFigura pro NalezBrani*/
+
+/* neco jako DlouhaCernaFigura pro NalezBrani*/
 #define DlouhaCernaFiguraBrani(pzas,o1,o2, ktera)\
 {\
  for(j=o1;j<=o2;j++)\
    for(q=p+ofsety[j],k=i+ofsety[j];*q>=0 && *q<7;q+=ofsety[j],k+=ofsety[j])\
     if(*q>0) {ZaradCerneBrani(pzas,i,k,q, (ktera)) break;}\
 }
-/* neco jako DlouhaCernaFigura pro NalezBrani*/
-
-
 
 /*************************************************************/
-/* NalezTahy		                            								 */
+/* NalezTahy                                                 */
 /* Generuje vsechny pseudolegalni tahy (jako kdyby kral mohl */
 /* jit do sachu)                                             */
 /* Ceny nastavi podle zmeny materialu, tahy netridi          */
 /*************************************************************/
-
 void NalezTahy(TUloha *u) {
   int j, k, i; /*promenne pro for cykly*/
   s8 *p; /* hlavni pointer na pole v pozici*/
@@ -269,13 +276,13 @@ void NalezTahy(TUloha *u) {
            /*tedy nehrozi promena*/
           if (i < a7) {
             if (*(p + 11) < 0) ZaradBileBrani(pzas, i, i + 11, (p + 11), 1)
-	          if (*(p + 9) < 0) ZaradBileBrani(pzas, i, i + 9, (p + 9), 1)
-	 if (!*(p+10)) /* policko pred pescem je volne*/
-	 { 
-		 ZaradTah(pzas,i,i+10) 
-			 if (i<=h2 && !*(p+20)) ZaradTah(pzas,i,i+20)} /* pescem o 2*/
-	 if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i+11) else
-	  if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i+9)
+              if (*(p + 9) < 0) ZaradBileBrani(pzas, i, i + 9, (p + 9), 1)
+     if (!*(p+10)) /* policko pred pescem je volne*/
+     { 
+         ZaradTah(pzas,i,i+10) 
+             if (i<=h2 && !*(p+20)) ZaradTah(pzas,i,i+20)} /* pescem o 2*/
+     if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i+11) else
+      if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i+9)
        }
      else /* i>=a7 => promeny pesce*/
       {if (!*(p+10)) for(j=3;j>=0;j--) ZaradBilouPromenu(pzas,i,i+10,j,0)
@@ -306,12 +313,12 @@ void NalezTahy(TUloha *u) {
     }
     *p = 6;
    if((u->pozice.roch&1)&&(!*(p+1))&&(!*(p+2))
-	   && !Ohrozeno(p+1,0) && !Ohrozeno(p,0))  {
-	    ZaradRosadu(pzas,MBRoch)
+       && !Ohrozeno(p+1,0) && !Ohrozeno(p,0))  {
+        ZaradRosadu(pzas,MBRoch)
    }
    if((u->pozice.roch&2)&&(!*(p-1))&&(!*(p-2))&&(!*(p-3))
-	   && !Ohrozeno(p-1,0) && !Ohrozeno(p,0)){
-	   ZaradRosadu(pzas,VBRoch)
+       && !Ohrozeno(p-1,0) && !Ohrozeno(p,0)){
+       ZaradRosadu(pzas,VBRoch)
    }
    break; /* od krale */
   }/* od switch*/
@@ -325,12 +332,12 @@ void NalezTahy(TUloha *u) {
      case -1 : /*pesec*/
       if (i>h2) /*tedy nehrozi promena*/
        { if (*(p-11)>0 && *(p-11)<7) ZaradCerneBrani(pzas,i,i-11,(p-11), -1)
-	 if (*(p-9)>0 && *(p-9)<7) ZaradCerneBrani(pzas,i,i-9,(p-9), -1)
-	 if (!*(p-10)) /* policko pred pescem je volne*/
-	 { ZaradTah(pzas,i,i-10) if (i>=a7 && !*(p-20)) ZaradTah(pzas,i,i-20)} /* pescem o 2*/
-	 if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i-9) else
-	  if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i-11)
-	  }
+     if (*(p-9)>0 && *(p-9)<7) ZaradCerneBrani(pzas,i,i-9,(p-9), -1)
+     if (!*(p-10)) /* policko pred pescem je volne*/
+     { ZaradTah(pzas,i,i-10) if (i>=a7 && !*(p-20)) ZaradTah(pzas,i,i-20)} /* pescem o 2*/
+     if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i-9) else
+      if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i-11)
+      }
      else /* i<=h2 => promeny pesce*/
       {if (!*(p-10)) for(j=3;j>=0;j--) ZaradCernouPromenu(pzas,i,i-10,j,0)
        if (*(p-11)>0 && *(p-11)<7) for(j=3;j>=0;j--) ZaradCernouPromenu(pzas,i,i-11,j,*(p-11))
@@ -361,11 +368,11 @@ void NalezTahy(TUloha *u) {
     *p = -6;
    if((u->pozice.roch&4)&&(!*(p+1))&&(!*(p+2))
        && !Ohrozeno(p+1,1) && !Ohrozeno(p,1)){
-	   ZaradRosadu(pzas,MCRoch)
+       ZaradRosadu(pzas,MCRoch)
    }
    if((u->pozice.roch&8)&&(!*(p-1))&&(!*(p-2))&&(!*(p-3))
-	   && !Ohrozeno(p-1,1) && !Ohrozeno(p,1)){
-	   ZaradRosadu(pzas,VCRoch)
+       && !Ohrozeno(p-1,1) && !Ohrozeno(p,1)){
+       ZaradRosadu(pzas,VCRoch)
    }
    break;
   }/* od switch*/
@@ -394,9 +401,9 @@ void NalezBrani(TUloha *u)
      case 1 : /*pesec*/
       if (i<a7) /*tedy nehrozi promena*/
        { if (*(p + 11) < 0) ZaradBileBrani(pzas,i,i+11,(p+11), 1)
-	 if (*(p+9)<0) ZaradBileBrani(pzas,i,i+9,(p+9), 1)
-	 if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i+11) else
-	  if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i+9)
+     if (*(p+9)<0) ZaradBileBrani(pzas,i,i+9,(p+9), 1)
+     if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i+11) else
+      if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i+9)
        }
      else /* i>=a7 => promeny pesce*/
       {if (!*(p+10)) ZaradBilouPromenu(pzas,i,i+10,3,0)
@@ -430,9 +437,9 @@ void NalezBrani(TUloha *u)
      case -1 : /*pesec*/
       if (i>h2) /*tedy nehrozi promena*/
        { if (*(p-11)>0 && *(p-11)<7) ZaradCerneBrani(pzas,i,i-11,(p-11), -1)
-	 if (*(p-9)>0 && *(p-9)<7) ZaradCerneBrani(pzas,i,i-9,(p-9), -1)
-	 if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i-9) else
-	 if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i-11)
+     if (*(p-9)>0 && *(p-9)<7) ZaradCerneBrani(pzas,i,i-9,(p-9), -1)
+     if (u->pozice.mimoch==i+1) ZaradMimochodem(pzas,i,i-9) else
+     if (u->pozice.mimoch==i-1) ZaradMimochodem(pzas,i,i-11)
       }
      else /* i<=h2 => promeny pesce*/
       {if (!*(p-10)) ZaradCernouPromenu(pzas,i,i-10,3,0)
@@ -464,17 +471,19 @@ void NalezBrani(TUloha *u)
  u->zasobnik.hranice[u->zasobnik.pos+1]=(s16)(pzas-u->zasobnik.tahy);
 }
 
-#define TESTUJ(X,Y) {if(*(p+(X))==(Y)){if(poc)return 2;else{*a=p+(X);poc++;}}}
 /* Pomocne makro pro KymOhrozeno - test pro 1 typ figury */
-#define TESTUJ2(X,Y,Z) {if(*(p+(X))==(Y)||*(p+(X))==(Z)){if(poc)return 2;else{*a=p+(X);poc++;}}}
+#define TESTUJ(X,Y) {if(*(p+(X))==(Y)){if(poc)return 2;else{*a=p+(X);poc++;}}}
+
 /* Pomocne makro pro KymOhrozeno - test pro 2 typy figury */
-int KymOhrozeno(s8 *p, s8 **a, int bilym)
+#define TESTUJ2(X,Y,Z) {if(*(p+(X))==(Y)||*(p+(X))==(Z)){if(poc)return 2;else{*a=p+(X);poc++;}}}
+
 /*******************************************************/
 /*  KymOhrozeno   Je policko p ohrozene ?              */
-/*  Odkud ? - prvního nalezeného ohrozovace vraci v a  */
+/*  Odkud ? - prvnÃ­ho nalezenÃ©ho ohrozovace vraci v a  */
 /*  Kolikrat - navratova hodnota (nejvyse ale 2)       */
 /*  bilym - ohrozuje to pole bily                      */
 /*******************************************************/
+int KymOhrozeno(s8 *p, s8 **a, int bilym)
  {int j,k,poc;
  poc=0;
  *a=p;
@@ -513,14 +522,16 @@ int KymOhrozeno(s8 *p, s8 **a, int bilym)
 #undef TESTUJ2
 /* Tato jmena budu jeste pouzivat */
 
-#define TESTUJ(X,Y) {if(*(p+(X))==(Y))poc++;}
 /* Pomocne makro pro PocetOhrozeni - test pro 1 typ figury */
-#define TESTUJ2(X,Y,Z) {if(*(p+(X))==(Y)||*(p+(X))==(Z))poc++;}
+#define TESTUJ(X,Y) {if(*(p+(X))==(Y))poc++;}
+
 /* Pomocne makro pro PocetOhrozeni - test pro 2 typy figury */
-int PocetOhrozeni(s8 *p, int bilym)
+#define TESTUJ2(X,Y,Z) {if(*(p+(X))==(Y)||*(p+(X))==(Z))poc++;}
+
 /***************************************/
 /* Kolikrat je dane pole ohrozeno ?    */
 /***************************************/
+int PocetOhrozeni(s8 *p, int bilym)
  {int j,k,poc;
  poc=0;
  if (bilym)
@@ -554,12 +565,13 @@ int PocetOhrozeni(s8 *p, int bilym)
  }
  return poc;
  }
-void NalezBileVazby(TUloha *u,int pole){
+
 /**********************************************************/
 /* Nalezne vsechny kameny bileho, ktere jsou              */
 /* ve vazbe vuci poli pole. (Na poli je napr. bily kral)  */
 /**********************************************************/
- s8 *p;
+void NalezBileVazby(TUloha* u, int pole) {
+    s8 *p;
  int i,j;
  u8 pl;
 
@@ -572,20 +584,21 @@ void NalezBileVazby(TUloha *u,int pole){
    /*Nasel jsem figuru, ktera je mozna ve vazbe*/
    for(p+=ofsety[i];;p+=ofsety[i]){
     if(!*p)continue;
-	if(*p==-5 || *p==-4 && i<4 || *p==-3 && i>=4)
-	 u->Vazby[j++]=pl;
-	break;
+    if(*p==-5 || *p==-4 && i<4 || *p==-3 && i>=4)
+     u->Vazby[j++]=pl;
+    break;
    }
    break;
   }
   if(j<8)u->Vazby[j]=0;
 }
-void NalezCerneVazby(TUloha *u,int pole){
+
 /**********************************************************/
 /* Nalezne vsechny kameny cerneho, ktere jsou             */
 /* ve vazbe vuci poli pole. (Na poli je napr. cerny kral) */
 /**********************************************************/
- s8 *p;
+void NalezCerneVazby(TUloha* u, int pole) {
+    s8 *p;
  int i,j;
  u8 pl;
 
@@ -598,23 +611,24 @@ void NalezCerneVazby(TUloha *u,int pole){
    /*Nasel jsem figuru, ktera je mozna ve vazbe*/
    for(p+=ofsety[i];;p+=ofsety[i]){
     if(!*p)continue;
-	if(*p<3||*p>5)break;
-	if(*p==5 || *p==4 && i<4 || *p==3 && i>=4)
-	u->Vazby[j++]=pl;
-	break;
+    if(*p<3||*p>5)break;
+    if(*p==5 || *p==4 && i<4 || *p==3 && i>=4)
+    u->Vazby[j++]=pl;
+    break;
    }
    break;
   }
   if(j<8)u->Vazby[j]=0;
 }
 
-#define PREVOD(x,y,z){z=x;x=z+y;y=z-y;}
 /* Linearni transformace - prevod diagonaly na sloupec/radek */
-int Mezi(int x1,int y1,int x2,int y2,int x3,int y3){
+#define PREVOD(x,y,z){z=x;x=z+y;y=z-y;}
+
 /*******************************************************************/
 /* necht A=[x1,y1],B=[x3,y3] jsou na jedne diagonale/sloupci/radce */
 /* je [x2,y2] mezi nimi ? Na polozavrenem useku <A,B) ?            */
 /*******************************************************************/
+int Mezi(int x1,int y1,int x2,int y2,int x3,int y3){
  int pom;
  if(x1!=x3 && y1!=y3){
  /*Diagonalu prevedu na sloupec nebo radku
@@ -639,12 +653,12 @@ int Mezi(int x1,int y1,int x2,int y2,int x3,int y3){
   else return 0;
  }
 }
-int VeVazbe(TUloha *u,int pole){
 /*****************************************/
 /* Je pole (figura na nem) vazane        */
 /* Vyzaduje u->Vazby                     */
 /*****************************************/
- int i;
+int VeVazbe(TUloha* u, int pole) {
+    int i;
  for(i=0;i<8;i++)
   if(!u->Vazby[i])break;
   else if(u->Vazby[i]==pole)return 1;
@@ -654,11 +668,10 @@ int VeVazbe(TUloha *u,int pole){
 #define ZKUS(o,f) { if(*(a+(o)) == (f) && !VeVazbe(u, pa+(o)))\
 ZaradBileBrani(*pzas,pa+(o),pa,a, (f))}
 
+/*Pomocne makro pro BileBraniNaPole*/
 #define ZKUSPROMENY(o) {if(*(a+(o))==1&&!VeVazbe(u,pa+(o)))\
 {int ugh; for(ugh=0;ugh<4;ugh++)ZaradBilouPromenu(*pzas,pa+(o),pa,ugh,*a);}}
 
-/*Pomocne makro pro BileBraniNaPole*/
-void BileBraniNaPole(TUloha *u,TTah1 **pzas,s8 *a){
 /*****************************************************************/
 /* Necht na poli a je SACHUJICI kamen cerneho a necht            */
 /* se jedna o sach jednonasobny. Potom funkce najde              */
@@ -672,7 +685,8 @@ void BileBraniNaPole(TUloha *u,TTah1 **pzas,s8 *a){
 /* ktery je zaroven vazany, nebot jinak by pred tahem            */
 /* pesce o 2 byl nehrajici v sachu.                              */
 /*****************************************************************/
-int pa,j,k;
+void BileBraniNaPole(TUloha* u, TTah1** pzas, s8* a) {
+    int pa,j,k;
 
  NalezBileVazby(u,u->material.bk);
  pa=a-u->pozice.sch;
@@ -707,11 +721,11 @@ ZaradCerneBrani(*pzas,pa+(o),pa,a, (f))}
 #define ZKUSPROMENY(o) {if(*(a+(o))==-1&&!VeVazbe(u,pa+(o)))\
 {int ugh; for(ugh=0;ugh<4;ugh++)ZaradCernouPromenu(*pzas,pa+(o),pa,ugh,*a);}}
 
-void CerneBraniNaPole(TUloha *u,TTah1 **pzas,s8 *a){
 /******************************/
 /* Obdoba BileBraniNaPole     */
 /******************************/
-int pa,j,k;
+void CerneBraniNaPole(TUloha* u, TTah1** pzas, s8* a) {
+    int pa,j,k;
 
  NalezCerneVazby(u,u->material.ck);
  pa=a-u->pozice.sch;
@@ -736,12 +750,12 @@ for(j=4;j<=7;j++) /*strelcem nebo damou po diagonale*/
 
 #define MEZI(dx,dy) Mezi(axy.rem,axy.quot,fxy.rem+(dx),fxy.quot+(dy),kxy.rem,kxy.quot)
 
-void BilyKryjeDlouhySach(TUloha *u,TTah1 **pzas,s8 *a){
 /*********************************************************/
 /* Funkce nalezne tahy, kterymi bily pokryje nekontaktni */
 /* sach  (krome tahu kralem)                             */
 /*********************************************************/
- int ia,i,j,k,xo,yo;
+void BilyKryjeDlouhySach(TUloha* u, TTah1** pzas, s8* a) {
+    int ia,i,j,k,xo,yo;
  div_t axy,kxy,fxy;
  s8 *p,*q;
 
@@ -756,14 +770,14 @@ void BilyKryjeDlouhySach(TUloha *u,TTah1 **pzas,s8 *a){
      case 1 : /*pesec*/
       if (i<a7) /*tedy nehrozi promena*/
        {
-	 if (!*(p+10)) /* policko pred pescem je volne*/
-	 {
-		if(MEZI(0,1)) ZaradTah(*pzas,i,i+10)
-		else
-		if (i<=h2 && !*(p+20) && MEZI(0,2)) ZaradTah(*pzas,i,i+20)
-	 } /* pescem o 2*/
+     if (!*(p+10)) /* policko pred pescem je volne*/
+     {
+        if(MEZI(0,1)) ZaradTah(*pzas,i,i+10)
+        else
+        if (i<=h2 && !*(p+20) && MEZI(0,2)) ZaradTah(*pzas,i,i+20)
+     } /* pescem o 2*/
         if((p+11)==a)ZaradBileBrani(*pzas,i,i+11,a, 1);
-		if((p+9)==a)ZaradBileBrani(*pzas,i,i+9,a, 1);
+        if((p+9)==a)ZaradBileBrani(*pzas,i,i+9,a, 1);
      }
      else /* i>=a7 => promeny pesce*/
       {if (!*(p+10)&&MEZI(0,1)) for(j=3;j>=0;j--) ZaradBilouPromenu(*pzas,i,i+10,j,0)
@@ -788,11 +802,11 @@ void BilyKryjeDlouhySach(TUloha *u,TTah1 **pzas,s8 *a){
  } /* od for cyklu*/
 }
 
-void CernyKryjeDlouhySach(TUloha *u,TTah1 **pzas,s8 *a){
 /*********************************/
 /* analogie BilyKryjeDlouhySach  */
 /*********************************/
- int ia,i,j,k,xo,yo;
+void CernyKryjeDlouhySach(TUloha* u, TTah1** pzas, s8* a) {
+    int ia,i,j,k,xo,yo;
  div_t axy,kxy,fxy;
  s8 *p,*q;
 
@@ -807,14 +821,14 @@ void CernyKryjeDlouhySach(TUloha *u,TTah1 **pzas,s8 *a){
      case -1 : /*pesec*/
       if (i>h2) /*tedy nehrozi promena*/
        {
-	 if (!*(p-10)) /* policko pred pescem je volne*/
-	 {
-		if(MEZI(0,-1)) ZaradTah(*pzas,i,i-10)
-		else
-		if (i>=a7 && !*(p-20) && MEZI(0,-2)) ZaradTah(*pzas,i,i-20)
-	} /* pescem o 2*/
+     if (!*(p-10)) /* policko pred pescem je volne*/
+     {
+        if(MEZI(0,-1)) ZaradTah(*pzas,i,i-10)
+        else
+        if (i>=a7 && !*(p-20) && MEZI(0,-2)) ZaradTah(*pzas,i,i-20)
+    } /* pescem o 2*/
         if((p-11)==a)ZaradCerneBrani(*pzas,i,i-11,a, -1);
-		if((p-9)==a)ZaradCerneBrani(*pzas,i,i-9,a, -1);
+        if((p-9)==a)ZaradCerneBrani(*pzas,i,i-9,a, -1);
      }
      else /* i<=h2 => promeny pesce*/
       {if (!*(p-10)&&MEZI(0,-1)) for(j=3;j>=0;j--) ZaradCernouPromenu(*pzas,i,i-10,j,0)
@@ -825,8 +839,8 @@ void CernyKryjeDlouhySach(TUloha *u,TTah1 **pzas,s8 *a){
   case -2: /* kun*/
    for (j=8;j<=15;j++)
     if ((*(p+ofsety[j]))>=0&&(*(p+ofsety[j]))<=6
-	     &&MEZI(ofsetyX[j],ofsetyY[j]))
-	 ZaradCerneBrani(*pzas,i,i+ofsety[j],(p+ofsety[j]), -2);
+         &&MEZI(ofsetyX[j],ofsetyY[j]))
+     ZaradCerneBrani(*pzas,i,i+ofsety[j],(p+ofsety[j]), -2);
    break;
   case -3: /* strelec*/
    DlSDlouhaCernaFigura(*pzas,4,7,q,k, -3)
@@ -841,13 +855,13 @@ void CernyKryjeDlouhySach(TUloha *u,TTah1 **pzas,s8 *a){
  } /* od for cyklu*/
 }
 
-void NalezTahyZeSachu(TUloha *u){
 /**********************************************************/
 /* Nalezne vsechny legalni (nikoliv pseudolegalni) tahy.  */
 /* Predpoklada se, ze hrac na tahu je v sachu a spravne   */
 /* nastavene u->material                                  */
 /**********************************************************/
- s8 *a;
+void NalezTahyZeSachu(TUloha* u) {
+    s8 *a;
  int i, bily,odkud,kam;
  TTah1 *pzas; /* pointer do zasobniku tahu*/
 
@@ -861,7 +875,7 @@ void NalezTahyZeSachu(TUloha *u){
   u->zasobnik.hranice[u->zasobnik.pos];
  bily=u->pozice.bily;
 
- /*Nejprve vyzkousime tahy kralem, to má smysl i pri dvojsachu*/
+ /*Nejprve vyzkousime tahy kralem, to mÃ¡ smysl i pri dvojsachu*/
 
  if(bily){
   a=u->pozice.sch+u->material.bk;

@@ -1,6 +1,6 @@
-/* Sachové centrum - Knihovna zahájení Petr Kuèera 2000*/
-/** Deklarace typù datovıch struktur pou¾itıch k reprezentaci
-    knihovny zahájení v pamìti.
+ï»¿/* SachovÃ© centrum - Knihovna zahÃ¡jenÃ­ Petr KuÄera 2000*/
+/** Deklarace typÅ¯ datovÃ½ch struktur pouÅ¾itÃ½ch k reprezentaci
+    knihovny zahÃ¡jenÃ­ v pamÄ›ti.
   */
 
 #ifndef __DATASTR_H__
@@ -8,287 +8,287 @@
 
 #include "cotyvar.h"
 
-/** HLOUBKA_ADRESARE - urèuje hloubku jedné úrovnì adresáøe. */
+/** HLOUBKA_ADRESARE - urÄuje hloubku jednÃ© ÃºrovnÄ› adresÃ¡Å™e. */
 #define HLOUBKA_ADRESARE 4
-/** POCET_ADRES_V_BLOKU - urèuje poèet adres v jednom bloku adresáøe. */
+/** POCET_ADRES_V_BLOKU - urÄuje poÄet adres v jednom bloku adresÃ¡Å™e. */
 #define POCET_ADRES_V_BLOKU 16 /*2^4*/
-/*Konstanta urèující masku pro odmaskování prvních HLOUBKA_ADRESARE bitù
+/*Konstanta urÄujÃ­cÃ­ masku pro odmaskovÃ¡nÃ­ prvnÃ­ch HLOUBKA_ADRESARE bitÅ¯
  */
 #define ZAKLADNI_MASKA 15
 
-/*urèuje, jestli mají bıt pozice v souboru pakovány, nebo má bıt ukládán
- pøímo datovı typ TPozice*/
+/*urÄuje, jestli majÃ­ bÃ½t pozice v souboru pakovÃ¡ny, nebo mÃ¡ bÃ½t uklÃ¡dÃ¡n
+ pÅ™Ã­mo datovÃ½ typ TPozice*/
 #define PAKUJ_POZICE 1
 
-/** tah_t - popis tahu s ECO a váhou vıbìru, pokud je váha men¹í ne¾ 0,
-    jde o dosud nespecifikovanou váhu.
+/** tah_t - popis tahu s ECO a vÃ¡hou vÃ½bÄ›ru, pokud je vÃ¡ha menÅ¡Ã­ neÅ¾ 0,
+    jde o dosud nespecifikovanou vÃ¡hu.
 */
 typedef struct _tah {
-  /*váha vıbìru tahu*/
+  /*vÃ¡ha vÃ½bÄ›ru tahu*/
   char vaha;
-  /*písmeno ze zápisu ECO pozice vzniklé tímto tahem*/
+  /*pÃ­smeno ze zÃ¡pisu ECO pozice vzniklÃ© tÃ­mto tahem*/
   char ECO_pismeno;
-  /*èíslo ze zápisu ECO pozice vzniklé tímto tahem*/
+  /*ÄÃ­slo ze zÃ¡pisu ECO pozice vzniklÃ© tÃ­mto tahem*/
   char ECO_cislo;
-  /*dvoubajtovı popis tahu*/
+  /*dvoubajtovÃ½ popis tahu*/
   u16 tah;
-  /*poøadí partie ve zdrojovém souboru knihovny, v ní¾ byl tah naposledy
-    pøidáván.*/
+  /*poÅ™adÃ­ partie ve zdrojovÃ©m souboru knihovny, v nÃ­Å¾ byl tah naposledy
+    pÅ™idÃ¡vÃ¡n.*/
   int cis_partie;
-  /*Souèet vah ze v¹ech partií, v nich¾ byl tah pøidáván*/
+  /*SouÄet vah ze vÅ¡ech partiÃ­, v nichÅ¾ byl tah pÅ™idÃ¡vÃ¡n*/
   int soucet_vah;
-  /*1 pokud byl tah v poslední partii pøidáván a jeho váha nebyla explicitnì
-    urèena.*/
+  /*1 pokud byl tah v poslednÃ­ partii pÅ™idÃ¡vÃ¡n a jeho vÃ¡ha nebyla explicitnÄ›
+    urÄena.*/
   int neurcena;
 } tah_t;
 
-/*Poèáteèní velikost pole tahy ve struktuøe pozice_t*/
+/*PoÄÃ¡teÄnÃ­ velikost pole tahy ve struktuÅ™e pozice_t*/
 #define POZICE_TAHY_POCATECNI_VELIKOST 10
-/*Pøírùstek velikosti pole tahy ve struktuøe pozice_t, pøi jejím pøekroèení*/
+/*PÅ™Ã­rÅ¯stek velikosti pole tahy ve struktuÅ™e pozice_t, pÅ™i jejÃ­m pÅ™ekroÄenÃ­*/
 #define POZICE_TAHY_DELTA 10
 
-/*Konstanta urèující, ¾e ECO pozice není implicitní A00*/
+/*Konstanta urÄujÃ­cÃ­, Å¾e ECO pozice nenÃ­ implicitnÃ­ A00*/
 #define NENI_IMPL_A00 0
-/*Konstanta urèující, ¾e ECO pozice je A00 implicitní v rámci knihovny*/
+/*Konstanta urÄujÃ­cÃ­, Å¾e ECO pozice je A00 implicitnÃ­ v rÃ¡mci knihovny*/
 #define KNIH_IMPL_A00 1
-/*Konstanta urèující, ¾e ECO pozice je A00 implicitní pouze v rámci dané partie*/
+/*Konstanta urÄujÃ­cÃ­, Å¾e ECO pozice je A00 implicitnÃ­ pouze v rÃ¡mci danÃ© partie*/
 #define PART_IMPL_A00 2
 
-/** pozice_t - struktura popisující pozici s tahy, které z ní vychází*/
+/** pozice_t - struktura popisujÃ­cÃ­ pozici s tahy, kterÃ© z nÃ­ vychÃ¡zÃ­*/
 typedef struct _pozice {
-  /*Odkaz na dal¹í pozici v seznamu pozic*/
+  /*Odkaz na dalÅ¡Ã­ pozici v seznamu pozic*/
   struct _pozice *dalsi_pozice;
-  /*Ha¹ovací klíè pozice popsané touto strukturou*/
+  /*HaÅ¡ovacÃ­ klÃ­Ä pozice popsanÃ© touto strukturou*/
   u32 hasovaci_klic;
-  /*písmeno ze zápisu ECO popisované pozice*/
+  /*pÃ­smeno ze zÃ¡pisu ECO popisovanÃ© pozice*/
   char ECO_pismeno;
-  /*èíslo ze zápisu ECO popisované pozice*/
+  /*ÄÃ­slo ze zÃ¡pisu ECO popisovanÃ© pozice*/
   char ECO_cislo;
-  /*Urèuje, jestli ECO pozice je implicitní A00,
-    je-li NENI_IMPL_A00, pak nejde o implicitní A00,
-    je-li ECO_A00&KNIH_IMPL_A00, pak jde o implicitní A00 v rámci celé knihovny,
-    je-li ECO_A00&PART_IMPL_A00, pak se jedná o A00 implicitní pouze v rámci dané partie
+  /*UrÄuje, jestli ECO pozice je implicitnÃ­ A00,
+    je-li NENI_IMPL_A00, pak nejde o implicitnÃ­ A00,
+    je-li ECO_A00&KNIH_IMPL_A00, pak jde o implicitnÃ­ A00 v rÃ¡mci celÃ© knihovny,
+    je-li ECO_A00&PART_IMPL_A00, pak se jednÃ¡ o A00 implicitnÃ­ pouze v rÃ¡mci danÃ© partie
   */
   char ECO_A00;
-  /*popisovaná pozice*/
+  /*popisovanÃ¡ pozice*/
   TPozice pozice;
-  /*poèet tahù vedoucích z této pozice*/
+  /*poÄet tahÅ¯ vedoucÃ­ch z tÃ©to pozice*/
   int pocet_tahu;
-  /*souèet vah urèenıch tahù v aktuální partii*/
+  /*souÄet vah urÄenÃ½ch tahÅ¯ v aktuÃ¡lnÃ­ partii*/
   int soucet_vah;
-  /*poèet tahù s neurèenou vahou v souèasné partii*/
+  /*poÄet tahÅ¯ s neurÄenou vahou v souÄasnÃ© partii*/
   int pocet_neurcenych;
-  /*poèet tahù s nenulovou vahou v souèasné partii*/
+  /*poÄet tahÅ¯ s nenulovou vahou v souÄasnÃ© partii*/
   int pocet_nenulovych;
-  /*poèet partií, v nich¾ se pozice vyskytla*/
+  /*poÄet partiÃ­, v nichÅ¾ se pozice vyskytla*/
   int pocet_partii;
   /*velikost pole tahy*/
   int vel_tahu;
-  /*pole obsahující tahy vedoucí z této pozice*/
+  /*pole obsahujÃ­cÃ­ tahy vedoucÃ­ z tÃ©to pozice*/
   tah_t *tahy;
-  /*vypoètená pozice v souboru*/
+  /*vypoÄtenÃ¡ pozice v souboru*/
   long poloha;
-  /*èíslo partie, v ní¾ byl pøidán poslední tah s nenulovou nebo neurèenou vahou,
-    nebo -1, pokud tam takovı tah není*/
+  /*ÄÃ­slo partie, v nÃ­Å¾ byl pÅ™idÃ¡n poslednÃ­ tah s nenulovou nebo neurÄenou vahou,
+    nebo -1, pokud tam takovÃ½ tah nenÃ­*/
   int part_nenul_tah;
 } pozice_t;
 
-/** blok_pozice_t - struktura popisující obsah bloku s pozicemi, které
-    mají stejnı ha¹ovací klíè.
+/** blok_pozice_t - struktura popisujÃ­cÃ­ obsah bloku s pozicemi, kterÃ©
+    majÃ­ stejnÃ½ haÅ¡ovacÃ­ klÃ­Ä.
  */
 typedef struct _blok_pozic {
-  /*Poèet pozic je¾ jsou ulo¾ené v této struktuøe*/
+  /*PoÄet pozic jeÅ¾ jsou uloÅ¾enÃ© v tÃ©to struktuÅ™e*/
   int pocet_pozic;
-  /*Ha¹ovací klíè spoleènı v¹em pozicím ulo¾enım v této struktuøe*/
+  /*HaÅ¡ovacÃ­ klÃ­Ä spoleÄnÃ½ vÅ¡em pozicÃ­m uloÅ¾enÃ½m v tÃ©to struktuÅ™e*/
   u32 hasovaci_klic;
-  /*Poloha bloku v souboru s knihovnou (vypoèteno tìsnì pøed ulo¾ením)*/
+  /*Poloha bloku v souboru s knihovnou (vypoÄteno tÄ›snÄ› pÅ™ed uloÅ¾enÃ­m)*/
   long poloha;
-  /*Poèet bytù, které blok v souboru bude zabírat*/
+  /*PoÄet bytÅ¯, kterÃ© blok v souboru bude zabÃ­rat*/
   long delka_bloku;
-  /*Ukazatel na hlavu spojového seznamu s pozicemi, které jsou v tomto bloku ulo¾eny.*/
+  /*Ukazatel na hlavu spojovÃ©ho seznamu s pozicemi, kterÃ© jsou v tomto bloku uloÅ¾eny.*/
   pozice_t *pozice;
 } blok_pozic_t;
 
-/** blok_adresare_t - struktura popisující obsah bloku s adresáøem v pamìti.*/
+/** blok_adresare_t - struktura popisujÃ­cÃ­ obsah bloku s adresÃ¡Å™em v pamÄ›ti.*/
 typedef struct _blok_adresare {
-  /*Poloha bloku v souboru s knihovnou zahájení (vypoèteno tìsnì pøed ulo¾ením).*/
+  /*Poloha bloku v souboru s knihovnou zahÃ¡jenÃ­ (vypoÄteno tÄ›snÄ› pÅ™ed uloÅ¾enÃ­m).*/
   long poloha;
   /*
-    Úroveò bloku ve struktuøe popisující obsah knihovny, urèuje, která skupina
-    bitù v ha¹ovacím klíèi se pou¾ije pøi pøechodu na dal¹í úroveò.
+    ÃšroveÅˆ bloku ve struktuÅ™e popisujÃ­cÃ­ obsah knihovny, urÄuje, kterÃ¡ skupina
+    bitÅ¯ v haÅ¡ovacÃ­m klÃ­Äi se pouÅ¾ije pÅ™i pÅ™echodu na dalÅ¡Ã­ ÃºroveÅˆ.
   */
   int uroven;
   /*
-    Ukazatelé na bloky pozic, které jsou urèeny hodnotou ha¹ovacího klíèe.
-    Ha¹ovací klíè je ulo¾en implicitnì pomocí indexu v poli, jde o 16 prvkové pole,
-    na ka¾dé úrovni se tedy ¹tìpí podle ètveøice bitù, pokud poskládáme pøíslu¹né
-    ètveøice za sebou, dostaneme prefix klíèe dlouhı 4*(uroven+1) bitù.
-    Pokud je prvek pole NULL, znamená to buï, ¾e pozice s klíèem zaèínajícím
-    danım prefixem se dosud nevyskytla, nebo ¾e je více pou¾itıch klíèù s danım
-    prefixem, v tom pøípadì musí bıt pøíslu¹nı prvek pole adresy_adresaru ne NULL.
-    Pokud je prvek ne NULL, je jedinı klíè s danım prefixem, v tom pøípadì musí
-    bıt prvek v poli adresy_adresaru se stejnım indexem NULL.
+    UkazatelÃ© na bloky pozic, kterÃ© jsou urÄeny hodnotou haÅ¡ovacÃ­ho klÃ­Äe.
+    HaÅ¡ovacÃ­ klÃ­Ä je uloÅ¾en implicitnÄ› pomocÃ­ indexu v poli, jde o 16 prvkovÃ© pole,
+    na kaÅ¾dÃ© Ãºrovni se tedy Å¡tÄ›pÃ­ podle ÄtveÅ™ice bitÅ¯, pokud posklÃ¡dÃ¡me pÅ™Ã­sluÅ¡nÃ©
+    ÄtveÅ™ice za sebou, dostaneme prefix klÃ­Äe dlouhÃ½ 4*(uroven+1) bitÅ¯.
+    Pokud je prvek pole NULL, znamenÃ¡ to buÄ, Å¾e pozice s klÃ­Äem zaÄÃ­najÃ­cÃ­m
+    danÃ½m prefixem se dosud nevyskytla, nebo Å¾e je vÃ­ce pouÅ¾itÃ½ch klÃ­ÄÅ¯ s danÃ½m
+    prefixem, v tom pÅ™Ã­padÄ› musÃ­ bÃ½t pÅ™Ã­sluÅ¡nÃ½ prvek pole adresy_adresaru ne NULL.
+    Pokud je prvek ne NULL, je jedinÃ½ klÃ­Ä s danÃ½m prefixem, v tom pÅ™Ã­padÄ› musÃ­
+    bÃ½t prvek v poli adresy_adresaru se stejnÃ½m indexem NULL.
    */
   blok_pozic_t *adresy_pozic[POCET_ADRES_V_BLOKU];
   /*
-    Ukazatele na bloky adresáøù dal¹ích úrovní v hierarchické struktuøe popisující
-    knihovnu zahájení.
+    Ukazatele na bloky adresÃ¡Å™Å¯ dalÅ¡Ã­ch ÃºrovnÃ­ v hierarchickÃ© struktuÅ™e popisujÃ­cÃ­
+    knihovnu zahÃ¡jenÃ­.
    */
   struct _blok_adresare *adresy_adresaru[POCET_ADRES_V_BLOKU];
 } blok_adresare_t;
 
 
-/*Následující typy slou¾í k popisu stavu souboru.*/
+/*NÃ¡sledujÃ­cÃ­ typy slouÅ¾Ã­ k popisu stavu souboru.*/
 
-/*typ popisující tah ulo¾enı do souboru*/
+/*typ popisujÃ­cÃ­ tah uloÅ¾enÃ½ do souboru*/
 typedef struct _f_tah {
-  /*Pravdìpodobnost, s jakou má bıt tah vybírán*/
+  /*PravdÄ›podobnost, s jakou mÃ¡ bÃ½t tah vybÃ­rÃ¡n*/
   char vaha;
-  /*Písmeno z kódu ECO tahu*/
+  /*PÃ­smeno z kÃ³du ECO tahu*/
   char ECO_pismeno;
-  /*Èíslo z kódu ECO tahu*/
+  /*ÄŒÃ­slo z kÃ³du ECO tahu*/
   char ECO_cislo;
-  /*Dvoubajtovı popis tahu*/
+  /*DvoubajtovÃ½ popis tahu*/
   u16 tah;
 } f_tah_t;
 
-/*Struktura popisující pozici ulo¾enou v souboru s knohovnou zahájení.*/
+/*Struktura popisujÃ­cÃ­ pozici uloÅ¾enou v souboru s knohovnou zahÃ¡jenÃ­.*/
 typedef struct {
   /*
-    Dal¹í pozice ve spojovém seznamu pozic z jednoho bloku.
-    Skuteèná adresa dal¹í pozice je ZAC_ADR+dalsi_pozice.
+    DalÅ¡Ã­ pozice ve spojovÃ©m seznamu pozic z jednoho bloku.
+    SkuteÄnÃ¡ adresa dalÅ¡Ã­ pozice je ZAC_ADR+dalsi_pozice.
    */
   long dalsi_pozice;
   /*
-    Stav hry popisovanı touto pozicí.
+    Stav hry popisovanÃ½ touto pozicÃ­.
    */
   TPozice pozice;
   /*char ECO_pismeno;*/
   /*char ECO_cislo;*/
-  /*Poèet tahù, které vedou z této pozice.*/
+  /*PoÄet tahÅ¯, kterÃ© vedou z tÃ©to pozice.*/
   int pocet_tahu;
-  /*Pole s tahy vedoucími z této pozice.*/
+  /*Pole s tahy vedoucÃ­mi z tÃ©to pozice.*/
   f_tah_t *tahy;
 } f_pozice_t;
 
-/*Struktura popisující blok pozic ulo¾enı v souboru.*/
+/*Struktura popisujÃ­cÃ­ blok pozic uloÅ¾enÃ½ v souboru.*/
 typedef struct _f_blok_pozic {
-  /*Délka bloku v bytech (=sizeof(f_blok_pozic_t)+pocet_pozic*sizeof(f_pozice_t).*/
+  /*DÃ©lka bloku v bytech (=sizeof(f_blok_pozic_t)+pocet_pozic*sizeof(f_pozice_t).*/
   long delka_bloku;
-  /*Poèet pozic ulo¾enıch v tomto bloku.*/
+  /*PoÄet pozic uloÅ¾enÃ½ch v tomto bloku.*/
   int pocet_pozic;
-  /*Ha¹ovací klíè spoleènı v¹em pozicím v bloku.*/
+  /*HaÅ¡ovacÃ­ klÃ­Ä spoleÄnÃ½ vÅ¡em pozicÃ­m v bloku.*/
   u32 hasovaci_klic;
   /*
-    Pozice první pozice bloku v souboru - posun od zaèátku pozic.
-    Skuteèná adresa v souboru je ZAC_POZIC+adr_pozic.
+    Pozice prvnÃ­ pozice bloku v souboru - posun od zaÄÃ¡tku pozic.
+    SkuteÄnÃ¡ adresa v souboru je ZAC_POZIC+adr_pozic.
    */
   long adr_pozic;
 } f_blok_pozic_t;
 
-/*Struktura popisující blok adresáøe ulo¾enı v souboru.*/
+/*Struktura popisujÃ­cÃ­ blok adresÃ¡Å™e uloÅ¾enÃ½ v souboru.*/
 typedef struct _f_blok_adresare {
-  /*Poloha pole adresy v souboru. Skuteèná adresa zaèátku pole je ZAC_POZIC+zac_adres.*/
+  /*Poloha pole adresy v souboru. SkuteÄnÃ¡ adresa zaÄÃ¡tku pole je ZAC_POZIC+zac_adres.*/
   long zac_adres;
-  /*Úroveò bloku v hierarchické struktuøe adresáøe.*/
+  /*ÃšroveÅˆ bloku v hierarchickÃ© struktuÅ™e adresÃ¡Å™e.*/
   int uroven;
   /*
-    Pole s adresami následujících blokù. Pokud je pøíslu¹nı prvek 0, nenásleduje
-    v jeho smìru ¾ádnı dal¹í blok. Pokud má bitovı zápis hodnotu 0<adresa>,
-    jde o adresu bloku adres, pokud má tvar 1<adresa>, pak jde o adresu bloku
-    pozic. V¹echny adresy jsou relativní vzhledem k ZAC_ADR. Adresa 0 je tedy adresou
-    základního bloku, na nìj¾ se v¹ak nemù¾e vyskytnout odkaz v ¾ádném bloku adres.
+    Pole s adresami nÃ¡sledujÃ­cÃ­ch blokÅ¯. Pokud je pÅ™Ã­sluÅ¡nÃ½ prvek 0, nenÃ¡sleduje
+    v jeho smÄ›ru Å¾Ã¡dnÃ½ dalÅ¡Ã­ blok. Pokud mÃ¡ bitovÃ½ zÃ¡pis hodnotu 0<adresa>,
+    jde o adresu bloku adres, pokud mÃ¡ tvar 1<adresa>, pak jde o adresu bloku
+    pozic. VÅ¡echny adresy jsou relativnÃ­ vzhledem k ZAC_ADR. Adresa 0 je tedy adresou
+    zÃ¡kladnÃ­ho bloku, na nÄ›jÅ¾ se vÅ¡ak nemÅ¯Å¾e vyskytnout odkaz v Å¾Ã¡dnÃ©m bloku adres.
    */
   long adresy[POCET_ADRES_V_BLOKU];
 } f_blok_adresare_t;
 
 #if PAKUJ_POZICE
 
-/*Struktura popisující typ TPozice (viz cotyvar.h) v souboru, je-li tento typ pakován*/
+/*Struktura popisujÃ­cÃ­ typ TPozice (viz cotyvar.h) v souboru, je-li tento typ pakovÃ¡n*/
 typedef struct {
-  /*Stav ro¹ády - jako v TPozice*/
+  /*Stav roÅ¡Ã¡dy - jako v TPozice*/
   u8 roch;
   /*Stav pole mimochodem - jako v TPozice*/
   u8 mimoch;
-  /*Je-li bílı na tahu - jako v TPozice*/
+  /*Je-li bÃ­lÃ½ na tahu - jako v TPozice*/
   int bily;
   /*
-    Popis ¹achovnice - ¹achovnice 8*8 po øádcích - byte popisuje dvì následující pole.
-    Obsah pole je zapsán jako 6+hodnota z TPozice.sch. 
+    Popis Å¡achovnice - Å¡achovnice 8*8 po Å™Ã¡dcÃ­ch - byte popisuje dvÄ› nÃ¡sledujÃ­cÃ­ pole.
+    Obsah pole je zapsÃ¡n jako 6+hodnota z TPozice.sch. 
   */
   char sch[32];
 } f_tpozice_t;
 
 /*
-  Pøevede pozici ze struktury typu TPozice do struktury typu f_tpozice_t.
+  PÅ™evede pozici ze struktury typu TPozice do struktury typu f_tpozice_t.
 
-  parametr pozice vstupní pozice
-  parametr fpozice vıstupní pozice
+  parametr pozice vstupnÃ­ pozice
+  parametr fpozice vÃ½stupnÃ­ pozice
 
-  vrací 0 pokud nedojde k chybì, jinak kód chyby danı konstantami v souboru
+  vracÃ­ 0 pokud nedojde k chybÄ›, jinak kÃ³d chyby danÃ½ konstantami v souboru
           obkc.h
  */
 int pakuj(TPozice *pozice, f_tpozice_t *fpozice);
 
 /*
-  Pøevede pozici ze struktury typu f_tpozice_t do struktury typu TPozice.
+  PÅ™evede pozici ze struktury typu f_tpozice_t do struktury typu TPozice.
 
-  parametr fpozice vstupní pozice
-  parametr pozice vıstupní pozice
+  parametr fpozice vstupnÃ­ pozice
+  parametr pozice vÃ½stupnÃ­ pozice
 
-  vrací 0 pokud nedojde k chybì, jinak kód chyby danı konstantami v souboru
+  vracÃ­ 0 pokud nedojde k chybÄ›, jinak kÃ³d chyby danÃ½ konstantami v souboru
           obkc.h
  */
 int rozpakuj(f_tpozice_t *fpozice, TPozice *pozice);
 
 #endif
 
-/*Zaèátek blokù adresáøe v souboru - poloha základního bloku.*/
+/*ZaÄÃ¡tek blokÅ¯ adresÃ¡Å™e v souboru - poloha zÃ¡kladnÃ­ho bloku.*/
 extern long ZAC_ADR;
-/*Zaèátek blokù s pozicemi v souboru.*/
+/*ZaÄÃ¡tek blokÅ¯ s pozicemi v souboru.*/
 extern long ZAC_POZIC;
 
 /*
-  Maska, která odfiltruje z prvku pole adresy strutkury typu f_blok_adres_t adresu.
-  (Zamaskuje pøípadnou 1 na zaèátku.)
+  Maska, kterÃ¡ odfiltruje z prvku pole adresy strutkury typu f_blok_adres_t adresu.
+  (Zamaskuje pÅ™Ã­padnou 1 na zaÄÃ¡tku.)
  */
 #define BL_MASKA ((long)(((long)1)<<(sizeof(long)*8-1)))
 
 #include <stdio.h>
 
 /*
-  Porovná pozice a zjistí, jestli jsou shodné.
+  PorovnÃ¡ pozice a zjistÃ­, jestli jsou shodnÃ©.
 
-  parametr a první porovnávaná pozice
-  parametr b druhá porovnávaná pozice
+  parametr a prvnÃ­ porovnÃ¡vanÃ¡ pozice
+  parametr b druhÃ¡ porovnÃ¡vanÃ¡ pozice
 
-  vrací 1, jsou-li pozice stejné, jinak 0.
+  vracÃ­ 1, jsou-li pozice stejnÃ©, jinak 0.
  */
 int stejne_pozice(TPozice *a, TPozice *b);
 
 /*
-  Vrací znakovı popis figury k èíselnému.
+  VracÃ­ znakovÃ½ popis figury k ÄÃ­selnÃ©mu.
 
-  parametr fig èíselnı popis figury.
-  vrací znak, kterı figuru popisuje, malé písmeno v pøípadì èerné figury,
-        velké písmeno v pøípadì bílé figury.
+  parametr fig ÄÃ­selnÃ½ popis figury.
+  vracÃ­ znak, kterÃ½ figuru popisuje, malÃ© pÃ­smeno v pÅ™Ã­padÄ› ÄernÃ© figury,
+        velkÃ© pÃ­smeno v pÅ™Ã­padÄ› bÃ­lÃ© figury.
  */
 char zn_fig(int fig);
 /*
-  Vypí¹e obsah pozice pøeètené ze souboru.
+  VypÃ­Å¡e obsah pozice pÅ™eÄtenÃ© ze souboru.
 
-  parametr file soubor, do nìj¾ bude pozice vypsána
-  parametr pozice vypisovaná pozice
-  vrací 0, nedojde-li k chybì, jinak kód chyby danı konstantou v obk_ch.h
+  parametr file soubor, do nÄ›jÅ¾ bude pozice vypsÃ¡na
+  parametr pozice vypisovanÃ¡ pozice
+  vracÃ­ 0, nedojde-li k chybÄ›, jinak kÃ³d chyby danÃ½ konstantou v obk_ch.h
  */
 int dump_f_pozice(FILE *file, f_pozice_t *pozice);
 
 /*
-  Vypí¹e pozici do souboru.
+  VypÃ­Å¡e pozici do souboru.
 
-  parametr file soubor, do nìj¾ bude pozice vypsána.
-  parametr pozice vypisovaná pozice
-  vrací 0, nedojde-li k chybì, jinak kód chyby danı konstantou v obk_ch.h
+  parametr file soubor, do nÄ›jÅ¾ bude pozice vypsÃ¡na.
+  parametr pozice vypisovanÃ¡ pozice
+  vracÃ­ 0, nedojde-li k chybÄ›, jinak kÃ³d chyby danÃ½ konstantou v obk_ch.h
  */
 int print_pozice(FILE *file, TPozice *pozice);
 
