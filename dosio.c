@@ -26,6 +26,7 @@
 #include "sachy.h"
 #include "pole.h"
 #include "dejtah.h"
+#include "soubvv.h"
 
 static void BezCRLF(char *s){
   if (s) while(*s) {
