@@ -1,4 +1,4 @@
-﻿/*********************************************************/
+/*********************************************************/
 /* tabulky.c - prace s databazi koncovek                 */
 /* 8.4. 2002 Jan Nemec                                 */
 /*********************************************************/
@@ -39,6 +39,7 @@ Hodnoty v tabulce:
 ...
 -k - totez jako +k, jen opacne barvy
 Behem vytvareni -128 -zatim neznamo
+
 */
 
 #define TABDIR "Endgames/"
@@ -122,7 +123,7 @@ void TSchTypStr(s8 *sch, char *s){
  char f[2][6];
  s8 *k;
  int i,j,l,b;
- const char *fgr="pjsvdk";
+ char *fgr="pjsvdk";
 
  k=sch+h8;
  memset((void *)f,0,12);
@@ -159,14 +160,14 @@ static int cena(char s){
   case 0: return 0;
   case 'k': return 0;
   case 'p': return 1;
-  case 'n': return 2;
-  case 'b': return 3;
-  case 'r': return 4;
-  case 'q': return 5;
-  default: return -1; /* TODO : Chyba() */
+  case 'j': return 2;
+  case 's': return 3;
+  case 'v': return 4;
+  case 'd': return 5;
+  default: return -1;
  }
 }
-static char jm[4]={'n','b','r','q'};
+static char jm[4]={'j','s','v','d'};
 static int Normalizuj(char *s){
 /* Z "kkd udela kdk a podobne" */
  int i;
@@ -317,7 +318,7 @@ static int IntToPozice(int i, char *typ, TPozice *pos){
  return 1;
 }
 
-static char DejTypPole[7]={'?', 'p', 'n', 'b', 'r', 'q', 'k'};
+static char DejTypPole[7]={'?', 'p', 'j', 's', 'v', 'd', 'k'};
 
 static int DejTyp(s8 *sch,char *typ){
 /* Vraci 0, z hlediska cerneho; 1 z hlediska bileho*/
@@ -615,36 +616,29 @@ static int GenerujBezRekurze(char *typ){
 void GenerujTabulky() {
     /* Warning: Take many hours to generate */
 
-    /* 2 pieces */
-    /* Draw */
-    GenerujTabulku("kk");
-
-    /* 3 pieces */
-    /* Win */
-    GenerujTabulku("kqk");
-    GenerujTabulku("krk");
-    /* ? */
-    GenerujTabulku("kpk");
-    /* Draw */
-    GenerujTabulku("knk");
-    GenerujTabulku("kbk");
-
+    
     /* 4 pieces */
     /* Win */
-    GenerujTabulku("kqkn");
-    GenerujTabulku("kqkb");
-    GenerujTabulku("kqkr");
-    GenerujTabulku("kbnk");
-    GenerujTabulku("kbbk");
+    GenerujTabulku("kdkj");
+    GenerujTabulku("kdks");
+    GenerujTabulku("kdkv");
+    GenerujTabulku("ksjk");
+    GenerujTabulku("kssk");
     GenerujTabulku("kppk");
 
     /* Draw */
-    GenerujTabulku("knnk");
-    GenerujTabulku("kqkq");
+    GenerujTabulku("kjjk");
+    GenerujTabulku("kjkj");
+    GenerujTabulku("ksks");
+    GenerujTabulku("kskj");
+    GenerujTabulku("kdkd");
+    GenerujTabulku("kvkj");
+    GenerujTabulku("kvks");
 
     /* ? */
-    GenerujTabulku("kqkp"); 
+    GenerujTabulku("kdkp"); 
     GenerujTabulku("kpkp");
+    GenerujTabulku("kvkp");
 }
 
 int GenerujTabulku(const char *typ){
