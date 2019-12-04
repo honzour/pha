@@ -646,8 +646,17 @@ int GenerujTabulku(const char *typ){
   unsigned int i ,j;
 
   size_t d = strlen(typ);
-  if (d > 8)
+
+  if (d > 8) {
+    puts("Moc dlouhy typ");
     return -1;
+  }
+  for (i = 0; i < d; i++) {
+    if (cena(typ[i]) < 0) {
+      puts("Kameny mohou byt jen kdvsjp");
+      return -2;
+    }
+  }
   strcpy(p, typ);
   
   Normalizuj(p);
