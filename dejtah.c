@@ -200,29 +200,28 @@ s16 CenaToScore(s16 ACena)
 }
 
 #if Typ_Produktu==DLL
+#pragma warning(disable : 4996)
 void Nejlepsi(TUloha* uloha, TTah1* ATah1, u8 AScoreBound) {
     char MoveAsText[MAX_LONG_MOVE_SIZE];
     TahToLongStr(ATah1->data, MoveAsText);
-    /*    Callbacks.NextBestMove(MoveAsText, CenaToScore(ATah1->cena), AScoreBound); */
 
-	/*
-	TODO PSA
-    std::string moves;
-    moves.append(MoveAsText);
-    moves.append(" ");
+	
+	char moves[256];
+    strcpy(moves, MoveAsText);
+    strncat(moves, " ", sizeof(moves));
 	
     for (int i = 1; i < 99; i++) // TODO : cut end of variant
     {
         if (uloha->hvar[1][i] != 0)
         {
             TahToLongStr(uloha->hvar[1][i], MoveAsText);
-            moves.append(MoveAsText);
-            moves.append(" ");
+			strncat(moves, MoveAsText, sizeof(moves));
+			strncat(moves, " ", sizeof(moves));
         }
         else
             break;
     }
-	*/
+	
     Callbacks.NextBestMove(MoveAsText, CenaToScore(ATah1->cena), AScoreBound);
 }
 #endif
@@ -247,20 +246,14 @@ cfunkce void GetBookMoves(TUloha* uloha)
         for (int j = 0; j < f_pozice.pocet_tahu; j++) {
             char MoveAsText[MAX_LONG_MOVE_SIZE];
             TahToLongStr(f_pozice.tahy[j].tah, MoveAsText);
-			/*
-			TODO PSA
-            std::string message;
-            message.append(MoveAsText);
-            message.append(", ECO: ");
-            message += f_pozice.tahy[j].ECO_pismeno;
-            message.append(std::to_string((int)f_pozice.tahy[j].ECO_cislo / 10));
-            message.append(std::to_string((int)f_pozice.tahy[j].ECO_cislo % 10));
-            message.append(", Probability: ");
-            message.append(std::to_string((int)f_pozice.tahy[j].vaha));
-            message.append(" %");
-			*/
+            
+			
 #if Typ_Produktu==DLL
-            Callbacks.TellGUIInfo(MoveAsText);
+			char str[256];
+
+			sprintf(str, "%s, ECO: %c%i%i, Probability: %i%%", MoveAsText, f_pozice.tahy[j].ECO_pismeno,
+				(int)(f_pozice.tahy[j].ECO_cislo / 10), (int)(f_pozice.tahy[j].ECO_cislo % 10), (int)(f_pozice.tahy[j].vaha));
+            Callbacks.TellGUIInfo(str);
 #endif
         }
     }

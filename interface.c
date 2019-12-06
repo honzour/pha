@@ -34,14 +34,11 @@ void DoMove(char* AMove)
     }
     else
     {
-		/*
-		TODO PSA
+		char str[256];
 		
-        std::string str(AMove);
-        std::string s = "Invalid move: " + str;
-        Callbacks.TellGUIError(s.c_str());
-		*/
-		Callbacks.TellGUIError(AMove);
+        sprintf(str, "Invalid move: %s", AMove);
+        Callbacks.TellGUIError(str);
+
     }
 }
 
