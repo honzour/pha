@@ -417,6 +417,9 @@ typedef struct {
 #define FoundInEndgameDatabaseScore 1000
 
 /*inicializacni konstantni promenna*/
+extern const TPozice PrazdnePostaveni;
+
+/*inicializacni konstantni promenna*/
 extern const TPozice ZakladniPostaveni;
 
 /*inicializacni konstantni promenna*/
