@@ -205,7 +205,7 @@ void Nejlepsi(TUloha* uloha, TTah1* ATah1, u8 AScoreBound) {
     char MoveAsText[MAX_LONG_MOVE_SIZE];
     TahToLongStr(ATah1->data, MoveAsText);
 
-	
+/*
 	char moves[256];
     strcpy(moves, MoveAsText);
     strncat(moves, " ", sizeof(moves));
@@ -221,7 +221,7 @@ void Nejlepsi(TUloha* uloha, TTah1* ATah1, u8 AScoreBound) {
         else
             break;
     }
-	
+*/	
     Callbacks.NextBestMove(MoveAsText, CenaToScore(ATah1->cena), AScoreBound);
 }
 #endif
