@@ -230,7 +230,7 @@ int IsBookAvailable()
 {
     if (!MamKnihovnu)
     {
-        MamKnihovnu = init_knihovna("Opening Book.dat");
+        MamKnihovnu = init_knihovna("Opening Book.dat") == 0;
     }
     return MamKnihovnu;
 }
