@@ -40,6 +40,7 @@ u8 roch;  /* binarne 00...00vmVM */
 u8 mimoch;  /* Pole, na nemz stoji pesec tahnuvsi v predchozim tahu o 2,
          nebo 0 pokud se minule netahlo pescem o 2 */
  int bily;    /* Je bily na tahu ?*/
+ int quietMoveCount;
  TSch sch;} TPozice;
 
 /* Horni odhad delky vetve stromu propoctu - kvuli velikosti datovych struktur */
