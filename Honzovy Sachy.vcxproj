@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="boardFromFEN.h" />
     <ClInclude Include="chyba.h" />
     <ClInclude Include="cotyvar.h" />
     <ClInclude Include="cteni.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="volby.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="boardFromFEN.c" />
     <ClCompile Include="chyba.c" />
     <ClCompile Include="cotyvar.c" />
     <ClCompile Include="cteni.c" />

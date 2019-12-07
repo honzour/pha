@@ -23,7 +23,7 @@ void SetStartPos()
 
 void SetPositionFromString(char* AFEN)
 {
-    /* TODO : Implement */
+  boardFromFEN(&globalUloha->pozice, AFEN);
 }
 
 void DoMove(char* AMove)
