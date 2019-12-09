@@ -45,11 +45,12 @@ static int stringToSquare(char* str) {
   return str[0] == '-' ? 0 : square(str[1] - '1', str[0] - 'a');
 }
 
+// TODO Error detection!!!
 cfunkce void boardFromFEN(TPozice* board, const char* fen) {
   int sq = 9 * 10 + 1;
   char ch;
-  char* str = _strdup(fen), * strPos = NULL;
-  char* token = strtok_s(str, " ", &strPos);
+  char* str = strdup(fen), * strPos = NULL;
+  char* token = strtok(str, " ");
 
   memcpy(board, &PrazdnePostaveni, sizeof(TPozice));
 
@@ -72,11 +73,11 @@ cfunkce void boardFromFEN(TPozice* board, const char* fen) {
   }
 
   // Turn of play
-  token = strtok_s(NULL, " ", &strPos);
+  token = strtok(NULL, " ");
   board->bily = token[0] == 'w' ? 1 : 0;
 
   // Castling rights
-  token = strtok_s(NULL, " ", &strPos);
+  token = strtok(NULL, " ");
 
   while ((ch = *token++)) {
     if (ch == 'K') 
@@ -90,7 +91,7 @@ cfunkce void boardFromFEN(TPozice* board, const char* fen) {
   }
 
   // En passant square
-  int epSquare = stringToSquare(strtok_s(NULL, " ", &strPos));
+  int epSquare = stringToSquare(strtok(NULL, " "));
   int pawnSquare;
   if (board->bily)
     pawnSquare = epSquare - 10;
@@ -100,7 +101,7 @@ cfunkce void boardFromFEN(TPozice* board, const char* fen) {
   board->mimoch = pawnSquare;
 
   // Half & Full Move Counters
-  int halfMoveCounter = atoi(strtok_s(NULL, " ", &strPos));
+  int halfMoveCounter = atoi(strtok(NULL, " "));
   board->quietMoveCount = halfMoveCounter;
 //  board->fullMoveCounter = atoi(strtok_s(NULL, " ", &strPos));
 

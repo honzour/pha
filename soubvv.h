@@ -12,3 +12,7 @@ cfunkce int OtevriZeSouboru(char *jmeno,TUloha *u);
 /*******************************************************/
 /* Otevreni aktualni partie ze souboru formatu HS 1350 */
 /*******************************************************/
+cfunkce int OtevriFENZeSouboru(char *jmeno,TUloha *u);
+/*******************************************************/
+/* Otevreni pozice ze souboru formatu FEN              */
+/*******************************************************/

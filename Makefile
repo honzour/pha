@@ -22,7 +22,8 @@ baseobj=${outdir}/cotyvar.o ${outdir}/cteni.o ${outdir}/datastr.o \
 	${outdir}/lokruti.o ${outdir}/myslitel.o ${outdir}/obk_ch.o \
 	${outdir}/ohodnoc.o ${outdir}/partie.o ${outdir}/pgn.o \
 	${outdir}/sachy.o ${outdir}/strtah.o ${outdir}/tabulky.o \
-	${outdir}/soubvv.o ${outdir}/dejtah.o ${outdir}/ticho.o ${outdir}/testy.o
+	${outdir}/soubvv.o ${outdir}/dejtah.o ${outdir}/ticho.o \
+	${outdir}/testy.o ${outdir}/boardFromFEN.o
 
 ifeq (${target}, windows)
 volby=${def} ${opt} -c -mwindows
@@ -118,7 +119,7 @@ ${outdir}/qvlakno.o: qvlakno.cpp qvlakno.h qhlokno.h qtsachy.h myslitel.h volby.
 	
 # sekce definujici zavislosti
 
-z_soubvv=soubvv.c soubvv.h cotyvar.h volby.h strtah.h globruti.h generato.h myslitel.h partie.h pole.h Makefile
+z_soubvv=soubvv.c soubvv.h cotyvar.h volby.h strtah.h globruti.h generato.h myslitel.h partie.h pole.h boardFromFEN.h Makefile
 z_cotyvar=cotyvar.c cotyvar.h volby.h Makefile
 z_globruti=globruti.c globruti.h volby.h cotyvar.h chyba.h myslitel.h generato.h partie.h  hashtab.h lokruti.h strtah.h pole.h Makefile 
 z_generato=generato.c generato.h volby.h cotyvar.h ohodnoc.h chyba.h globruti.h lokruti.h pole.h Makefile
@@ -126,7 +127,7 @@ z_lokruti=lokruti.c lokruti.h volby.h cotyvar.h generato.h hashtab.h dosio.h pol
 z_chyba=chyba.c chyba.h volby.h Makefile 
 z_hashpech=hashpech.c hashpech.h volby.h ohodnoc.h Makefile
 z_hashtab=hashtab.c hashtab.h volby.h chyba.h Makefile 
-z_dosio=dosio.c dosio.h hashpech.h volby.h cotyvar.h myslitel.h globruti.c lokruti.c tabulky.h hashtab.h sachy.h ohodnoc.h pole.h Makefile 
+z_dosio=dosio.c dosio.h hashpech.h volby.h cotyvar.h myslitel.h globruti.c lokruti.c tabulky.h hashtab.h sachy.h ohodnoc.h pole.h soubvv.h Makefile 
 z_kontrola=kontrola.c hashtab.h volby.h generato.h lokruti.h globruti.h Makefile
 z_myslitel=myslitel.c myslitel.h volby.h generato.h globruti.h knihovna.h tabulky.h ticho.h Makefile
 z_dejtah=dejtah.c dejtah.h myslitel.h volby.h generato.h globruti.h knihovna.h tabulky.h Makefile 
@@ -143,6 +144,7 @@ z_cteni=cteni.c cteni.h obk_ch.h datastr.h hash.h cotyvar.h volby.h Makefile
 z_obk_ch=obk_ch.c obk_ch.h Makefile 
 z_scio=scio.c scio.h globruti.h dosio.h volby.h cotyvar.h chyba.h myslitel.h generato.h Makefile
 z_testy=testy.c cotyvar.h volby.h partie.h Makefile
+z_boardFromFen=boardFromFEN.c boardFromFEN.h Makefile
 
 # totez pro specificke windowsi soubory
 
@@ -257,3 +259,7 @@ ${outdir}/scio.o: ${z_scio}
 
 ${outdir}/testy.o: ${z_testy}
 	${cc} testy.c -o ${outdir}/testy.o ${volby}
+
+${outdir}/boardFromFEN.o: ${z_boardFromFEN}
+	${cc} boardFromFEN.c -o ${outdir}/boardFromFEN.o ${volby}
+

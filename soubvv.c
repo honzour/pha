@@ -13,6 +13,7 @@
 #include "myslitel.h"
 #include "partie.h"
 #include "pole.h"
+#include "boardFromFEN.h"
 
 char PismenoKamene(s8 k){
 	if(k<0)k=(s8)-k;
@@ -43,7 +44,7 @@ int UlozDoSouboru(char *jmeno,TUloha *u) {
 	while (u->prt->l){
 		GlobTahniZpet(u);
 	}
-	fprintf(f,"Poèáteèní postavení:\nBílý:\n");
+	fprintf(f,"Poï¿½ï¿½teï¿½nï¿½ postavenï¿½:\nBï¿½lï¿½:\n");
 	for(j=1;j<=6;j++)
 		for(i=a1;i<=h8;i++)
 			if(u->pozice.sch[i]==j){
@@ -52,9 +53,9 @@ int UlozDoSouboru(char *jmeno,TUloha *u) {
 				putc((i-a1)/10+'1',f);
 				putc(' ',f);
 			}
-	fprintf(f,"\nMalá rošáda: %s",(u->pozice.roch&1)?"Ano":"Ne");
-	fprintf(f,"\nVelká rošáda: %s",(u->pozice.roch&2)?"Ano":"Ne");
-	fprintf(f,"\nÈerný:\n");
+	fprintf(f,"\nMalï¿½ roï¿½ï¿½da: %s",(u->pozice.roch&1)?"Ano":"Ne");
+	fprintf(f,"\nVelkï¿½ roï¿½ï¿½da: %s",(u->pozice.roch&2)?"Ano":"Ne");
+	fprintf(f,"\nï¿½ernï¿½:\n");
 	for(j=-1;j>=-6;j--)
 		for(i=a1;i<=h8;i++)
 			if(u->pozice.sch[i]==j){
@@ -63,12 +64,12 @@ int UlozDoSouboru(char *jmeno,TUloha *u) {
 				putc((i-a1)/10+'1',f);
 				putc(' ',f);
 			}
-	fprintf(f,"\nMalá rošáda: %s",(u->pozice.roch&4)?"Ano":"Ne");
-	fprintf(f,"\nVelká rošáda: %s",(u->pozice.roch&8)?"Ano":"Ne");
+	fprintf(f,"\nMalï¿½ roï¿½ï¿½da: %s",(u->pozice.roch&4)?"Ano":"Ne");
+	fprintf(f,"\nVelkï¿½ roï¿½ï¿½da: %s",(u->pozice.roch&8)?"Ano":"Ne");
 	fputs("\nNa tahu je: ",f);
-	fputs(u->pozice.bily ? "Bílý":"Èerný",f);
+	fputs(u->pozice.bily ? "Bï¿½lï¿½":"ï¿½ernï¿½",f);
 	putc('\n',f);
-	fprintf(f,"Prùbìh partie:\n");
+	fprintf(f,"Prï¿½bï¿½h partie:\n");
 	i=0;
 	while (u->prt->p){
 		NalezTahy(u);
@@ -90,13 +91,40 @@ int UlozDoSouboru(char *jmeno,TUloha *u) {
 	fclose(f);
 	return 1;
 }
+
+int OtevriFENZeSouboru(char *jmeno,TUloha *u) {
+  char s[512];
+  TPozice pos;
+  FILE *f;
+
+  f = fopen(jmeno,"r");
+  if (!f) {
+	  printf("Nemuzu otevrit %s\n", jmeno);
+	  return 0;
+  }
+  if (!fgets(s,sizeof(s) - 1,f)) {
+    printf("Nemuzu cist z %s\n", jmeno);
+    fclose(f);
+    return 0;
+  }
+  fclose(f);
+
+  boardFromFEN(&pos, s);
+
+  InitPartie(&(u->prt), &pos);
+  u->pozice = pos;
+  
+  return 1;
+}
+
+
 int OtevriZeSouboru(char *jmeno,TUloha *u){
 /*******************************************************/
 /* Otevreni aktualni partie ze souboru formatu HS 1350 */
 /*******************************************************/
-	TPartie *prt; /* Zde si uchovám pùvodní partii*/
-	TPozice pos; /*Zde si uchovám pùvodní pozici*/
-/*Když se otevøení nepodaøí, vrátím se k pùvodním*/
+	TPartie *prt; /* Zde si uchovï¿½m pï¿½vodnï¿½ partii*/
+	TPozice pos; /*Zde si uchovï¿½m pï¿½vodnï¿½ pozici*/
+/*Kdyï¿½ se otevï¿½enï¿½ nepodaï¿½ï¿½, vrï¿½tï¿½m se k pï¿½vodnï¿½m*/
 	int i,j,k;
 	s8 g;
 	FILE *f;
@@ -105,7 +133,7 @@ int OtevriZeSouboru(char *jmeno,TUloha *u){
 
 	prt=u->prt;
 	u->prt=NULL;
-/* Teï mám v prt pùvodní partii a u->prt prázdnou */
+/* Teï¿½ mï¿½m v prt pï¿½vodnï¿½ partii a u->prt prï¿½zdnou */
 	pos=u->pozice;
 	for(i=0;i<=7;i++)
 		for(j=0;j<=7;j++){
@@ -113,13 +141,13 @@ int OtevriZeSouboru(char *jmeno,TUloha *u){
 		}
 	u->pozice.roch=0;
 	u->pozice.mimoch=0;
-/* Teï analogicky s pozicí*/
+/* Teï¿½ analogicky s pozicï¿½*/
 	f=fopen(jmeno,"r");
 	if(!f)goto chyba;
-	if(!fgets(s,50,f) || strcmp(s,"Poèáteèní postavení:\n")||
+	if(!fgets(s,50,f) || strcmp(s,"Poï¿½ï¿½teï¿½nï¿½ postavenï¿½:\n")||
 		!fgets(s,50,f))goto chybaf;
-        if(!strcmp(s,"Bílý:\n"))u->pozice.bily=1;else
-		if(!strcmp(s,"Èerný:\n"))u->pozice.bily=0;else
+        if(!strcmp(s,"Bï¿½lï¿½:\n"))u->pozice.bily=1;else
+		if(!strcmp(s,"ï¿½ernï¿½:\n"))u->pozice.bily=0;else
 			goto chybaf;
 	if(!fgets(s,97,f))goto chybaf;
 	j=strlen(s);
@@ -140,17 +168,17 @@ int OtevriZeSouboru(char *jmeno,TUloha *u){
 		i+=3;
 	}
 	if(!fgets(s,50,f))goto chybaf;
-	if(strncmp(s,"Malá rošáda: ",13))goto chybaf;
+	if(strncmp(s,"Malï¿½ roï¿½ï¿½da: ",13))goto chybaf;
 	if(!strcmp(s+13,"Ano\n"))u->pozice.roch|=1;
 	else
 	if(strcmp(s+13,"Ne\n"))goto chybaf;
 	if(!fgets(s,50,f))goto chybaf;
-	if(strncmp(s,"Velká rošáda: ",14))goto chybaf;
+	if(strncmp(s,"Velkï¿½ roï¿½ï¿½da: ",14))goto chybaf;
 	if(!strcmp(s+14,"Ano\n"))u->pozice.roch|=2;
 	else
 	if(strcmp(s+14,"Ne\n"))goto chybaf;
 
-	if(!fgets(s,50,f) || strcmp(s,"Èerný:\n")) goto chybaf;
+	if(!fgets(s,50,f) || strcmp(s,"ï¿½ernï¿½:\n")) goto chybaf;
 	if(!fgets(s,97,f))goto chybaf;
 	j=strlen(s);
 	for(i=0;i<j;){
@@ -171,28 +199,28 @@ int OtevriZeSouboru(char *jmeno,TUloha *u){
 		i+=3;
 	}
 	if(!fgets(s,50,f))goto chybaf;
-	if(strncmp(s,"Malá rošáda: ",13))goto chybaf;
+	if(strncmp(s,"Malï¿½ roï¿½ï¿½da: ",13))goto chybaf;
 	if(!strcmp(s+13,"Ano\n"))u->pozice.roch|=4;
 	else
 	if(strcmp(s+13,"Ne\n"))goto chybaf;
 	if(!fgets(s,50,f))goto chybaf;
-	if(strncmp(s,"Velká rošáda: ",14))goto chybaf;
+	if(strncmp(s,"Velkï¿½ roï¿½ï¿½da: ",14))goto chybaf;
 	if(!strcmp(s+14,"Ano\n"))u->pozice.roch|=8;
 	else
 	if(strcmp(s+14,"Ne\n"))goto chybaf;
 	
 	if(!fgets(s,50,f))goto chybaf;
 	if(strncmp(s,"Na tahu je: ",12))goto chybaf;
-	if(!strcmp(s+12,"Bílý\n"))u->pozice.bily=1;
+	if(!strcmp(s+12,"Bï¿½lï¿½\n"))u->pozice.bily=1;
 	else
-	if(!strcmp(s+12,"Èerný\n"))u->pozice.bily=0;
+	if(!strcmp(s+12,"ï¿½ernï¿½\n"))u->pozice.bily=0;
 	else goto chybaf;
-	if(!fgets(s,50,f) || strcmp(s,"Prùbìh partie:\n"))
+	if(!fgets(s,50,f) || strcmp(s,"Prï¿½bï¿½h partie:\n"))
 		goto chybaf;
-/* A koneènì naèítám partii */
+/* A koneï¿½nï¿½ naï¿½ï¿½tï¿½m partii */
 	InitPartie(&(u->prt),&(u->pozice));
 	if(!u->pozice.bily){
-		/* ve výchozí pozici zaèínal èerný */
+		/* ve vï¿½chozï¿½ pozici zaï¿½ï¿½nal ï¿½ernï¿½ */
 	if(!fgets(s,50,f)||!s[0]) goto KonecPartie;
 		if(strstr(s,"     1... ")!=s) goto chybaf;
 		NalezTahy(u);
@@ -232,7 +260,7 @@ chyba:
 	DonePartie(&(u->prt));
 	u->prt=prt;
 	u->pozice=pos;
-/* Obnovil jsem pùvodní pozici a partii */
+/* Obnovil jsem pï¿½vodnï¿½ pozici a partii */
 	return 0;
 }
 

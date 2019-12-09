@@ -27,6 +27,7 @@
 #include "pole.h"
 #include "dejtah.h"
 #include "soubvv.h"
+#include "boardFromFEN.h"
 
 static void BezCRLF(char *s){
   if (s) while(*s) {
@@ -211,6 +212,7 @@ tz - Vraceni tahu\n\
 td - Znovuzahrani vraceneho tahu\n\
 ul - Uloz partii\n\
 ot - Otevri partii\n\
+fo - Otevři FEN\n\
 ge - Generuj tabulky koncovek\n\
 of - Test ohodnocovaci funkce\n\
 va - NalezVazby\n\
@@ -422,24 +424,36 @@ void OhodTest(TUloha *u){
     u->zasobnik.hPechG[0]=HashPechG(&(u->pozice));
     printf("Hodnota pozice (z pohledu %s) %i\n",(u->pozice.bily ? "bileho" : "cerneho"),(int)HodnotaPozice(u,-mat,mat));
 }
+
+static void readFilename(char *s, int len) {
+    puts("Jmeno souboru:");
+    fgets(s, len, stdin);
+    BezCRLF(s);
+}
+
 void Uloz(TUloha *uloha){
     char s[256];
 
-    puts("Jmeno souboru:");
-    fgets(s,255,stdin);
-  BezCRLF(s);
+    readFilename(s, sizeof(s) - 1);
     if(UlozDoSouboru(s,uloha))
         puts("Partie ulozena"); else
         puts("Neuspech pri ukladani !");
 }
 void Otevri(TUloha *uloha){
     char s[256];
+    readFilename(s, sizeof(s) - 1);
 
-    puts("Jmeno souboru:");
-    fgets(s,255,stdin);
-  BezCRLF(s);
     if(OtevriZeSouboru(s,uloha))
         puts("Partie otevrena"); else
+        puts("Neuspech pri otvirani !");
+}
+
+static void OtevriFen(TUloha *uloha){
+    char s[256];
+    readFilename(s, sizeof(s) - 1);
+
+    if (OtevriFENZeSouboru(s,uloha))
+        puts("FEN otevren"); else
         puts("Neuspech pri otvirani !");
 }
 
@@ -497,6 +511,9 @@ cfunkce void HlavniDosCyklus(TUloha *uloha)
    if (!strcmp(s,"tc\n")) {TestujGeneratorCas(uloha);continue;};
    if (!strcmp(s,"ul\n")) {Uloz(uloha);continue;};
    if (!strcmp(s,"ot\n")) {Otevri(uloha);continue;};
+   if (!strcmp(s,"fo\n")) {OtevriFen(uloha);continue;};
+
+
    if (!strcmp(s,"ge\n")) {
           char st[256];
           puts("Jakou ? (napr. kdkv):");
