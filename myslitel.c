@@ -446,7 +446,8 @@ s16 AlfaBeta(TUloha *uloha, s16 alfa, s16 beta, s16 hloubka
       return 0;
     }
 
-    if (uloha->RemTab.poc + zanor > 100 - uloha->pozice.quietMoveCount) {
+    // TODO fix this! This is wrong
+    if (uloha->RemTab.poc + zanor > 100) {
       /*remiza 50 tahu*/
 #ifdef HTML_VYPISY
       if (soub) {

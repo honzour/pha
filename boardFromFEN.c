@@ -102,7 +102,7 @@ cfunkce void boardFromFEN(TPozice* board, const char* fen) {
 
   // Half & Full Move Counters
   int halfMoveCounter = atoi(strtok(NULL, " "));
-  board->quietMoveCount = halfMoveCounter;
+  board->quietHalfMoveCount = halfMoveCounter;
 //  board->fullMoveCounter = atoi(strtok_s(NULL, " ", &strPos));
 
   free(str);

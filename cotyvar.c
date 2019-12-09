@@ -7,7 +7,7 @@
 
 /* Konstantni promenna uzita pri inicializaci */
 const TPozice PrazdnePostaveni =
-{ 0/*zadna rosada*/, 0/*ne mimochodem*/, 1/*hraje bily*/, 0/*quietMoveCount*/,
+{ 0/*zadna rosada*/, 0/*ne mimochodem*/, 1/*hraje bily*/, 0/*quietHalfMoveCount*/,
 { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
   100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
   /*     a    b    c    d    e    f    g    h*/
@@ -25,7 +25,7 @@ const TPozice PrazdnePostaveni =
 
 /* Konstantni promenna uzita pri inicializaci */
 const TPozice ZakladniPostaveni=
- {15/*vsechny rosady*/, 0/*ne mimochodem*/, 1/*hraje bily*/, 0/*quietMoveCount*/,
+ {15/*vsechny rosady*/, 0/*ne mimochodem*/, 1/*hraje bily*/, 0/*quietHalfMoveCount*/,
  { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
    100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
    /*     a    b    c    d    e    f    g    h*/
