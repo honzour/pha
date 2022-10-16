@@ -413,7 +413,7 @@ s16 HodnotaPozice(TUloha *u,s16 alfa,s16 beta) {
     goto NeniTam; 
   }
 
-  php = u->hpt + (u->zasobnik.hPechF[hloubka] &    ((1 << u->HashCfg.DveNaXHashPech) - 1));
+  php = u->hpt + (u->zasobnik.hPechF[hloubka] &    (((size_t)1 << u->HashCfg.DveNaXHashPech) - 1));
   if (php->kod == u->zasobnik.hPechG[hloubka]) goto JeTam;
 
   NeniTam:;

@@ -115,7 +115,7 @@ int GetHash(TUloha *uloha, s16 alfa, s16 beta, u8 hloubka, s16 *cena) {
 
     if(!uloha->AlgCfg.AlgKoef.PovolHash) return 0;
     zanor=uloha->zasobnik.pos;
-  p = uloha->ht + (uloha->zasobnik.hF[zanor] & ((1 << uloha->HashCfg.DveNaXHash) - 1));
+  p = uloha->ht + (uloha->zasobnik.hF[zanor] & (((size_t)1 << uloha->HashCfg.DveNaXHash) - 1));
     if (p->kod != uloha->zasobnik.hG[zanor] ||
           p->hloubka < hloubka ||
           !(p->priznak & 2) && p->cena < beta ||
@@ -136,7 +136,7 @@ void SetHash(TUloha *uloha, u8 hloubka, u8 priznak, s16 cena) {
   if (!uloha->AlgCfg.AlgKoef.PovolHash) return;
   hassert(cena < mat + 1 && cena > -mat - 1, "Cena v hash tabulce");
   zanor = uloha->zasobnik.pos;
-  p = uloha->ht + (uloha->zasobnik.hF[zanor] & ((1 << uloha->HashCfg.DveNaXHash) - 1));
+  p = uloha->ht + (uloha->zasobnik.hF[zanor] & (((size_t)1 << uloha->HashCfg.DveNaXHash) - 1));
  /*if(hloubka<p->hloubka) return;*/
  /* to abych si neprepsal hloubeji propoctenou pozici 
   Nicmene ted si to klidne prepisu*/
@@ -156,7 +156,7 @@ int GetHash(TUloha *uloha, s16 alfa, s16 beta, u8 hloubka, s16 *cena) {
 
     if(!uloha->AlgCfg.AlgKoef.PovolHash) return 0;
   {
-    u32 a = ((1 << uloha->HashCfg.DveNaXHash) - 1);
+    size_t a = (((size_t)1 << uloha->HashCfg.DveNaXHash) - 1);
       zanor = uloha->zasobnik.pos;
     p = uloha->ht + ((uloha->zasobnik.hF[zanor] + (u32) hloubka + (u32) 9) & a);
     konec = uloha->ht + a;
@@ -193,7 +193,7 @@ void SetHash(TUloha *uloha, u8 hloubka, u8 priznak, s16 cena) {
   if (!uloha->AlgCfg.AlgKoef.PovolHash) return;
   hassert(cena < mat + 1 && cena > -mat - 1, "Cena v hash tabulce");
   zanor = uloha->zasobnik.pos;
-  p = uloha->ht + ((uloha->zasobnik.hF[zanor] + hloubka) & ((1 << uloha->HashCfg.DveNaXHash) - 1));
+  p = uloha->ht + ((uloha->zasobnik.hF[zanor] + hloubka) & (((size_t)1 << uloha->HashCfg.DveNaXHash) - 1));
   p->priznak = priznak;
   p->cena = cena;
   p->hloubka = hloubka;
@@ -209,7 +209,7 @@ int GetHashNejlepsi(TUloha *uloha, u16 *tah, u8 *hloubka, u8 *priznak) {
   int zanor;
 
     zanor = uloha->zasobnik.pos;
-  p = uloha->ntt + (uloha->zasobnik.hF[zanor] & ((1 << uloha->HashCfg.DveNaXHashNejlepsi) - 1));
+  p = uloha->ntt + (uloha->zasobnik.hF[zanor] & (((size_t)1 << uloha->HashCfg.DveNaXHashNejlepsi) - 1));
     if (p->kod != uloha->zasobnik.hG[zanor])
       return 0;
     *tah = (u16)p->cena;
@@ -227,7 +227,7 @@ THashPrvek *p;
   int zanor;
 
   zanor = uloha->zasobnik.pos;
-  p = uloha->ntt + (uloha->zasobnik.hF[zanor] & ((1 << uloha->HashCfg.DveNaXHashNejlepsi) - 1));
+  p = uloha->ntt + (uloha->zasobnik.hF[zanor] & (((size_t)1 << uloha->HashCfg.DveNaXHashNejlepsi) - 1));
  /* if (p->cena) {
     printf("Prepis tah: %x -> %x, kod %x -> %x, hloubka %x -> %x, priznak %x -> %x\n",
        p->cena, tah, p->kod, uloha->zasobnik.hG[zanor], p->hloubka, hloubka, p->priznak, priznak);

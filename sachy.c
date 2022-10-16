@@ -31,11 +31,11 @@
 
 cfunkce void PromazTabulky(TUloha *uloha) {
     if (uloha->ht != NULL)
-        memset((void *)uloha->ht,0,(1 << uloha->HashCfg.DveNaXHash) * sizeof(THashPrvek));
+        memset((void *)uloha->ht,0,((size_t)1 << uloha->HashCfg.DveNaXHash) * sizeof(THashPrvek));
     if (uloha->hpt != NULL)
-        memset((void *)uloha->hpt, 0, (1 << uloha->HashCfg.DveNaXHashPech) * sizeof(THashPech));
+        memset((void *)uloha->hpt, 0, ((size_t)1 << uloha->HashCfg.DveNaXHashPech) * sizeof(THashPech));
     if (uloha->ntt != NULL)
-        memset((void *)uloha->ntt, 0, (1 << uloha->HashCfg.DveNaXHashNejlepsi) * sizeof(THashPrvek));
+        memset((void *)uloha->ntt, 0, ((size_t)1 << uloha->HashCfg.DveNaXHashNejlepsi) * sizeof(THashPrvek));
 }
 
 /*********************************************/
@@ -57,9 +57,9 @@ cfunkce TUloha *InitUlohu(int DveNaXHash, int DveNaXHashPech, int DveNaXHashNejl
   uloha->HashCfg.DveNaXHash = DveNaXHash;
   uloha->HashCfg.DveNaXHashPech = DveNaXHashPech;
   uloha->HashCfg.DveNaXHashNejlepsi = DveNaXHashNejlepsi;
-  uloha->ht =  (THashPrvek *) malloc(sizeof(THashPrvek) * (1 << uloha->HashCfg.DveNaXHash));
-  uloha->hpt = (THashPech *) malloc(sizeof(THashPech)  * (1 << uloha->HashCfg.DveNaXHashPech));
-  uloha->ntt = (THashPrvek *) malloc(sizeof(THashPrvek) * (1 << uloha->HashCfg.DveNaXHashNejlepsi));
+  uloha->ht =  (THashPrvek *) malloc(sizeof(THashPrvek) * ((size_t)1 << uloha->HashCfg.DveNaXHash));
+  uloha->hpt = (THashPech *) malloc(sizeof(THashPech)  * ((size_t)1 << uloha->HashCfg.DveNaXHashPech));
+  uloha->ntt = (THashPrvek *) malloc(sizeof(THashPrvek) * ((size_t)1 << uloha->HashCfg.DveNaXHashNejlepsi));
 
   PromazTabulky(uloha);
   
@@ -78,7 +78,7 @@ AItems   Result
 int CalcLowShl(size_t AItems)
 {
     int result = 0;
-    while (((unsigned)1 << result) <= AItems)
+    while (((size_t)1 << result) <= AItems)
     {
         result++;
     }
@@ -94,7 +94,7 @@ cfunkce void SetUlohaHash(TUloha** AUloha, ptrdiff_t AHashSize) {
     if ((*AUloha)->AlgCfg.AlgKoef.PovolHash)
     {
         (*AUloha)->HashCfg.DveNaXHash = shr;
-        (*AUloha)->ht = (THashPrvek*)malloc(sizeof(THashPrvek) * (1 << (*AUloha)->HashCfg.DveNaXHash));
+        (*AUloha)->ht = (THashPrvek*)malloc((size_t)sizeof(THashPrvek) * ((size_t)1 << (*AUloha)->HashCfg.DveNaXHash));
         if ((*AUloha)->ht == NULL)
         {
             /* Failed to allocate memory */
